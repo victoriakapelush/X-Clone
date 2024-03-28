@@ -15,7 +15,7 @@ const usersRouter = require('./routes/users');
 const app = express();
 
 app.use(cors({
-  origin: 'https://chatsphere-3sxt.onrender.com', 
+  origin: 'http://localhost:5173', 
   credentials: true
 }));
 
