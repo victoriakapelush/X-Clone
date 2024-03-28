@@ -7,12 +7,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-require("dotenv").config();
+require('dotenv').config({ path: './config.env' });
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+const mongoDB = process.env.mongoDB;
 
 app.use(cors({
   origin: 'http://localhost:5173', 
