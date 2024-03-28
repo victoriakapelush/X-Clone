@@ -1,0 +1,19 @@
+{
+  "name": "social-butterfly",
+  "version": "1.0.0",
+  "description": "Social Media App where users can create personalized profiles, post content, like, comment and follow one another.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victoriakapelush/Social-Butterfly.git"
+  },
+  "author": "Victoria Kapelush",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victoriakapelush/Social-Butterfly/issues"
+  },
+  "homepage": "https://github.com/victoriakapelush/Social-Butterfly#readme"
+}
