@@ -9,7 +9,7 @@ function App() {
         <h1 className='header'>Social Butterfly</h1>
         <p>Linking Lives, Sharing Stories!</p>
         <Link className='new-acc-link' to='/signup'>Create a new account</Link>
-        <Link className='new-acc-link' to='/'>Sign in</Link>
+        <Link className='new-acc-link' to='/login'>Sign in</Link>
       </div>
       <footer className='flex-row'>
         Designed and developed by <a href='https://victoriakapelush.com' target='_blank'>Victoria Kapelush</a>

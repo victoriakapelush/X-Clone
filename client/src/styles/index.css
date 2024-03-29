@@ -5,6 +5,11 @@
   src: url('../assets/fonts/grandslang-roman.otf') format('opentype');
 }
 
+@font-face {
+  font-family: 'Segoe UI';
+  src: url(../assets/fonts/segoeuithis.ttf);
+}
+
 :root {
   --offwhite: #DDDDDD;
 }
@@ -17,6 +22,10 @@ body, html {
   margin: 0;
   height: 100%;
   color: black;
+}
+
+h1, h2, h3, h4 {
+  font-family: Grandslang Roman, sans-serif;
 }
 
 .flex-row {
@@ -73,10 +82,6 @@ footer a:hover {
   text-decoration: line-through;
 }
 
-.icon-header-container h1 {
-  font-family: Grandslang Roman, sans-serif;
-}
-
 .icon-header-container p {
   font-size: 1.2rem;
 }
@@ -102,4 +107,172 @@ footer a:hover {
 .new-acc-link:hover {
   background-color: black;
   color: var(--offwhite);
+}
+
+/* SIGNUP PAGE */
+
+.register-container {
+  background-color: var(--offwhite);
+  height: 100%;
+}
+
+.create-account-container {
+  border-right: 1px solid black;
+  width: 60%;
+  justify-content: center;
+  align-items: flex-end;
+  padding-right: 2rem;
+}
+
+.create-account-container h1 {
+  font-size: 4rem;
+  margin: 0;
+}
+
+.create-account-container p {
+  font-size: 1.3rem;
+}
+
+.form-container {
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 2rem;
+}
+
+.form-container h2 {
+  font-size: 2rem;
+}
+
+.form {
+  width: 60%;
+  height: auto;
+}
+
+.form input {
+  height: 2rem;
+  margin-bottom: 1.2rem;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  font-size: 1rem;
+}
+
+.form label {
+  margin-bottom: .3rem;
+}
+
+.or {
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.google-signup {
+  padding-bottom: 1rem;
+}
+
+.policy {
+  font-weight: bold;
+}
+
+.contact-support {
+  border-top: 1px solid black;
+  margin: 2rem 0;
+  padding-top: 1rem;
+  width: 60%;
+}
+
+/* SIGN IN PAGE */
+
+.back-btn {
+  border: 1px solid black;
+  padding: .5rem 2rem;
+  font-size: 1.1rem;
+  margin-top: .5rem;
+}
+
+.back-btn:hover {
+  background-color: white;
+}
+
+.or-login {
+  margin: 0;
+  padding-bottom: 1rem;
+}
+
+.login {
+  margin-top: 1.2rem;
+}
+
+.email-input {
+  background: url('../assets/icons/at.svg') no-repeat left;
+  background-size: 20px;
+  padding-left: 1.7rem;
+  background-color: white;
+  opacity: .6;
+}
+
+.password-input {
+  background: url('../assets/icons/lock.svg') no-repeat left;
+  background-size: 16px;
+  padding-left: 1.7rem;
+  background-color: white;
+  opacity: .6;
+}
+
+/* HOME */
+
+.home-container {
+  height: 100%;
+  background-color: var(--offwhite);
+  justify-content: center;
+}
+
+.links-container {
+  border-right: 1px solid black;
+  width: fit-content;
+  height: 100%;
+  gap: 2rem;
+  padding: 1rem 4rem 0 9rem;
+}
+
+.nav-links {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.3rem;
+} 
+
+.nav-img {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.nav-links-container {
+  justify-content: flex-start;
+  margin: 0;
+  gap: .5rem;
+}
+
+.main-user-icon {
+  width: 3rem;
+  align-self: flex-start;
+}
+
+.new-post-btn {
+  width: fit-content;
+  padding: .5rem 1.5rem;
+  border: 1px solid black;
+  align-self: flex-start;
+}
+
+.new-post-btn:hover {
+  background-color: black;
+  color: var(--offwhite);
+}
+
+.profile-center {
+  width: 100%;
+  border-right: 1px solid black;
+}
+
+.profile-right {
+  width: 100%;
 }
