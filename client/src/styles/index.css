@@ -270,9 +270,123 @@ footer a:hover {
 
 .profile-center {
   width: 100%;
+  height: 100%;
   border-right: 1px solid black;
+  margin-right: 2rem;
 }
 
 .profile-right {
   width: 100%;
+  margin-top: 2rem;
+  margin-right: 8rem;
+  width: 30%;
+}
+
+.no-bullets {
+  list-style-type: none;
+}
+
+.terms-list {
+  gap: 1rem;
+  border-top: 1px solid black;
+  width: 104%;
+  height: auto;
+  padding-left: 0;
+}
+
+.terms-list li {
+  padding: 1rem .5rem 1rem 0;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.terms-list li:first-child {
+  padding-left: 1rem;
+}
+
+.terms-list li:last-child {
+  padding-right: 2rem;
+}
+
+.terms-list li:hover {
+  text-decoration: underline;
+}
+
+.more-feed-links {
+  gap: .5rem;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  width: 100%;
+  border-top: 1px solid black;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  height: auto;
+}
+
+.more-feed-links .feed-link:hover {
+  text-decoration: underline;
+}
+
+.mini-header {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.mini-header img {
+  width: 3rem;
+  height: auto;
+}
+
+.mini-header-btns-container {
+  border-bottom: 1px solid black;
+}
+
+.mini-header-btn {
+  padding: 1rem 1rem;
+  letter-spacing: .1rem;
+  font-size: 1.2rem;
+}
+
+.mini-header-btn:hover {
+  background-color: white;
+}
+
+.mini-header-btn:active {
+  text-decoration: underline;
+}
+
+/* single post style */
+
+.post {
+  border-bottom: 1px solid black;
+  width: 100%;
+  height: auto;
+}
+
+.profile-pic {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin: 10px 10px; 
+}
+
+.post-icons-container {
+  gap: 1rem;
+}
+
+.post-icon {
+  width: 1.5rem;
+}
+
+.post-box {
+  height: fit-content;
+  width: 100%;
+  margin: 10px 10px 10px 0; 
+
+}
+
+.post-image {
+  width: 35rem;
+  height: auto;
 }
