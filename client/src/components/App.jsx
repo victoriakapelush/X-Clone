@@ -6,8 +6,8 @@ function App() {
     <div className='sign-up-container flex-column'>
       <div className='icon-header-container flex-column'>
         <img className='butterfly-icon' src={icon} />
-        <h1 className='header'>Social Butterfly</h1>
-        <p>Linking Lives, Sharing Stories!</p>
+        <h1 className='header'>BeSocial</h1>
+        <p>Linking Lives, Sharing Stories.</p>
         <Link className='new-acc-link' to='/signup'>Create a new account</Link>
         <Link className='new-acc-link' to='/login'>Sign in</Link>
       </div>
