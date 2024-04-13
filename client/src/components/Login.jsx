@@ -13,6 +13,7 @@ function Login() {
             <form className="flex-column form">
                 <input placeholder="username or email" className='email-input'></input>
                 <input placeholder="password" className='password-input'></input>
+                <button className='back-btn'>Sign in</button>
             </form>
             <h2 className="or-login">Or</h2>
             <form className='google-signup'>

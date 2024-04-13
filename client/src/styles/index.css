@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 @font-face {
   font-family: 'Grandslang Roman';
@@ -36,6 +37,10 @@ h1, h2, h3, h4 {
 .flex-column {
   display: flex;
   flex-direction: column;
+}
+
+.opacity:hover {
+  opacity: .7;
 }
 
 a {
@@ -197,6 +202,7 @@ footer a:hover {
 .or-login {
   margin: 0;
   padding-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .login {
@@ -204,19 +210,17 @@ footer a:hover {
 }
 
 .email-input {
-  background: url('../assets/icons/at.svg') no-repeat left;
-  background-size: 20px;
+  background: url('../assets/icons/at.png') no-repeat left;
+  background-size: 23px;
   padding-left: 1.7rem;
   background-color: white;
-  opacity: .6;
 }
 
 .password-input {
-  background: url('../assets/icons/lock.svg') no-repeat left;
-  background-size: 16px;
+  background: url('../assets/icons/lock.png') no-repeat left;
+  background-size: 23px;
   padding-left: 1.7rem;
   background-color: white;
-  opacity: .6;
 }
 
 /* HOME */
@@ -275,7 +279,6 @@ footer a:hover {
 .profile-center {
   width: 100%;
   height: 100%;
-  border-right: 1px solid black;
   margin-right: 4rem;
 }
 
@@ -333,6 +336,18 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.header-and-mini-header {
+  align-content: center;
+  gap: .3rem;
+}
+
+.header-and-mini-header h1 {
+  margin-bottom: 0;
+  font-family: "Pacifico", cursive;
+  font-weight: lighter;
+  font-style: normal;
+}
+
 .mini-header {
   justify-content: flex-start;
   margin-top: 1rem;
@@ -343,6 +358,7 @@ footer a:hover {
 .mini-header-btns-container {
   border-bottom: 1px solid black;
   width: 100%;
+  border-right: 1px solid black;
 }
 
 .mini-header-btn {
@@ -367,6 +383,7 @@ footer a:hover {
   border-bottom: 1px solid black;
   width: 100%;
   height: auto;
+  border-right: 1px solid black;
 }
 
 .profile-pic {

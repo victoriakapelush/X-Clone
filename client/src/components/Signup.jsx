@@ -17,7 +17,8 @@ function Signup() {
                 <input></input>
                 <label>Password</label>
                 <input></input>
-                <p>By creating an account you agree to the <a className="policy" href="">Terms of Service</a> and <a className="policy" href="">Privacy Policy</a>.</p>
+                <p>By creating an account you agree to the <a className="policy opacity" href="">Terms of Service</a> and <a className="policy opacity" href="">Privacy Policy</a>.</p>
+                <button className='back-btn'>Sign up</button>
             </form>
             <h2 className="or">Or</h2>
             <form className='google-signup'>
@@ -28,7 +29,7 @@ function Signup() {
               />            
             </form>
             <Link to="/" className='back-btn'>Back</Link>
-            <p className='contact-support'>Having trouble? <a href="" className="policy">Contact support</a>.</p>
+            <p className='contact-support'>Having trouble? <a href="" className="policy opacity">Contact support</a>.</p>
         </div>
       </div>
     )

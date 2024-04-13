@@ -9,8 +9,7 @@ const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config({ path: './config.env' });
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const signupRouter = require('./routes/signup');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -42,8 +41,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/signup', signupRouter);
 
 // Add session middleware
 app.use(session({

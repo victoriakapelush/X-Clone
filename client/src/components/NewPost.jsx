@@ -15,17 +15,17 @@ function NewPost() {
         <div className='post flex-row'>
             <img className='profile-pic' src={icon}></img>
             <div className='flex-column post-box'>
-                <Link to='/home' className='link-to-profile'><span className='user-name'>Phil Lewis</span> <span className='username-name'>@phillewis.bsky.social·4h</span></Link>
+                <Link to='/home' className='link-to-profile'><span className='user-name opacity'>Phil Lewis</span> <span className='username-name'>@phillewis.bsky.social · 4h</span></Link>
                 <p className='post-text'>Put a heating pad on one of the cat hammocks and it is like stuffing them in a get along shirt</p>
                 <img className='post-image' src={random}></img>
                 <div className='flex-row post-icons-container'>
-                    <Link to='/home'><img className='post-icon' src={comment} title='Reply'/></Link>
-                    <Link to='/home'><img className='post-icon' src={repost} title='Repost'/></Link>
-                    <Link to='/home'><img className='post-icon' src={sendpost} title='Share'/></Link>
-                    <Link to='/home'><img className='post-icon' src={likebefore} title='Like'/></Link>
+                    <Link to='/home'><img className='post-icon opacity' src={comment} title='Reply'/></Link>
+                    <Link to='/home'><img className='post-icon opacity' src={repost} title='Repost'/></Link>
+                    <Link to='/home'><img className='post-icon opacity' src={sendpost} title='Share'/></Link>
+                    <Link to='/home'><img className='post-icon opacity' src={likebefore} title='Like'/></Link>
                     <div className='save-icons flex-row'>
-                        <Link to='/home'><img className='post-icon' src={iconbookmark} title='Bookmark'/></Link>
-                        <Link to='/home'><img className='post-icon' src={save} title='Save' /></Link>
+                        <Link to='/home'><img className='post-icon opacity' src={iconbookmark} title='Bookmark'/></Link>
+                        <Link to='/home'><img className='post-icon opacity' src={save} title='Save' /></Link>
                     </div>
                 </div>
             </div>
