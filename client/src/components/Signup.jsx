@@ -20,7 +20,11 @@ function Signup() {
                 <p>By creating an account you agree to the <a className="policy opacity" href="">Terms of Service</a> and <a className="policy opacity" href="">Privacy Policy</a>.</p>
                 <button className='back-btn'>Sign up</button>
             </form>
-            <h2 className="or">Or</h2>
+            <div className='flex-row or-border'>
+              <div className='or-divider'></div>
+              <h3>or</h3>
+              <div className='or-divider signup-or-border'></div>
+          </div>
             <form className='google-signup'>
               <GoogleButton
                 type="light"

@@ -12,7 +12,10 @@
 }
 
 :root {
-  --offwhite: #DDDDDD;
+  --light-grey: #d1d1cf;
+  --beige: #f8ddaf;
+  --plum: #e5a2f3;
+  --blue: #3956f1;
 }
 
 #root {
@@ -23,6 +26,7 @@ body, html {
   margin: 0;
   height: 100%;
   color: black;
+  background-color: var(--light-grey);
 }
 
 h1, h2, h3, h4 {
@@ -54,9 +58,30 @@ a:hover, a:visited {
 }
 
 .sign-up-container {
-  background-color: var(--offwhite);
-  height: 100%;
-  justify-content: space-between;
+  background-color: var(--light-grey);
+  height: 93%;
+}
+
+.inner-container {
+  min-height: 100%;
+  flex-wrap: wrap;
+}
+
+.main-images-container {
+  flex-wrap: wrap;
+  margin: auto 0;
+  margin-left: 15rem;
+}
+
+.forth-image {
+  margin-bottom: 9.4rem;
+}
+
+.main-page-main-image {
+  width: 13rem;
+  height: auto;
+  border-radius: 30px;
+  padding: 0 1rem 1rem 0;
 }
 
 .butterfly-icon {
@@ -65,9 +90,11 @@ a:hover, a:visited {
 }
 
 .icon-header-container {
+  width: 100%;
+  height: fit-content;
+  margin: 0;
   justify-content: center;
   align-items: center;
-  margin: auto 0;
 }
 
 footer {
@@ -80,15 +107,16 @@ footer {
 }
 
 footer a {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 footer a:hover {
-  text-decoration: line-through;
+  text-decoration: underline;
 }
 
 .icon-header-container p {
   font-size: 1.2rem;
+  margin-bottom: .5rem;
 }
 
 .icon-header-container h1, p {
@@ -109,15 +137,34 @@ footer a:hover {
   font-size: 1.2rem;
 }
 
+.no-top-margin {
+  margin-top: 0;
+}
+
 .new-acc-link:hover {
   background-color: black;
-  color: var(--offwhite);
+  color: var(--light-grey);
+}
+
+.or-border {
+  justify-content: center;
+  align-items: center;
+}
+
+.or-divider {
+  border: 1px solid rgb(87, 87, 87);
+  margin: 10px 0;
+  width: 8rem;
+}
+
+.or-border h3 {
+  padding: 0 1rem 0 1rem;
 }
 
 /* SIGNUP PAGE */
 
 .register-container {
-  background-color: var(--offwhite);
+  background-color: var(--light-grey);
   height: 100%;
 }
 
@@ -169,6 +216,10 @@ footer a:hover {
 .or {
   margin: 0;
   padding: 1rem 0;
+}
+
+.signup-or-border {
+  width: 20.5rem;
 }
 
 .google-signup {
@@ -227,7 +278,7 @@ footer a:hover {
 
 .home-container {
   height: 100%;
-  background-color: var(--offwhite);
+  background-color: var(--light-grey);
   justify-content: center;
   overflow: scroll;
 }
@@ -273,7 +324,7 @@ footer a:hover {
 
 .new-post-btn:hover {
   background-color: black;
-  color: var(--offwhite);
+  color: var(--light-grey);
 }
 
 .profile-center {
