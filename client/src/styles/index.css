@@ -11,11 +11,20 @@
   src: url(../assets/fonts/segoeuithis.ttf);
 }
 
+@font-face {
+  font-family: 'Segoe UI bold';
+  src: url(../assets/fonts/segoeuithibd.ttf);
+}
+
 :root {
   --light-grey: #d1d1cf;
   --beige: #f8ddaf;
   --plum: #e5a2f3;
   --blue: #3956f1;
+  --black: rgb(0,0,0);
+  --white: rgb(231, 233, 234);
+  --blue: rgb(29, 155, 240);
+  --deep-grey: rgb(113, 118, 123);
 }
 
 #root {
@@ -23,14 +32,11 @@
 }
 
 body, html {
+  font-family: 'Segoe UI';
   margin: 0;
   height: 100%;
-  color: black;
-  background-color: var(--light-grey);
-}
-
-h1, h2, h3, h4 {
-  font-family: Grandslang Roman, sans-serif;
+  color: var(--white);
+  background-color: var(--black);
 }
 
 .flex-row {
@@ -49,92 +55,77 @@ h1, h2, h3, h4 {
 
 a {
   text-decoration: none;
-  color: black;
 }
 
 a:hover, a:visited {
   text-decoration: none;
-  color: black;
 }
 
 .sign-up-container {
-  background-color: var(--light-grey);
-  height: 93%;
+  background-color: var(--black);
+  height: 100%;
 }
 
 .inner-container {
-  min-height: 100%;
-  flex-wrap: wrap;
+  gap: 13rem;
+  margin: 0 auto;
+  height: 100%;
 }
 
 .main-images-container {
-  flex-wrap: wrap;
   margin: auto 0;
-  margin-left: 15rem;
-}
-
-.forth-image {
-  margin-bottom: 9.4rem;
 }
 
 .main-page-main-image {
-  width: 13rem;
+  width: 21rem;
   height: auto;
-  border-radius: 30px;
-  padding: 0 1rem 1rem 0;
 }
 
-.butterfly-icon {
-  width: 5rem;
-  height: auto;
+.header {
+  font-size: 4rem;
+  font-weight: bold;
+  font-family: 'Segoe UI bold';
+  padding-bottom: 3rem;
+  margin: 0;
+}
+
+.join-today {
+  font-size: 2rem;
+  font-family: 'Segoe UI bold';
+  padding-bottom: 2rem;
+  margin: 0;
 }
 
 .icon-header-container {
   width: 100%;
   height: fit-content;
   margin: 0;
-  justify-content: center;
-  align-items: center;
+  text-align: left;
+  margin: auto 0;
 }
 
-footer {
-  justify-content: center;
-  padding: 1rem 2rem;
-  border-top: 1px solid black;
-  align-items: center;
+.google-login-container {
+  width: 100%;
+}
+
+.auth-container {
   width: fit-content;
-  margin: 0 auto;
-}
-
-footer a {
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-.icon-header-container p {
-  font-size: 1.2rem;
-  margin-bottom: .5rem;
-}
-
-.icon-header-container h1, p {
-  margin: 0;
-}
-
-.icon-header-container p, h1 {
-  padding: .5rem 0; 
 }
 
 .new-acc-link {
-  border: 1px solid black;
   border-radius: 10px;
-  width: fit-content;
-  padding: .5rem 2rem;
+  width: 100%;
+  padding: .5rem 0;
   margin-top: 1rem;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+.new-acc-link a {
+  color: var(--white);
 }
 
 .no-top-margin {
@@ -142,23 +133,92 @@ footer a:hover {
 }
 
 .new-acc-link:hover {
-  background-color: black;
-  color: var(--light-grey);
+  background-color: rgb(26, 140, 216);
+  color: var(--white);
+}
+
+.new-acc-link a:visited {
+  color: var(--white);
 }
 
 .or-border {
-  justify-content: center;
   align-items: center;
 }
 
 .or-divider {
   border: 1px solid rgb(87, 87, 87);
-  margin: 10px 0;
-  width: 8rem;
+  width: 100%;
 }
 
 .or-border h3 {
   padding: 0 1rem 0 1rem;
+}
+
+.terms-of-service {
+  font-size: .8rem;
+}
+
+.small-letters {
+  color: var(--blue);
+}
+
+.small-letters:hover {
+  text-decoration: underline;
+}
+
+.have-acc-question {
+  margin-top: 3rem;
+}
+
+.old-acc-link {
+  border: 1px solid var(--light-grey);
+  border-radius: 10px;
+  width: 100%;
+  padding: .5rem 0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.old-acc-link a {
+  color: rgb(29, 155, 240);
+}
+
+.old-acc-link a:visited {
+  color: rgb(29, 155, 240);
+}
+
+.old-acc-link:hover {
+  background-color: rgba(29,155,240,0.1);
+  cursor: pointer;
+}
+
+/* FOOTER */
+
+.footer {
+  justify-content: center;
+  bottom: 0;
+  margin: 0 auto;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.links-footer-container {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.link-footer {
+  display: inline-block;
+  margin: 0;
+  font-size: 13px;
+  color: var(--deep-grey);
+  overflow-wrap: break-word;
+  margin-bottom: 4px;
+  margin-top: 4px;
+}
+
+.link-footer-text {
+  padding-right: 1rem;
 }
 
 /* SIGNUP PAGE */
