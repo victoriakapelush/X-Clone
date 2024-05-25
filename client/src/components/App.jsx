@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import image1 from '../assets/images/x-icon-white.png'
 import { GoogleOAuthProvider } from '@react-oauth/google';

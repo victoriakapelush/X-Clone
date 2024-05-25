@@ -161,6 +161,9 @@ a:hover, a:visited {
 .small-letters {
   color: var(--blue);
 }
+.small-letters:hover {
+  cursor: pointer;
+}
 
 .small-letters:hover {
   text-decoration: underline;
@@ -199,7 +202,7 @@ a:hover, a:visited {
   justify-content: center;
   bottom: 0;
   margin: 0 auto;
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 2rem 1rem 2rem;
 }
 
 .links-footer-container {
@@ -217,6 +220,11 @@ a:hover, a:visited {
   margin-top: 4px;
 }
 
+.link-footer:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .link-footer-text {
   padding-right: 1rem;
 }
@@ -224,13 +232,26 @@ a:hover, a:visited {
 /* SIGNUP PAGE */
 
 .register-container {
-  background-color: var(--light-grey);
+  background-color: var(--black);
   height: 100%;
+  color: var(--white);
+  margin: 0 auto;
+}
+
+.back-button {
+  width: 8rem;
+  margin-top: 2rem;
+}
+
+.signup-button {
+  background-color: transparent;
+  color: var(--blue);
 }
 
 .create-account-container {
   border-right: 1px solid black;
-  width: 60%;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: flex-end;
   padding-right: 2rem;
@@ -247,8 +268,10 @@ a:hover, a:visited {
 
 .form-container {
   width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: flex-start;
+  align-content: center;
   padding-left: 2rem;
 }
 
@@ -261,33 +284,30 @@ a:hover, a:visited {
   height: auto;
 }
 
-.form input {
+.form p {
+  font-size: .9rem;
+}
+
+.form input, .form-login input {
   height: 2rem;
   margin-bottom: 1.2rem;
   border-radius: 7px;
-  border: 1px solid transparent;
+  border: 1px solid var(--deep-grey);
   font-size: 1rem;
+  background-color: transparent;
+  padding: .5rem .5rem;
+  color: var(--white);
 }
 
-.form label {
-  margin-bottom: .3rem;
-}
-
-.or {
-  margin: 0;
-  padding: 1rem 0;
-}
-
-.signup-or-border {
-  width: 20.5rem;
-}
-
-.google-signup {
-  padding-bottom: 1rem;
+.form input:focus, .form-login input:focus{
+  outline: none;
+  border-color: #007bff;
 }
 
 .policy {
   font-weight: bold;
+  color: var(--blue);
+  font-size: .9rem;
 }
 
 .contact-support {
@@ -295,43 +315,51 @@ a:hover, a:visited {
   margin: 2rem 0;
   padding-top: 1rem;
   width: 60%;
+  font-size: .9rem;
 }
 
 /* SIGN IN PAGE */
 
-.back-btn {
-  border: 1px solid black;
-  padding: .5rem 2rem;
-  font-size: 1.1rem;
-  margin-top: .5rem;
+.login-center {
+  margin: 0 auto;
+  height: 100%;
 }
 
-.back-btn:hover {
+.form-login-container {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.actual-form-login {
+  gap: 2rem;
+}
+
+.login-signing-button {
+  height: 3rem;
+}
+
+.email-input-login {
   background-color: white;
+  width: 100%;
 }
 
-.or-login {
-  margin: 0;
-  padding-bottom: 1rem;
-  margin-top: 1rem;
+.login-google-button {
+  margin-bottom: 2rem;
 }
 
-.login {
-  margin-top: 1.2rem;
+.or-border-container {
+  width: 100%;
+  height: 100%;
+  align-items: center;
 }
 
-.email-input {
-  background: url('../assets/icons/at.png') no-repeat left;
-  background-size: 23px;
-  padding-left: 1.7rem;
-  background-color: white;
-}
-
-.password-input {
-  background: url('../assets/icons/lock.png') no-repeat left;
-  background-size: 23px;
-  padding-left: 1.7rem;
-  background-color: white;
+.or-border-line {
+  border-top: 1px solid var(--deep-grey);
+  width: 10rem;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 /* HOME */
