@@ -25,8 +25,11 @@ function App() {
                     onError={() => {
                       console.log('Login Failed');
                     }}
+                    locale='en'
                 />
                 </div>
+                <div
+                data-text="sign_in_with"></div>
             </GoogleOAuthProvider>
             <div className='flex-row or-border'>
               <div className='or-divider'></div>
