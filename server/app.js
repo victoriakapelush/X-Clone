@@ -8,8 +8,11 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config({ path: './config.env' });
+require('./config-passport');
 
-//const signupRouter = require('./routes/signup');
+const indexRouter = require('./routes/index');
+const googleRouter = require('./routes/google');
+const homeRouter = require('./routes/home');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -41,7 +44,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/signup', signupRouter);
+app.use('/', indexRouter);
+app.use('/auth/google', googleRouter);
+app.use('/home', homeRouter);
 
 // Add session middleware
 app.use(session({
@@ -67,7 +72,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err.message });
 });
 
 module.exports = app;

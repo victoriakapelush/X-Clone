@@ -67,8 +67,9 @@ a:hover, a:visited {
 }
 
 .inner-container {
-  gap: 13rem;
+  gap: 15rem;
   margin: 0 auto;
+  padding-left: 5rem;
   height: 100%;
 }
 
@@ -83,7 +84,7 @@ a:hover, a:visited {
 
 .header {
   font-size: 4rem;
-  font-weight: bold;
+  letter-spacing: -1.2px;
   font-family: 'Segoe UI bold';
   padding-bottom: 3rem;
   margin: 0;
