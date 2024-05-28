@@ -1,2 +1,21 @@
+# Node modules
 node_modules/
-config.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment Variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Coverage directory
+coverage/
+
+# Other generated directories
+dist/
+build/
