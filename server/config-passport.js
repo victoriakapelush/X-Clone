@@ -1,12 +1,23 @@
+require('dotenv').config({ path: './config.env' });
 const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
-require('dotenv').config({ path: './config.env' });
 
-const app = express();
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
@@ -44,25 +55,4 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
-app.post('/', passport.authenticate('local', { successRedirect: '/home', failureRedirect: '/' }));
-  
-app.get('/home', (req, res) => {
-    res.send(`Welcome ${req.user.username}`);
-  });
-  
-app.get('/', (req, res) => {
-    res.send('Failed to authenticate');
-  });
+module.exports = passport;

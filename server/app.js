@@ -11,7 +11,7 @@ require('dotenv').config({ path: './config.env' });
 require('./config-passport');
 
 const indexRouter = require('./routes/index');
-const googleRouter = require('./routes/google');
+const authRoutes = require('./routes/auth');
 const homeRouter = require('./routes/home');
 
 const app = express();
@@ -44,10 +44,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/auth/google', googleRouter);
-app.use('/home', homeRouter);
-
 // Add session middleware
 app.use(session({
   secret: 'cats',
@@ -58,6 +54,11 @@ app.use(session({
 // Initialize passport and session
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Routes
+app.use('/', indexRouter);
+app.use(authRoutes);
+app.use('/home', homeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
