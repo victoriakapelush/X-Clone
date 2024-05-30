@@ -572,3 +572,48 @@ a:hover, a:visited {
   font-weight: lighter;
   color: rgb(52, 51, 51);
 }
+
+/* MOBILE VERSION */
+
+@media (max-width: 768px) {
+  .main-page-main-image {
+    width: 7rem;
+    padding-top: 3rem;
+  }
+
+  .sign-up-container {
+    height: 100%;
+    gap: 3rem;
+  }
+
+  .inner-container {
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .header {
+    font-size: 3rem;
+  }
+
+  .join-today {
+    font-size: 1.5rem;;
+  }
+
+  /* Signup Page */
+
+  .register-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .create-account-container {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .form {
+    width: 90%;
+  }
+
+}
+

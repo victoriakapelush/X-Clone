@@ -13,6 +13,8 @@ require('./config-passport');
 const indexRouter = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const homeRouter = require('./routes/home');
+const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -56,9 +58,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/', indexRouter);
+app.use('/', indexRouter, authRoutes);
 app.use(authRoutes);
 app.use('/home', homeRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
