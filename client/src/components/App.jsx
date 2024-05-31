@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import image1 from '../assets/images/x-icon-white.png'
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
+import useGoogleOAuth from './GoogleAuth';
 
 function App() {
+  const responseMessage = useGoogleOAuth();
+
   return (
     <div className='sign-up-container flex-column'>
       <div className='flex-row inner-container'>
@@ -16,21 +16,10 @@ function App() {
           <h1 className='header'>Happening now</h1>
           <p className='join-today'>Join today.</p>
           <div className='auth-container'>
-            <GoogleOAuthProvider clientId="<your_client_id>">
               <div className="google-login-container">
-                <GoogleLogin
-                  onSuccess={credentialResponse => {
-                    console.log(credentialResponse);
-                  }}
-                    onError={() => {
-                      console.log('Login Failed');
-                    }}
-                    locale='en'
-                />
-                </div>
-                <div
-                data-text="sign_in_with"></div>
-            </GoogleOAuthProvider>
+                <GoogleLogin onSuccess={responseMessage} onError={() => { console.log('Login Failed'); }} locale='en' />
+              </div>
+                <div data-text="sign_in_with"></div>
             <div className='flex-row or-border'>
               <div className='or-divider'></div>
               <h3>or</h3>

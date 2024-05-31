@@ -6,12 +6,12 @@ import axios from "axios";
 
 function Signup() {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState({
     username: '',
     email: '',
     password: '',
   });
-  const [error, setError] = useState(null);
 
   const { username, email, password } = inputValue;
 
@@ -27,7 +27,7 @@ function Signup() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/",
+        "http://localhost:3000/api/signup",
         inputValue,
         { withCredentials: true }
       );
@@ -49,6 +49,7 @@ function Signup() {
       password: '',
     });
   };
+
     return (
       <div className="flex-row register-container">
         <div className="flex-column create-account-container">

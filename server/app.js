@@ -58,10 +58,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/', indexRouter, authRoutes);
-app.use(authRoutes);
+app.use('/api/signup', indexRouter, authRoutes);
+app.use('/', authRoutes);
 app.use('/home', homeRouter);
-app.use('/login', loginRouter);
+app.use('/api/login', loginRouter);
 app.use('/logout', logoutRouter);
 
 // catch 404 and forward to error handler

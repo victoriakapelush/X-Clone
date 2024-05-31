@@ -6,19 +6,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
@@ -38,7 +25,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.clientSecret,
     callbackURL: 'http://localhost:3000/auth/google/callback'
   },
-  async (token, tokenSecret, profile, done) => {
+  async (token, profile, done) => {
     try {
       let user = await User.findOne({ googleId: profile.id });
       if (!user) {
@@ -54,5 +41,18 @@ passport.use(new GoogleStrategy({
     }
   }
 ));
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 module.exports = passport;
