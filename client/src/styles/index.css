@@ -105,15 +105,17 @@ a:hover, a:visited {
   margin: auto 0;
 }
 
-.google-login-container {
-  width: 100%;
-}
-
 .auth-container {
   width: fit-content;
 }
 
-.new-acc-link {
+.google-logo {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.new-acc-link, .google-btn {
   border-radius: 10px;
   width: 100%;
   padding: .5rem 0;
@@ -123,6 +125,16 @@ a:hover, a:visited {
   font-weight: bold;
   background-color: var(--blue);
   color: var(--white);
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0;
+  padding: .1rem 0;
+  background-color: transparent;
 }
 
 .new-acc-link a {
@@ -330,11 +342,20 @@ a:hover, a:visited {
   height: 100%;
   justify-content: center;
   align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.form-login {
   width: 100%;
 }
 
 .actual-form-login {
   gap: 2rem;
+}
+
+.actual-form-login input {
+  width: 95%;
 }
 
 .login-signing-button {

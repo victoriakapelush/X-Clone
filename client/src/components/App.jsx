@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import image1 from '../assets/images/x-icon-white.png'
-import { GoogleLogin } from '@react-oauth/google';
 import useGoogleOAuth from './GoogleAuth';
 
 function App() {
@@ -16,10 +15,13 @@ function App() {
           <h1 className='header'>Happening now</h1>
           <p className='join-today'>Join today.</p>
           <div className='auth-container'>
-              <div className="google-login-container">
-                <GoogleLogin onSuccess={responseMessage} onError={() => { console.log('Login Failed'); }} locale='en' />
-              </div>
-                <div data-text="sign_in_with"></div>
+            <div className='new-acc-link no-top-margin'>
+              <button className='google-btn' onClick={() => responseMessage()}>
+                <img src='https://developers.google.com/identity/images/g-logo.png' alt='Google Logo' className='google-logo' />
+                Continue with Google
+              </button>              
+            </div>
+            <div data-text="sign_in_with"></div>
             <div className='flex-row or-border'>
               <div className='or-divider'></div>
               <h3>or</h3>

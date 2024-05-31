@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 import useGoogleOAuth from './GoogleAuth';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -37,8 +36,13 @@ function Login() {
           </div>
             <div className='login-google-button'>
               <div className="google-login-container">
-              <GoogleLogin onSuccess={responseMessage} onError={() => { console.log('Login Failed'); }} locale='en' />
-                </div>
+              <div className='new-acc-link no-top-margin'>
+                <button className='google-btn' onClick={() => responseMessage()}>
+                  <img src='https://developers.google.com/identity/images/g-logo.png' alt='Google Logo' className='google-logo' />
+                  Continue with Google
+                </button>              
+              </div>                
+              </div>
                 <div className='or-border-container flex-row'>
                   <div className='or-border-line'></div>
                   <p>or</p>
@@ -46,7 +50,7 @@ function Login() {
                 </div>
               </div>
             <div className="flex-column form-login">
-              <form className='actual-form-login flex-row' onSubmit={handleSubmit} method='post'>
+              <form className='actual-form-login flex-column' onSubmit={handleSubmit} method='post'>
                   <input placeholder="Username" className='email-input email-input-login' type="text" name="username" value={credentials.username} onChange={handleChange} required></input>
                   <input placeholder="Email" className='email-input email-input-login' type="email" name="email" value={credentials.email} onChange={handleChange} required></input>
                   <input placeholder="Password" className='password-input email-input-login' type="text" name="password" value={credentials.password} onChange={handleChange} required></input>
