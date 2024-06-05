@@ -51,9 +51,9 @@ function Login() {
               </div>
             <div className="flex-column form-login">
               <form className='actual-form-login flex-column' onSubmit={handleSubmit} method='post'>
-                  <input placeholder="Username" className='email-input email-input-login' type="text" name="username" value={credentials.username} onChange={handleChange} required></input>
-                  <input placeholder="Email" className='email-input email-input-login' type="email" name="email" value={credentials.email} onChange={handleChange} required></input>
-                  <input placeholder="Password" className='password-input email-input-login' type="text" name="password" value={credentials.password} onChange={handleChange} required></input>
+                  <input placeholder="Username" className='email-input email-input-login no-margin-form' type="text" name="username" value={credentials.username} onChange={handleChange} required></input>
+                  <input placeholder="Email" className='email-input email-input-login no-margin-form' type="email" name="email" value={credentials.email} onChange={handleChange} required></input>
+                  <input placeholder="Password" className='password-input email-input-login no-margin-form' type="password" name="password" value={credentials.password} onChange={handleChange} required></input>
                   <button className='old-acc-link signup-button login-signing-button' type='submit'>Sign in</button>
               </form>
             </div>
