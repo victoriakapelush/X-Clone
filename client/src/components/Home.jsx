@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import NewPost from './NewPost'
+import profileImage from '../assets/images/emoji.png'
 import user from '../assets/icons/user.png'
 import home from '../assets/icons/home.png'
 import explore from '../assets/icons/explore.png'
@@ -154,10 +155,49 @@ useEffect(() => {
                 <div className='premium-header'>
                     <h3>What's happening</h3>
                 </div>
+                <div className='whatshappenning-container flex-column'>
+                    <div className='trending-hashtag-container flex-column'>
+                        <span className='trending-name'>Sports · Trending</span>
+                        <span className='trending-hashtag'>#GoYankees</span>
+                        <span className='trending-number-posts'>9,000 posts</span>
+                    </div>
+                    <div className='trending-hashtag-container flex-column'>
+                        <span className='trending-name'>Trending in United States</span>
+                        <span className='trending-hashtag'>#GoYankees</span>
+                        <span className='trending-number-posts'>9,000 posts</span>
+                    </div>
+                    <div className='trending-hashtag-container flex-column'>
+                        <span className='trending-name'>Sports · Trending</span>
+                        <span className='trending-hashtag'>#GoYankees</span>
+                        <span className='trending-number-posts'>9,000 posts</span>
+                    </div>
+                </div>
             </div>
             <div className='flex-column premium-subscribe-container'>
                 <div className='premium-header'>
                     <h3>Who to follow</h3>
+                </div>
+                <div className='who-tofollow-container flex-column'>
+                    <div className='who-tofollow-profile-box flex-row'>
+                        <div className='who-to-follow-single-user flex-row'>
+                            <div className='who-tofollow-image-box'>
+                                <div>
+                                    <img className='nav-img' src={profileImage}></img>
+                                </div>
+                            </div>
+                            <div className='flex-column who-tofollow-name-box'>
+                                <div>
+                                    <span>Dongwook</span>
+                                </div>
+                                <div>
+                                    <span>@DongWookChung2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button className='new-post-btn radius smaller-size'>Follow</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
