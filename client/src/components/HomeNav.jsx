@@ -1,0 +1,96 @@
+import { Link } from 'react-router-dom';
+import user from '../assets/icons/user.png'
+import home from '../assets/icons/home.png'
+import explore from '../assets/icons/explore.png'
+import messages from '../assets/icons/messages.png'
+import hashtag from '../assets/icons/hashtag.png'
+import notifications from '../assets/icons/notifications.png'
+import bookmark from '../assets/icons/bookmark.png'
+import grok from '../assets/icons/grok.png'
+import lists from '../assets/icons/lists.png'
+import communities from '../assets/icons/communities.png'
+import premium from '../assets/icons/premium.png'
+
+function HomeNav() {
+    return (
+        <>
+            <div className='links-container flex-column'>
+                <Link className='flex-row header-and-mini-header' to='/home'>
+                    <svg id='mini-header' className='radius' viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M86.8918 28.25H99.0219L72.5243 58.5334L103.698 99.75H79.285L60.1647 74.7536L38.2929 99.75H26.1627L54.5069 67.3565L24.5938 28.25H49.6199L66.9004 51.0974L86.8918 28.25ZM82.6337 92.4904H89.3555L45.9716 35.1301H38.7584L82.6337 92.4904Z" fill="white"/>
+                    </svg>
+                </Link>
+                <Link to="/home" className='links-home-page flex-column'>
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={home}/>
+                        <p className='nav-links'>Home</p>
+                    </div>
+                </Link>
+                <Link to="/home" className='links-home-page flex-column'>
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={explore}/>
+                        <p className='nav-links'>Explore</p>
+                    </div>
+                </Link>
+                <Link to="/home" className='links-home-page flex-column'>
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={hashtag}/>
+                        <p className='nav-links'>Feeds</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={notifications}/>
+                        <p className='nav-links'>Notifications</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={messages}/>
+                        <p className='nav-links'>Messages</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={grok}/>
+                        <p className='nav-links'>Grok</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={lists}/>
+                        <p className='nav-links'>Lists</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={bookmark}/>
+                        <p className='nav-links'>Bookmarks</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={communities}/>
+                        <p className='nav-links'>Communities</p>
+                    </div>
+                </Link>
+                <Link to="/home">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={premium}/>
+                        <p className='nav-links'>Premium</p>
+                    </div>
+                </Link>
+                <Link to="/profile">
+                    <div className='flex-row nav-links-container radius'>
+                        <img className='nav-img' src={user}/>
+                        <p className='nav-links'>Profile</p>
+                    </div>
+                </Link>
+                <button className='new-post-btn radius'>Post</button>
+                <button className='logout-btn radius'>Log out</button>
+            </div>
+        </>
+    )
+}
+
+export default HomeNav

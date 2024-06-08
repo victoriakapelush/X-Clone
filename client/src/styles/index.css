@@ -406,7 +406,7 @@ a:hover, a:visited {
 
 .links-container {
   border-right: 1px solid var(--deep-grey);
-  width: 20%;
+  width: 400px;
   padding: 0 3rem 0 6rem;
   position: sticky;
   color: var(--white);
@@ -422,6 +422,10 @@ a:hover, a:visited {
   margin: 0;
 } 
 
+.nav-links:active {
+  font-weight: bold;
+}
+
 .nav-img {
   width: 1.7rem;
   height: 1.7rem;
@@ -429,11 +433,12 @@ a:hover, a:visited {
 
 .nav-links-container {
   justify-content: flex-start;
+  width: fit-content;
   margin: 0;
   gap: 1rem;
   align-items: center;
   border: 1px solid transparent;
-  padding: 12px 12px;
+  padding: .75rem 1.5rem .75rem .75rem;
 }
 
 .nav-links-container:hover {
@@ -613,33 +618,29 @@ textarea::placeholder {
 }
 
 .profile-right {
-  width: 30%;
+  max-width: 50%;
+  min-width: 20%;
   margin-top: 1rem;
   margin-right: 5rem;
-  position: sticky;
   top: 0;
   gap: 1.5rem;
+  position: sticky;
+  height: fit-content;
 }
 
-.premium-subscribe-container {
-  border: 1px solid var(--deep-grey);
-  border-radius: 20px;
-  padding: 1rem 1rem;
-}
-
-.premium-header h3 {
-  margin: 0;
-  margin-bottom: 1rem;
-}
-
-.premium-paragraph p {
-  margin: 0;
+.whatshappenning-container {
+  min-width: 100%;
 }
 
 .trending-hashtag-container {
-  width: fit-content;
+  width: 100%;
   padding-bottom: 1rem;
-  padding-right: 1rem;
+  padding-left: .3rem;
+  cursor: pointer;
+}
+
+.trending-hashtag-container:hover {
+  background-color: var(--opacity);
 }
 
 .trending-hashtag-container {
@@ -653,6 +654,78 @@ textarea::placeholder {
 
 .trending-hashtag {
   font-weight: 600;
+}
+
+.premium-subscribe-container {
+  border: 1px solid var(--deep-grey);
+  border-radius: 20px;
+  padding: 1rem 1rem .5rem 1rem;
+  min-width: 100%;
+}
+
+.premium-header h3 {
+  margin: 0;
+  margin-bottom: 1rem;
+  margin-left: .3rem;
+}
+
+.premium-paragraph p {
+  margin: 0;
+}
+
+.who-tofollow-container {
+  min-width: 100%;
+}
+
+.who-tofollow-container:hover {
+  background-color: var(--opacity);
+}
+
+.who-tofollow-profile-box {
+  justify-content: space-between;
+  align-items: center;
+  min-width: 100%;
+}
+
+.who-tofollow-image-box {
+  padding: 0 .3rem 0 0;
+}
+
+.who-tofollow-image-box img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.who-to-follow-single-user {
+  min-width: 60%;
+  align-items: center;
+}
+
+.who-tofollow-btn {
+  margin-right: 1rem;
+}
+
+.who-tofollow-btn button, .who-tofollow-btn button:hover {
+  background-color: var(--white);
+  color: var(--black);
+  cursor: pointer;
+  padding: .5rem .5rem;
+  font-size: .9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.who-tofollow-name-box {
+  font-size: .9rem;
+}
+
+.who-tofollow-namelink {
+  font-weight: 600;
+}
+
+.who-tofollow-iglink {
+  font-weight: lighter;
+  color: var(--deep-grey);
 }
 
 /* SINGLE POST */

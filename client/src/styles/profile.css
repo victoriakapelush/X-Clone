@@ -1,0 +1,83 @@
+.profile-container {
+    margin: 0;
+    min-width: 40rem;
+    margin: .5rem 2rem .5rem 0;
+    border-right: 1px solid var(--deep-grey);
+}
+
+.profile-container header {
+    gap: 1.2rem;
+    margin-bottom: .5rem;
+}
+
+.profile-icon-back {
+    align-items: center;
+}
+
+.profile-icon-back img {
+    width: 2rem;
+    height: 2rem;
+    padding: .5rem .5rem .5rem 1rem;
+    border-radius: 50%;
+}
+
+.profile-icon-back img:hover {
+    background-color: var(--opacity);
+}
+
+.profile-header-name {
+    justify-content: flex-start;
+}
+
+.profile-header-name h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.profile-header-name span {
+    color: var(--deep-grey);
+    cursor: pointer;
+    font-size: .9rem;
+}
+
+.background-image-holder {
+    width: 598px;
+    height: 199px;
+    width: 100%;
+    background-color: grey;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-photo-container {
+    height: fit-content;
+    width: 598px;
+}
+
+.profile-photo-container img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+}
+
+svg {
+    color: rgb(239, 243, 244);
+}
+
+.subscribe-btn {
+    border-color: rgb(201, 54, 204); 
+    background-color: rgb(201, 54, 204);
+    color: var(--white);
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: .4rem 1rem;
+}
+
+.subscribe-btn:hover {
+    background-color: rgb(181, 49, 184);
+}
+
+.subscribe-panel {
+    justify-content: flex-end;
+}

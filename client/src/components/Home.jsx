@@ -2,19 +2,9 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import NewPost from './NewPost'
-import profileImage from '../assets/images/emoji.png'
-import user from '../assets/icons/user.png'
-import home from '../assets/icons/home.png'
-import explore from '../assets/icons/explore.png'
-import messages from '../assets/icons/messages.png'
-import hashtag from '../assets/icons/hashtag.png'
-import notifications from '../assets/icons/notifications.png'
-import bookmark from '../assets/icons/bookmark.png'
 import userProfile from '../assets/images/emoji.png'
-import grok from '../assets/icons/grok.png'
-import lists from '../assets/icons/lists.png'
-import communities from '../assets/icons/communities.png'
-import premium from '../assets/icons/premium.png'
+import HomeNav from './HomeNav'
+import HomeExtra from './HomeExtra'
 
 function Home() {
 
@@ -24,81 +14,7 @@ useEffect(() => {
 
     return (
       <div className="flex-row home-container">
-        <div className='links-container flex-column'>
-            <a className='flex-row header-and-mini-header' href='/home'>
-                <svg id='mini-header' className='radius' viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M86.8918 28.25H99.0219L72.5243 58.5334L103.698 99.75H79.285L60.1647 74.7536L38.2929 99.75H26.1627L54.5069 67.3565L24.5938 28.25H49.6199L66.9004 51.0974L86.8918 28.25ZM82.6337 92.4904H89.3555L45.9716 35.1301H38.7584L82.6337 92.4904Z" fill="white"/>
-                </svg>
-            </a>
-            <Link to="/home" className='links-home-page flex-column'>
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={home}/>
-                    <p className='nav-links'>Home</p>
-                </div>
-            </Link>
-            <Link to="/home" className='links-home-page flex-column'>
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={explore}/>
-                    <p className='nav-links'>Explore</p>
-                </div>
-            </Link>
-            <Link to="/home" className='links-home-page flex-column'>
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={hashtag}/>
-                    <p className='nav-links'>Feeds</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={notifications}/>
-                    <p className='nav-links'>Notifications</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={messages}/>
-                    <p className='nav-links'>Messages</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={grok}/>
-                    <p className='nav-links'>Grok</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={lists}/>
-                    <p className='nav-links'>Lists</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={bookmark}/>
-                    <p className='nav-links'>Bookmarks</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={communities}/>
-                    <p className='nav-links'>Communities</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={premium}/>
-                    <p className='nav-links'>Premium</p>
-                </div>
-            </Link>
-            <Link to="/home">
-                <div className='flex-row nav-links-container radius'>
-                    <img className='nav-img' src={user}/>
-                    <p className='nav-links'>Profile</p>
-                </div>
-            </Link>
-            <button className='new-post-btn radius'>Post</button>
-            <button className='logout-btn radius'>Log out</button>
-        </div>
+        <HomeNav />
         <div className='profile-center'>
             <div className='flex-row mini-header-btns-container'>
                 <div className='mini-header-btn'>
@@ -141,66 +57,7 @@ useEffect(() => {
         <NewPost />
         <NewPost />
         </div>
-        <div className='profile-right flex-column'>
-            <div className='flex-column premium-subscribe-container'>
-                <div className='premium-header'>
-                    <h3>Subscribe to Premium</h3>
-                </div>
-                <div className='premium-paragraph'>
-                    <p>Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
-                </div>
-                <button className='new-post-btn radius smaller-size'>Subscribe</button>
-            </div>
-            <div className='flex-column premium-subscribe-container'>
-                <div className='premium-header'>
-                    <h3>What's happening</h3>
-                </div>
-                <div className='whatshappenning-container flex-column'>
-                    <div className='trending-hashtag-container flex-column'>
-                        <span className='trending-name'>Sports · Trending</span>
-                        <span className='trending-hashtag'>#GoYankees</span>
-                        <span className='trending-number-posts'>9,000 posts</span>
-                    </div>
-                    <div className='trending-hashtag-container flex-column'>
-                        <span className='trending-name'>Trending in United States</span>
-                        <span className='trending-hashtag'>#GoYankees</span>
-                        <span className='trending-number-posts'>9,000 posts</span>
-                    </div>
-                    <div className='trending-hashtag-container flex-column'>
-                        <span className='trending-name'>Sports · Trending</span>
-                        <span className='trending-hashtag'>#GoYankees</span>
-                        <span className='trending-number-posts'>9,000 posts</span>
-                    </div>
-                </div>
-            </div>
-            <div className='flex-column premium-subscribe-container'>
-                <div className='premium-header'>
-                    <h3>Who to follow</h3>
-                </div>
-                <div className='who-tofollow-container flex-column'>
-                    <div className='who-tofollow-profile-box flex-row'>
-                        <div className='who-to-follow-single-user flex-row'>
-                            <div className='who-tofollow-image-box'>
-                                <div>
-                                    <img className='nav-img' src={profileImage}></img>
-                                </div>
-                            </div>
-                            <div className='flex-column who-tofollow-name-box'>
-                                <div>
-                                    <span>Dongwook</span>
-                                </div>
-                                <div>
-                                    <span>@DongWookChung2</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <button className='new-post-btn radius smaller-size'>Follow</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <HomeExtra />
       </div>
     )
   }
