@@ -1,8 +1,8 @@
 .profile-container {
     margin: 0;
-    min-width: 40rem;
-    margin: .5rem 2rem .5rem 0;
+    margin-right: 2rem;
     border-right: 1px solid var(--deep-grey);
+    flex: 1;
 }
 
 .profile-container header {
@@ -42,23 +42,36 @@
 }
 
 .background-image-holder {
-    width: 598px;
-    height: 199px;
     width: 100%;
-    background-color: grey;
     margin: 0;
     padding: 0;
 }
 
+.background-image-holder img {
+    width: 600px;
+    height: 200px;
+}
+
 .profile-photo-container {
     height: fit-content;
-    width: 598px;
+    justify-content: space-between;
 }
 
 .profile-photo-container img {
-    width: 6rem;
-    height: 6rem;
+    width: 9rem;
+    height: 9rem;
     border-radius: 50%;
+    border: 3px solid var(--black);
+    bottom: 50px;
+    position: absolute;
+    bottom: 60%;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.profile-photo-container img:hover {
+    opacity: 0.8; 
+    filter: brightness(0.8);
+    cursor: pointer;
 }
 
 svg {
