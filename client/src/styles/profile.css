@@ -17,7 +17,8 @@
 .profile-icon-back img {
     width: 2rem;
     height: 2rem;
-    padding: .5rem .5rem .5rem 1rem;
+    margin-left: .5rem;
+    padding: .3rem .3rem;
     border-radius: 50%;
 }
 
@@ -31,6 +32,7 @@
 
 .profile-header-name h2 {
     margin: 0;
+    padding-top: .4rem;
     font-size: 1.2rem;
     cursor: pointer;
 }
@@ -55,6 +57,7 @@
 .profile-photo-container {
     height: fit-content;
     justify-content: space-between;
+    margin-left: 1rem;
 }
 
 .profile-photo-container img {
@@ -62,16 +65,13 @@
     height: 9rem;
     border-radius: 50%;
     border: 3px solid var(--black);
-    bottom: 50px;
     position: absolute;
     bottom: 60%;
-    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
 .profile-photo-container img:hover {
-    opacity: 0.8; 
-    filter: brightness(0.8);
     cursor: pointer;
+    filter: brightness(.9);
 }
 
 svg {
@@ -79,7 +79,7 @@ svg {
 }
 
 .subscribe-btn {
-    border-color: rgb(201, 54, 204); 
+    border: 1px solid rgb(201, 54, 204);
     background-color: rgb(201, 54, 204);
     color: var(--white);
     font-weight: 500;
@@ -89,8 +89,117 @@ svg {
 
 .subscribe-btn:hover {
     background-color: rgb(181, 49, 184);
+    cursor: pointer;
 }
 
 .subscribe-panel {
-    justify-content: flex-end;
+    justify-content: space-between;
+    position: absolute;
+    left: 51%;
+    margin-top: .5rem;
+    gap: .5rem;
 }
+
+.subscribe-panel svg {
+    border: 1px solid var(--white);
+    border-radius: 50%;
+    padding: .4rem .4rem;
+}
+
+.subscribe-panel svg:hover {
+    background-color: var(--opacity);
+    cursor: pointer;
+}
+
+.personal-info-section {
+    height: 100%;
+    top: 40%;
+    position: absolute;
+    margin-top: 1rem;
+}
+
+.profile-user-name {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.user-tag {
+    color: var(--deep-grey);
+    margin-bottom: 1rem;
+}
+
+.user-profile-description {
+    margin-bottom: .5rem;
+    margin-right: 1rem;
+    width: 60%;
+    text-overflow: unset;
+    overflow-wrap: break-word;
+}
+
+.location-date-container {
+    align-items: center;
+    gap: 1rem;
+    color: var(--deep-grey);
+    font-size: 1rem;
+}
+
+.location-container svg {
+    fill: var(--deep-grey);
+    padding: 0;
+}
+
+.location-container {
+    align-items: center;
+    gap: .3rem;
+    font-weight: lighter;
+}
+
+.following-container {
+    gap: 1rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.following-grey {
+    color: var(--deep-grey);
+    font-weight: lighter;
+}
+
+.following-number:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.followed-not {
+    font-size: .8rem;
+    color: var(--deep-grey);
+    font-weight: lighter;
+}
+
+.profile-nav {
+    margin: 2rem 0rem 1rem 0rem;
+    top: 70%;
+    position: absolute;
+    justify-content: center;
+}
+
+.profile-nav .profile-nav-link {
+    padding: 1rem 1.71rem;
+}
+
+.profile-nav .blue-underline {
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--deep-grey);
+}
+
+.profile-nav .profile-nav-link:hover {
+    background-color: var(--opacity);
+}
+
+.profile-post {
+    position: absolute;
+    top: 78%;
+    width: 41%;
+}
+
+
