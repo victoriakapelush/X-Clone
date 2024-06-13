@@ -3,12 +3,13 @@ import '../styles/profile.css'
 import { Link } from 'react-router-dom';
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
+import NewPost from './NewPost'
 import back from '../assets/icons/back.png'
 import backgroundImage from '../assets/images/random.jpg'
 
 function Profile() {
     return (
-        <div className='flex-row'>
+        <div className='flex-row profile-page'>
             <HomeNav />
             <div className='profile-container'>
                 <header className='flex-row'>
@@ -69,12 +70,11 @@ function Profile() {
                     <div className='blue-underline'>
                         <Link className='profile-nav-link for-you-tab'>Media</Link>
                     </div>
-                    <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Likes</Link>
-                    </div>
                 </nav>
                 <div className='profile-post'>
-                    
+                    <NewPost />
+                    <NewPost />
+                    <NewPost />
                 </div>
             </div>
             <HomeExtra />

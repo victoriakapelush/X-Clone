@@ -5,6 +5,7 @@ import NewPost from './NewPost'
 import userProfile from '../assets/images/emoji.png'
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
+import PopupWindow from './PopupWindow'
 
 function Home() {
 
@@ -14,6 +15,7 @@ useEffect(() => {
 
     return (
       <div className="flex-row home-container">
+        <PopupWindow />
         <HomeNav />
         <div className='profile-center'>
             <div className='flex-row mini-header-btns-container'>

@@ -2,7 +2,21 @@
     margin: 0;
     margin-right: 2rem;
     border-right: 1px solid var(--deep-grey);
+    border-left: 1px solid var(--deep-grey);
     flex: 1;
+    height: 40.5rem !important;
+}
+
+.profile-page {
+    overflow: scroll;
+}
+
+.profile-page .links-container {
+    border-right: none; 
+}
+
+.profile-page .profile-right {
+    position: sticky;
 }
 
 .profile-container header {
@@ -181,15 +195,16 @@ svg {
     top: 70%;
     position: absolute;
     justify-content: center;
+    width: 41.7%;
+    border-bottom: 1px solid var(--deep-grey);
 }
 
-.profile-nav .profile-nav-link {
-    padding: 1rem 1.71rem;
+.profile-nav-link {
+    padding: 1rem 2rem;
 }
 
 .profile-nav .blue-underline {
     padding-bottom: 1rem;
-    border-bottom: 3px solid var(--deep-grey);
 }
 
 .profile-nav .profile-nav-link:hover {
@@ -198,8 +213,13 @@ svg {
 
 .profile-post {
     position: absolute;
-    top: 78%;
+    top: 78.8%;
     width: 41%;
+}
+
+.profile-post .post {
+    width: 101.5%;
+    border-left: 1px solid var(--deep-grey);
 }
 
 
