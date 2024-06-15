@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NewPost from './NewPost'
 import userProfile from '../assets/images/emoji.png'
 import HomeNav from './HomeNav'
@@ -13,9 +13,17 @@ useEffect(() => {
     document.title = 'Home / X';
 }, []);
 
+const [showPopup, setShowPopup] = useState(true);
+
+const handleClosePopup = () => {
+    setShowPopup(false);
+};
+
     return (
       <div className="flex-row home-container">
-        <PopupWindow />
+        <div>
+            {showPopup && <PopupWindow onClose={handleClosePopup} />}
+        </div>
         <HomeNav />
         <div className='profile-center'>
             <div className='flex-row mini-header-btns-container'>

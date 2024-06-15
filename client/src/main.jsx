@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <Profile />
   },
   {
-    path: "/home/signup_image",
+    path: "/home",
     element: <PopupWindow />
   }
 ]);
