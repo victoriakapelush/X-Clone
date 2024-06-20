@@ -15,8 +15,9 @@ const signupGet = (req, res) => {
 
 const signupPost = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
-        console.log(`Received username: ${username}, email: ${email}, password: ${password}`);
+        const { originalUsername, email, password } = req.body;
+        const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
+        console.log(`Received username: ${originalUsername}, email: ${email}, password: ${password}`);
     if (!password) {
         console.log("Password is not provided.");
         return res.status(400).json({ message: "Invalid password format. Password is required." });
@@ -26,11 +27,12 @@ const signupPost = async (req, res) => {
         return res.status(400).json({ message: "Invalid password format. Password must be a string." });
       }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, email, password: hashedPassword });
+    const user = new User({ originalUsername, formattedUsername, email, password: hashedPassword });
     await user.save();
     const payload = {
       id: user._id,
-      username: user.username
+      originalUsername: user.originalUsername,
+      formattedUsername: user.formattedUsername
     };
 
     jwt.sign(payload, 'cats', { expiresIn: 86400 }, (err, token) => {

@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <Login />
   },
   {
-    path: "/home",
+    path: "/:username",
     element: <Home />
   },
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <Profile />
   },
   {
-    path: "/home",
+    path: "/:username",
     element: <PopupWindow />
   }
 ]);

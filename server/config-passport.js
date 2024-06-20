@@ -9,7 +9,13 @@ const User = require('./models/User');
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await User.findOne({ username });
+      const formattedUsername = username.toLowerCase().replace(/\s+/g, '');
+      const user = await User.findOne({ 
+        $or: [
+          { originalUsername: username }, 
+          { formattedUsername: formattedUsername }
+        ] 
+      });
       if (!user) return done(null, false, { message: 'Incorrect username' });
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) return done(null, false, { message: 'Incorrect password' });
@@ -25,14 +31,17 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.clientSecret,
     callbackURL: 'http://localhost:3000/auth/google/callback'
   },
-  async (token, profile, done) => {
+  async (accessToken, refreshToken, profile, done) => {
     try {
+      const originalUsername = profile.displayName;
+      const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
       let user = await User.findOne({ googleId: profile.id });
       if (!user) {
         user = await User.create({
           googleId: profile.id,
-          username: profile.displayName,
-          email: profile.emails[0].value,
+          originalUsername: originalUsername,
+          formattedUsername: formattedUsername,
+          email: profile.emails[0].value
         });
       }
       return done(null, user);

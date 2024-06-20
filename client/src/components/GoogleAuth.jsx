@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
 const useGoogleOAuth = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
 
   const responseMessage = useGoogleLogin({
     onSuccess: async tokenResponse => {
@@ -13,8 +16,10 @@ const useGoogleOAuth = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         const result = userInfo.data;
-        if (result) {
-          navigate('/home');
+        if (userInfo) {
+          const formattedUsername = result.name.toLowerCase().replace(/\s+/g, '');
+          setUsername(formattedUsername);
+          navigate(`/${formattedUsername}`);
         } else {
           console.log('Login failed.');
           navigate('/signup');

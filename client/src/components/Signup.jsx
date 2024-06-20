@@ -8,12 +8,13 @@ function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState({
-    username: '',
+    originalUsername: '',
+    formattedUsername: '',
     email: '',
     password: '',
   });
 
-  const { username, email, password } = inputValue;
+  const { originalUsername, formattedUsername, email, password } = inputValue;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +45,8 @@ function Signup() {
     }
 
     setInputValue({
-      username: '',
+      originalUsername: '',
+      formattedUsername: originalUsername.toLowerCase().replace(/\s+/g, ''),
       email: '',
       password: '',
     });
@@ -59,7 +61,7 @@ function Signup() {
         <div className="form-container flex-column">
             <h2>Your account</h2>
             <form className="flex-column form" onSubmit={handleSubmit} method='post'>
-                <input placeholder='Username' type="text" name='username' value={username} onChange={handleOnChange}></input>
+                <input placeholder='Username' type="text" name='originalUsername' value={originalUsername} onChange={handleOnChange}></input>
                 <input placeholder='Email' type="email" name='email' value={email} onChange={handleOnChange}></input>
                 <input placeholder='Password' type="password" minLength="3" name='password' value={password} onChange={handleOnChange}></input>
                 <p>By creating an account you agree to the <a className="policy opacity" href="">Terms of Service</a> and <a className="policy opacity" href="">Privacy Policy</a>.</p>
