@@ -28,11 +28,7 @@ function Signup() {
     e.preventDefault();
     const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
     try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/signup",
-        inputValue,
-        { withCredentials: true }
-      );
+      const { data } = await axios.post("http://localhost:3000/api/signup", inputValue, { withCredentials: true });
       const { success, token, message } = data;
       if (success) {
         localStorage.setItem('token', token);

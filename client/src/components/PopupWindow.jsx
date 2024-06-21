@@ -1,25 +1,54 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import '../styles/popup.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function PopupWindow({ onClose }) {
-const [selectedImage, setSelectedImage] = useState(null);
+    const navigate = useNavigate();
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [formattedUsername, setFormattedUsername] = useState('');
 
-const handleFileChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-        setSelectedImage(URL.createObjectURL(event.target.files[0]));
+    useEffect(() => {
+      const storedUsername = localStorage.getItem('originalUsername');
+      if (storedUsername) {
+        setFormattedUsername(storedUsername);
+        console.log(storedUsername);
+      }
+    }, []);
+
+    const handleFileChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setSelectedImage(URL.createObjectURL(event.target.files[0]));
+        }
+    };
+
+    const handleUploadClick = () => {
+        document.getElementById('profilePicture').click();
+    };
+
+    const handleDeleteClick = () => {
+        setSelectedImage(null);
     }
-};
 
-const handleUploadClick = () => {
-    document.getElementById('fileInput').click();
-};
-
-const handleDeleteClick = () => {
-    setSelectedImage(null);
-}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('profilePicture', selectedImage);
+        try {
+            const response = await axios.post(`http://localhost:3000/home/${formattedUsername}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(response.data);
+            navigate(`/${formattedUsername}`);
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+        }
+    }
 
     return(
         <div className="popup-container flex-row">
@@ -46,7 +75,7 @@ const handleDeleteClick = () => {
                     )}
                     <input
                         type="file"
-                        id="fileInput"
+                        id="profilePicture"
                         style={{ display: 'none' }}
                         onChange={handleFileChange}
                     />
@@ -57,7 +86,7 @@ const handleDeleteClick = () => {
                 </Link>
                 ) : (
                     <Link to='/home'>
-                    <button className='skip-for-now-btn' onClick={onClose}>Save</button>
+                    <button className='skip-for-now-btn' onClick={handleSubmit} type='submit'>Save</button>
                 </Link>
                 )}  
             </div>
