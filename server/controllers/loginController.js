@@ -4,9 +4,9 @@ const User = require('../models/User');
 
 const login = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { originalUsername, formattedUsername, email, password } = req.body;
     const user = await User.findOne({ 
-      $and: [{ username: username }, { email: email }] 
+      $and: [{ originalUsername: originalUsername }, { formattedUsername: formattedUsername }, { email: email }] 
     });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -17,7 +17,8 @@ const login = async (req, res) => {
     }
       const payload = {
         id: user._id,
-        username: user.username
+        originalUsername: user.originalUsername,
+        formattedUsername: user.formattedUsername
       }
       jwt.sign(payload, 'cats', { expiresIn: '3d' }, (err, token) => {
         if (err || !token) {
@@ -44,7 +45,8 @@ function verifyJWT(req, res, next) {
       }
       req.user = {
         id: decoded.id,
-        username: decoded.username
+        originalUsername: decoded.originalUsername,
+        formattedUsername: decoded.formattedUsername
       };
       next();
     });

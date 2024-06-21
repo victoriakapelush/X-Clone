@@ -26,6 +26,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/signup",
@@ -35,7 +36,7 @@ function Signup() {
       const { success, token, message } = data;
       if (success) {
         localStorage.setItem('token', token);
-        navigate("/home");
+        navigate(`/${formattedUsername}`);
       } else {
         setError(message);
       }
@@ -46,7 +47,7 @@ function Signup() {
 
     setInputValue({
       originalUsername: '',
-      formattedUsername: originalUsername.toLowerCase().replace(/\s+/g, ''),
+      formattedUsername: '',
       email: '',
       password: '',
     });

@@ -62,7 +62,7 @@ app.use('/api/signup', indexRouter, authRoutes);
 app.use('/', authRoutes);
 app.use('/api/login', loginRouter);
 app.use('/', logoutRouter);
-app.use('/', userProfile);
+app.use('/home', userProfile);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

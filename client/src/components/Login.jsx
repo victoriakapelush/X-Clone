@@ -9,7 +9,7 @@ function Login() {
   const responseMessage = useGoogleOAuth();
   const navigate = useNavigate();
   const notifyError = () => toast.error("User doesn't exist. Please try again.");
-  const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
+  const [credentials, setCredentials] = useState({ originalUsername: '', formattedUsername: '', email: '', password: '' });
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -17,12 +17,14 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedUsername = credentials.originalUsername.toLowerCase().replace(/\s+/g, '');
+    const updatedCredentials = { ...credentials, formattedUsername };
     try {
-      const response = await axios.post("http://localhost:3000/api/login", credentials);
+      const response = await axios.post("http://localhost:3000/api/login", updatedCredentials);
       const { token } = response.data;
       localStorage.setItem('token', token);
-      navigate('/home');
-    } catch (error) {
+      navigate(`/${formattedUsername}`);
+      } catch (error) {
       notifyError();
       console.error('Login error:', error);
     }
@@ -51,7 +53,7 @@ function Login() {
               </div>
             <div className="flex-column form-login">
               <form className='actual-form-login flex-column' onSubmit={handleSubmit} method='post'>
-                  <input placeholder="Username" className='email-input email-input-login no-margin-form' type="text" name="username" value={credentials.username} onChange={handleChange} required></input>
+                  <input placeholder="Username" className='email-input email-input-login no-margin-form' type="text" name="originalUsername" value={credentials.originalUsername} onChange={handleChange} required></input>
                   <input placeholder="Email" className='email-input email-input-login no-margin-form' type="email" name="email" value={credentials.email} onChange={handleChange} required></input>
                   <input placeholder="Password" className='password-input email-input-login no-margin-form' type="password" name="password" value={credentials.password} onChange={handleChange} required></input>
                   <button className='old-acc-link signup-button login-signing-button' type='submit'>Sign in</button>
