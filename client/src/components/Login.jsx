@@ -23,7 +23,7 @@ function Login() {
       const response = await axios.post("http://localhost:3000/api/login", updatedCredentials);
       const { token } = response.data;
       localStorage.setItem('token', token);
-      navigate(`/${formattedUsername}`);
+      navigate('/home');
       } catch (error) {
       notifyError();
       console.error('Login error:', error);

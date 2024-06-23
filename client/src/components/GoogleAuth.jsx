@@ -19,7 +19,7 @@ const useGoogleOAuth = () => {
         if (userInfo) {
           const formattedUsername = result.name.toLowerCase().replace(/\s+/g, '');
           setUsername(formattedUsername);
-          navigate(`/${formattedUsername}`);
+          navigate('/home');
         } else {
           console.log('Login failed.');
           navigate('/signup');

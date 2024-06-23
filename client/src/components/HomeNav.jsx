@@ -12,6 +12,7 @@ import communities from '../assets/icons/communities.png'
 import premium from '../assets/icons/premium.png'
 
 function HomeNav() {
+
     return (
         <>
             <div className='links-container flex-column'>
@@ -26,55 +27,55 @@ function HomeNav() {
                         <p className='nav-links'>Home</p>
                     </div>
                 </Link>
-                <Link to="/home" className='links-home-page flex-column'>
+                <Link to="/explore" className='links-home-page flex-column'>
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={explore}/>
                         <p className='nav-links'>Explore</p>
                     </div>
                 </Link>
-                <Link to="/home" className='links-home-page flex-column'>
+                <Link to="/feeds" className='links-home-page flex-column'>
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={hashtag}/>
                         <p className='nav-links'>Feeds</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/notifications">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={notifications}/>
                         <p className='nav-links'>Notifications</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/messages">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={messages}/>
                         <p className='nav-links'>Messages</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/grok">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={grok}/>
                         <p className='nav-links'>Grok</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/lists">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={lists}/>
                         <p className='nav-links'>Lists</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/bookmarks">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={bookmark}/>
                         <p className='nav-links'>Bookmarks</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/communities">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={communities}/>
                         <p className='nav-links'>Communities</p>
                     </div>
                 </Link>
-                <Link to="/home">
+                <Link to="/premium">
                     <div className='flex-row nav-links-container radius'>
                         <img className='nav-img' src={premium}/>
                         <p className='nav-links'>Premium</p>

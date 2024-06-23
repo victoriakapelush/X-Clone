@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   email: { type: String },
   password: { type: String },
   profilePicture: { type: String , default: null },
-  profileBio: { type: String, default: '' },
+  profileBio: { type: String, default: '' }
 });
 
 module.exports = mongoose.model("User", UserSchema);

@@ -7,6 +7,10 @@ const addUserProfile = async (req, res) => {
         if (req.file) {
             imagePath = req.file.filename;
         }
+        if (!req.file) {
+            imagePath = null;
+        }
+
         const currentUser = req.user.originalUsername; 
 
         const updateFields = {

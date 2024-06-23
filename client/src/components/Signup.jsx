@@ -32,7 +32,7 @@ function Signup() {
       const { success, token, message } = data;
       if (success) {
         localStorage.setItem('token', token);
-        navigate(`/${formattedUsername}`);
+        navigate('/home');
       } else {
         setError(message);
       }

@@ -17,7 +17,6 @@ const signupPost = async (req, res) => {
     try {
         const { originalUsername, email, password } = req.body;
         const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
-        console.log(`Received username: ${originalUsername}, email: ${email}, password: ${password}`);
     if (!password) {
         console.log("Password is not provided.");
         return res.status(400).json({ message: "Invalid password format. Password is required." });
@@ -41,6 +40,7 @@ const signupPost = async (req, res) => {
         return res.status(500).json({ message: 'Error generating token' });
       }
       res.status(201).json({ success: true, message: 'Registration successful', token });
+      console.log(token);
     });
   } catch (error) {
     console.error(error);
