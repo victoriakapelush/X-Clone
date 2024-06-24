@@ -1,15 +1,61 @@
+/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
 import icon from '../assets/images/emoji.png';
 import random from '../assets/images/random.jpg'
 // eslint-disable-next-line no-unused-vars
 import likeafter from '../assets/icons/like-after.png';
+import { useEffect, useState } from 'react';
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
 
 function NewPost() {
+    const [userData, setUserData] = useState(null);
+    const [formattedUsername, setFormattedUsername] = useState('');
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const decoded = jwtDecode(token);
+                    const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
+                    setFormattedUsername(decodedUsername); 
+                }
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        };
+        fetchUserData(); 
+    }, []); 
+
+    useEffect(() => {  
+        const getUserData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found in local storage.');
+                    return;
+                }
+                const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setUserData(response.data.profilePicture); 
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        if (formattedUsername !== '') {
+        getUserData(); 
+    }
+}, [formattedUsername]);
+
     return (
         <div className='post flex-row'>
-            <img className='profile-pic' src={icon}></img>
+            <img className='profile-pic' src={`http://localhost:3000/uploads/${userData}`} alt="Profile Image"></img>
             <div className='flex-column post-box'>
-                <Link to='/home' className='link-to-profile'><span className='user-name'>Phil Lewis</span> <span className='username-name'>@phillewis.bsky.social · 4h</span></Link>
+                <Link to='/profile' className='link-to-profile'><span className='user-name'>Phil Lewis</span> <span className='username-name'>@phillewis.bsky.social · 4h</span></Link>
                 <p className='post-text'>Put a heating pad on one of the cat hammocks and it is like stuffing them in a get along shirt</p>
                 <img className='post-image' src={random}></img>
                 <div className='flex-row post-icons-container'>

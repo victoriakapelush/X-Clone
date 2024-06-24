@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import user from '../assets/icons/user.png'
 import home from '../assets/icons/home.png'
 import explore from '../assets/icons/explore.png'
@@ -10,8 +11,32 @@ import grok from '../assets/icons/grok.png'
 import lists from '../assets/icons/lists.png'
 import communities from '../assets/icons/communities.png'
 import premium from '../assets/icons/premium.png'
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 function HomeNav() {
+    const navigate = useNavigate();
+    const [formattedUsername, setFormattedUsername] = useState('');
+
+    const handleLogout = async (e) => {
+      e.preventDefault();
+      try {
+        const getToken = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`);
+        const { token } = response.data;
+        localStorage.removeItem('token', token);
+        navigate('/');
+        if (getToken) {
+            const decoded = jwtDecode(token);
+            const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
+            setFormattedUsername(decodedUsername); 
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+        console.error('Error decoding token:', error);
+      }
+    };
 
     return (
         <>
@@ -88,7 +113,7 @@ function HomeNav() {
                     </div>
                 </Link>
                 <button className='new-post-btn radius'>Post</button>
-                <button className='logout-btn radius'>Log out</button>
+                <button className='logout-btn radius' onClick={handleLogout}>Log out</button>
             </div>
         </>
     )
