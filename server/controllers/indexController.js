@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Profile = require('../models/Profile');
 
 const signupGet = (req, res) => {
   User.find()
@@ -26,8 +27,36 @@ const signupPost = async (req, res) => {
         return res.status(400).json({ message: "Invalid password format. Password must be a string." });
       }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ originalUsername, formattedUsername, email, password: hashedPassword });
+
+    // Get the current month and year
+    const now = new Date();
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const currentMonthYear = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+    // Create a new user
+    const user = new User({ 
+      originalUsername, 
+      formattedUsername, 
+      email, 
+      password: hashedPassword 
+    });
+
+    // Create a new profile for the user
+    user.profile = {
+      profileBio: '',
+      profilePicture: null,
+      location: '',
+      website: '',
+      registationDate: 'Joined ' + currentMonthYear,
+      following: '',
+      followers: ''
+    };
+
     await user.save();
+
     const payload = {
       id: user._id,
       originalUsername: user.originalUsername,

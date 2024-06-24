@@ -27,9 +27,7 @@ function Profile() {
                 console.error('Error decoding token:', error);
             }
         };
-
         fetchUserData(); 
-
     }, []); 
 
     useEffect(() => {
@@ -40,14 +38,13 @@ function Profile() {
                     console.error('No token found in local storage.');
                     return;
                 }
-
                 const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-
-                setUserData(response.data.profilePicture); 
+                console.log(response.data.profile);
+                setUserData(response.data); 
                 console.log('User Data:', userData);
             } catch (error) {
                 console.error('Error fetching user data:', error);

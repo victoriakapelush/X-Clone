@@ -9,7 +9,11 @@ function Login() {
   const responseMessage = useGoogleOAuth();
   const navigate = useNavigate();
   const notifyError = () => toast.error("User doesn't exist. Please try again.");
-  const [credentials, setCredentials] = useState({ originalUsername: '', formattedUsername: '', email: '', password: '' });
+  const [credentials, setCredentials] = useState({ 
+    originalUsername: '', 
+    email: '', 
+    password: '' 
+  });
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });

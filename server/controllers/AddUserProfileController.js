@@ -1,7 +1,9 @@
 const User = require('../models/User');
+const Profile = require('../models/Profile');
 
 const addUserProfile = async (req, res) => {
-    const { profileBio } = req.body;
+    const { profileBio, location, website } = req.body;
+    const currentUser = req.user.originalUsername;
     try {
         let imagePath;
         if (req.file) {
@@ -10,23 +12,20 @@ const addUserProfile = async (req, res) => {
         if (!req.file) {
             imagePath = null;
         }
+        const user = await User.findOne({ originalUsername: currentUser }).populate('profile');
 
-        const currentUser = req.user.originalUsername; 
-
-        const updateFields = {
-            profilePicture: imagePath,
-            profileBio: profileBio
-        };
-
-        const updatedUser = await User.findOneAndUpdate(
-            { originalUsername: currentUser }, 
-            updateFields, 
-            { new: true } 
-        );
-
-        if (!updatedUser) {
-            return res.status(404).send('User not found');
+        if (!user || !user.profile) {
+            return res.status(404).send('User or user profile not found');
         }
+
+        // Update the user's profile subdocument
+        user.profile.profilePicture = imagePath;
+        user.profile.profileBio = profileBio || '';
+        user.profile.location = location || '';
+        user.profile.website = website || '';
+
+        await user.save();
+
         res.status(200).send('User profile updated successfully');
     } catch (error) {
         console.error('Error updating user profile:', error);

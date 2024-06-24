@@ -4,13 +4,17 @@ const User = require('../models/User');
 
 const login = async (req, res) => {
   try {
-    const { originalUsername, formattedUsername, email, password } = req.body;
+    const { originalUsername, email, password } = req.body;
+    const formattedUsername = originalUsername.toLowerCase().replace(/\s+/g, '');
     const user = await User.findOne({ 
-      $and: [{ originalUsername: originalUsername }, { formattedUsername: formattedUsername }, { email: email }] 
+      $or: [
+        { originalUsername: originalUsername, email: email },
+        { formattedUsername: formattedUsername, email: email }
+      ]
     });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+
+    console.log(user);
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Incorrect password' });
@@ -24,7 +28,7 @@ const login = async (req, res) => {
         if (err || !token) {
           return res.status(500).json({ message: 'Internal server error' });
         }
-        return res.json({ message: 'Login successful', token: 'Bearer ' + token });
+        return res.json({ message: 'Login successful', token: token });
       });
   } catch (error) {
     console.error(error);
@@ -33,26 +37,30 @@ const login = async (req, res) => {
 };
 
 function verifyJWT(req, res, next) {
-  const token = req.headers["authorization"]?.split(' ')[1];
-  if (token) {
-    jwt.verify(token, 'cats', (err, decoded) => {
-      if (err) {
-        console.error('Token verification error:', err);
-        return res.status(401).json({
-          isLoggedIn: false,
-          message: "Failed to Authenticate"
-        });
-      }
-      req.user = {
-        id: decoded.id,
-        originalUsername: decoded.originalUsername,
-        formattedUsername: decoded.formattedUsername
-      };
-      next();
-    });
-  } else {
-    res.status(401).json({ message: "Authorization token is missing", isLoggedIn: false });
+  const authorizationHeader = req.headers["authorization"];
+  if (!authorizationHeader) {
+    return res.status(401).json({ message: "Authorization token is missing", isLoggedIn: false });
   }
+
+  const tokenParts = authorizationHeader.split(' ');
+  if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+    return res.status(401).json({ message: "Invalid authorization header format", isLoggedIn: false });
+  }
+
+  const token = tokenParts[1];
+
+  jwt.verify(token, 'cats', (err, decoded) => {
+    if (err) {
+      console.error('Token verification error:', err);
+      return res.status(401).json({ isLoggedIn: false, message: "Failed to Authenticate" });
+    }
+    req.user = {
+      id: decoded.id,
+      originalUsername: decoded.originalUsername,
+      formattedUsername: decoded.formattedUsername
+    };
+    next();
+  });
 }
 
 module.exports = { login, verifyJWT };
