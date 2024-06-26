@@ -452,7 +452,7 @@ a:hover, a:visited {
 }
 
 .new-post-btn {
-  width: 100%;
+  width: 20rem;
   padding: 1rem 1rem;
   border: 1px solid black;
   align-self: flex-start;
@@ -470,7 +470,7 @@ a:hover, a:visited {
 }
 
 .logout-btn {
-  width: 100%;
+  width: 20rem;
   padding: 1rem 1rem;
   border: 1px solid black;
   align-self: flex-start;

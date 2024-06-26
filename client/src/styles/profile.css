@@ -4,7 +4,7 @@
     border-right: 1px solid var(--deep-grey);
     border-left: 1px solid var(--deep-grey);
     flex: 1;
-    height: 40.5rem !important;
+    height: 40rem;
 }
 
 .profile-page {
@@ -127,7 +127,7 @@ svg {
 }
 
 .personal-info-section {
-    height: 100%;
+    height: fit-content;
     top: 40%;
     position: absolute;
     margin-top: 1rem;
@@ -192,7 +192,7 @@ svg {
 }
 
 .profile-nav {
-    margin: 2rem 0rem 1rem 0rem;
+    margin: 0 0rem 1rem 0rem;
     top: 70%;
     position: absolute;
     justify-content: center;
@@ -214,13 +214,29 @@ svg {
 
 .profile-post {
     position: absolute;
-    top: 78.8%;
+    top: 75%;
     width: 41%;
 }
 
 .profile-post .post {
     width: 101.5%;
     border-left: 1px solid var(--deep-grey);
+}
+
+.edit-profile-btn {
+    width: fit-content;
+    background-color: var(--black);
+    border: 1px solid var(--white);
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: .5rem 1rem;
+    margin: .5rem 1rem 0 auto;
+}
+
+.edit-profile-btn:hover {
+    cursor: pointer;
+    background-color: var(--opacity);
 }
 
 

@@ -3,7 +3,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import NewPost from './NewPost'
-import userProfile from '../assets/images/emoji.png'
+import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import PopupWindow from './PopupWindow'
@@ -51,14 +51,12 @@ function Home() {
                     console.error('No token found in local storage.');
                     return;
                 }
-
-                const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
+                const response = await axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-
-                setUserData(response.data.profilePicture); 
+                setUserData(response.data); 
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -96,7 +94,11 @@ return (
                 <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
                         <Link to='/profile'>
-                            <img className='profile-pic' src={`http://localhost:3000/uploads/${userData}`} alt="Profile Image"></img>
+                            {userData && userData.profile.profilePicture ? (
+                                <img className='profile-pic' src={`http://localhost:3000/${userData.profile.profilePicture}`} alt="Profile Picture" />
+                                ) : (
+                                <img className='profile-pic' src={defaultProfileImage} alt="Default Profile Picture" />
+                            )}
                         </Link>
                         <div className='form-container-new-post'>
                             <form>

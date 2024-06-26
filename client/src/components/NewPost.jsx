@@ -7,9 +7,16 @@ import likeafter from '../assets/icons/like-after.png';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+/* eslint-disable react/no-unescaped-entities */
+import '../styles/profile.css'
+import HomeNav from './HomeNav'
+import HomeExtra from './HomeExtra'
+import back from '../assets/icons/back.png'
+import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
+import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function NewPost() {
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
 
     useEffect(() => {
@@ -28,7 +35,7 @@ function NewPost() {
         fetchUserData(); 
     }, []); 
 
-    useEffect(() => {  
+    useEffect(() => {
         const getUserData = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -36,20 +43,22 @@ function NewPost() {
                     console.error('No token found in local storage.');
                     return;
                 }
-                const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
+                const response = await axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setUserData(response.data.profilePicture); 
+                setUserData({ ...response.data });                
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
+
         if (formattedUsername !== '') {
-        getUserData(); 
-    }
-}, [formattedUsername]);
+            getUserData(); 
+        }
+    }, [formattedUsername]); 
+
 
     return (
         <div className='post flex-row'>

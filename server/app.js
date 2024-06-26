@@ -14,7 +14,8 @@ const indexRouter = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
-const userProfile = require('./routes/userProfile');
+const homePage = require('./routes/homePage');
+const profilePage = require('./routes/profilePage');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -63,7 +64,8 @@ app.use('/api/signup', indexRouter, authRoutes);
 app.use('/', authRoutes);
 app.use('/api/login', loginRouter);
 app.use('/', logoutRouter);
-app.use('/home', userProfile);
+app.use('/home', homePage);
+app.use('/profile', profilePage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

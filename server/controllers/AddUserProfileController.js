@@ -12,6 +12,7 @@ const addUserProfile = async (req, res) => {
         if (!req.file) {
             imagePath = null;
         }
+        
         const user = await User.findOne({ originalUsername: currentUser }).populate('profile');
 
         if (!user || !user.profile) {
