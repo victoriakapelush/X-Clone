@@ -2,30 +2,36 @@ const User = require('../models/User');
 const Profile = require('../models/Profile');
 
 const addUserProfile = async (req, res) => {
-    const { profileBio, location, website } = req.body;
+    const { profileBio, location, website, updatedName } = req.body;
     const currentUser = req.user.originalUsername;
     try {
-        let imagePath;
-        if (req.file) {
-            imagePath = req.file.filename;
+        let updateFields = {};
+
+        // Check if files were uploaded and set image paths accordingly
+        if (req.files) {
+            if (req.files.profilePicture) {
+                updateFields['profile.profilePicture'] = req.files.profilePicture[0].path;
+            }
+            if (req.files.backgroundHeaderImage) {
+                updateFields['profile.backgroundHeaderImage'] = req.files.backgroundHeaderImage[0].path;
+            }
         }
-        if (!req.file) {
-            imagePath = null;
-        }
+
+        // Update other fields only if they are provided in the request
+        if (profileBio) updateFields['profile.profileBio'] = profileBio;
+        if (location) updateFields['profile.location'] = location;
+        if (website) updateFields['profile.website'] = website;
+        updateFields['profile.updatedName'] = updatedName || currentUser;
         
-        const user = await User.findOne({ originalUsername: currentUser }).populate('profile');
+        const user = await User.findOneAndUpdate(
+            { originalUsername: currentUser },
+            { $set: updateFields },
+            { new: true, upsert: false, runValidators: true }
+        ).populate('profile');
 
         if (!user || !user.profile) {
             return res.status(404).send('User or user profile not found');
         }
-
-        // Update the user's profile subdocument
-        user.profile.profilePicture = imagePath;
-        user.profile.profileBio = profileBio || '';
-        user.profile.location = location || '';
-        user.profile.website = website || '';
-
-        await user.save();
 
         res.status(200).send('User profile updated successfully');
     } catch (error) {
@@ -33,6 +39,8 @@ const addUserProfile = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
 
 
 

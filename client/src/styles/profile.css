@@ -146,7 +146,7 @@ svg {
 .user-profile-description {
     margin-bottom: .5rem;
     margin-right: 1rem;
-    width: 60%;
+    width: 100%;
     text-overflow: unset;
     overflow-wrap: break-word;
 }

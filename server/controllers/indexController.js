@@ -48,9 +48,10 @@ const signupPost = async (req, res) => {
     user.profile = {
       profileBio: '',
       profilePicture: null,
+      updatedName: originalUsername,
       location: '',
       website: '',
-      registationDate: 'Joined ' + currentMonthYear,
+      registrationDate: 'Joined ' + currentMonthYear,
       following: '',
       followers: ''
     };

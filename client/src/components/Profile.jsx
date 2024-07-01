@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import '../styles/profile.css'
 import { useState, useEffect } from 'react';
@@ -14,57 +15,77 @@ import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function Profile() {
     const [userData, setUserData] = useState({});
+    const [originalUsername, setOriginalUsername] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [profileData, setProfileData] = useState({
+        profileBio: '',
+        location: '',
+        website: '',
+        updatedName: originalUsername,
+        profilePicture: null,
+        backgroundHeaderImage: null
+    });
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
     };
 
-    const handleClosePopup = () => {
+    const handleClosePopup = (updatedProfileData) => {
         setIsPopupOpen(false);
+        if (updatedProfileData) {
+            setProfileData(updatedProfileData);
+            setUserData((prevUserData) => ({
+                ...prevUserData,
+                profile: { ...prevUserData.profile, ...updatedProfileData },
+            }));
+        }
+    };
+
+    const fetchUserData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decoded = jwtDecode(token);
+                const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
+                setFormattedUsername(decodedUsername); 
+
+                // Fetch user data directly using decodedUsername
+                const response = await axios.get(`http://localhost:3000/profile/${decodedUsername}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                
+                setUserData({ ...response.data });
+                console.log(response.data);
+                setProfileData({
+                    profileBio: response.data.profile.profileBio || '',
+                    location: response.data.profile.location || '',
+                    website: response.data.profile.website || '',
+                    updatedName: response.data.profile.updatedName || '',
+                    profilePicture: response.data.profileImage || '',
+                    backgroundHeaderImage: response.data.backgroundHeaderImage || ''
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
     };
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    const decoded = jwtDecode(token);
-                    const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
-                    setFormattedUsername(decodedUsername); 
-                }
-            } catch (error) {
-                console.error('Error decoding token:', error);
-            }
-        };
         fetchUserData(); 
     }, []); 
-
+    
+     
     useEffect(() => {
-        const getUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    console.error('No token found in local storage.');
-                    return;
-                }
-                const response = await axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setUserData({ ...response.data });
-                console.log(userData);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        if (formattedUsername !== '') {
-            getUserData(); 
+        if (userData) {
+            console.log('User data:', userData);
+        } else {
+            console.log('User data is not available.');
         }
-    }, [formattedUsername]); 
+    }, [userData]);
 
     return (
         <div className='flex-row profile-page'>
@@ -75,8 +96,8 @@ function Profile() {
                         <img src={back}/>
                     </Link>
                     <div className='flex-column profile-header-name'>
-                    {userData.originalUsername && <h2>{userData.originalUsername}</h2>}                        
-                    {userData.profile && <span>{userData.profile.posts} posts</span>}
+                        {profileData && <h2>{profileData.updatedName}</h2>}                        
+                        {userData && userData.profile && <span>{userData.profile.posts} posts</span>}
                     </div>
                 </header>
                 <div className='background-image-holder'>
@@ -93,15 +114,15 @@ function Profile() {
                         <img src={defaultProfileImage} alt="Default Profile Picture" />
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
-                    {isPopupOpen && <EditProfilePopup onClose={handleClosePopup} />}
+                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup}/>}
                     <div className='flex-column personal-info-section'>
-                        {userData.originalUsername && <span className='profile-user-name'>{userData.originalUsername}</span>}
+                        {userData && userData.profile && <span className='profile-user-name'>{userData.profile.updatedName}</span>}
                         {userData.formattedUsername && <span className='user-tag'>@{userData.formattedUsername}</span>}
-                        {userData.profile && userData.profile.profileBio && (
-                            <p className='user-profile-description'>{userData.profile.profileBio}</p>
+                        {profileData && profileData.profileBio && (
+                            <p className='user-profile-description'>{profileData.profileBio}</p>
                         )}
                         <div className='flex-row location-date-container'>
-                        {userData.profile && userData.profile.location && (
+                        {userData && userData.profile && userData.profile.location && (
                             <>
                                 <div className='flex-row location-container'>
                                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -109,7 +130,11 @@ function Profile() {
                                     </svg>
                                     <span>{userData.profile.location}</span>
                                 </div>
-                                <div className='flex-row location-container'>
+                                </>
+                            )}
+                        {userData && userData.profile && userData.profile.website && (
+                        <>
+                            <div className='flex-row location-container'>
                                     <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07zm-2.12 3.53l-7.07 7.07-1.41-1.41 7.07-7.07 1.41 1.41zm-12.02.71l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07 1.95 1.96 5.11 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9z"></path></g></svg>
                                     <span>
                                         <a href={userData.profile.website} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline"}}>
@@ -117,12 +142,10 @@ function Profile() {
                                         </a>
                                     </span>
                                 </div>
-                            </>
-                          )}
+                                </>)}
                             <div className='flex-row location-container'>
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M7 4V3h2v1h6V3h2v1h1.5C19.89 4 21 5.12 21 6.5v12c0 1.38-1.11 2.5-2.5 2.5h-13C4.12 21 3 19.88 3 18.5v-12C3 5.12 4.12 4 5.5 4H7zm0 2H5.5c-.27 0-.5.22-.5.5v12c0 .28.23.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5H17v1h-2V6H9v1H7V6zm0 6h2v-2H7v2zm0 4h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2z"></path></g></svg>                            
-                                <span>Joined February 2021</span>
-                            </div>
+                                {userData.profile ? (<span>{userData.profile.registrationDate}</span>) : <span>No registration date available</span>}                            </div>
                         </div>
                         <div className='flex-row following-container'>
                             {userData.profile && (
@@ -131,7 +154,7 @@ function Profile() {
                                     <span className='following-grey'>Following</span>
                                 </span>
                             )}
-                            {userData.profile && (
+                            {userData && userData.profile && (
                                 <span className='following-number'>
                                     {userData.profile.followers ? userData.profile.followers : '0'}{' '} 
                                     <span className='following-grey'>Followers</span>

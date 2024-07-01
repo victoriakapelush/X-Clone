@@ -18,8 +18,7 @@ const getProfilePage = async (req, res) => {
 const updateProfilePage = async (req, res) => {
     const { formattedUsername } = req.params;
     const userId = req.user.id;
-    const { originalUsername, profileBio, location, website } = req.body;
-    
+    const { updatedName, profileBio, location, website } = req.body;
     try {
         const user = await User.findOne({ _id: userId, formattedUsername });
 
@@ -27,19 +26,7 @@ const updateProfilePage = async (req, res) => {
             return res.status(404).send('User not found');
         }
 
-        if (req.files['profilePicture']) {
-            user.profile.profilePicture = req.files['profilePicture'][0].path;
-        } else {
-            user.profile.profilePicture = null;
-        }
-
-        if (req.files['backgroundHeaderImage']) {
-            user.profile.backgroundHeaderImage = req.files['backgroundHeaderImage'][0].path;
-        } else {
-            user.profile.backgroundHeaderImage = null;
-        }
-
-        user.originalUsername = originalUsername;
+        user.profile.updatedName = updatedName;
         user.profile.profileBio = profileBio;
         user.profile.location = location;
         user.profile.website = website;

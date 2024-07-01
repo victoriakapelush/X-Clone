@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-function PopupWindow({ onClose }) {
+function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
     const navigate = useNavigate();
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
