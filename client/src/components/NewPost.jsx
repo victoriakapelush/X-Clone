@@ -59,10 +59,9 @@ function NewPost() {
         }
     }, [formattedUsername]); 
 
-
     return (
         <div className='post flex-row'>
-            <img className='profile-pic' src={`http://localhost:3000/uploads/${userData}`} alt="Profile Image"></img>
+            <img className='profile-pic' alt="Profile Image"></img>
             <div className='flex-column post-box'>
                 <Link to='/profile' className='link-to-profile'><span className='user-name'>Phil Lewis</span> <span className='username-name'>@phillewis.bsky.social · 4h</span></Link>
                 <p className='post-text'>Put a heating pad on one of the cat hammocks and it is like stuffing them in a get along shirt</p>

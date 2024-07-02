@@ -57,7 +57,6 @@ function Profile() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                
                 setUserData({ ...response.data });
                 console.log(response.data);
                 setProfileData({
@@ -65,8 +64,8 @@ function Profile() {
                     location: response.data.profile.location || '',
                     website: response.data.profile.website || '',
                     updatedName: response.data.profile.updatedName || '',
-                    profilePicture: response.data.profileImage || '',
-                    backgroundHeaderImage: response.data.backgroundHeaderImage || ''
+                    profilePicture: response.data.profile.profilePicture || '',
+                    backgroundHeaderImage: response.data.profile.backgroundHeaderImage || ''
                 });
             }
         } catch (error) {
@@ -101,15 +100,15 @@ function Profile() {
                     </div>
                 </header>
                 <div className='background-image-holder'>
-                    {userData.profile && userData.profile.backgroundHeaderImage ? (
-                        <img src={`http://localhost:3000/${userData.profile.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
+                    {profileData && profileData.backgroundHeaderImage ? (
+                        <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
                     ) : (
                         <img src={defaultBackgroundImage} alt="Default Profile Header Background Picture" />
                     )}
                 </div>
                     <div className='profile-photo-container flex-row'>
-                    {userData.profile && userData.profile.profilePicture ? (
-                        <img src={`http://localhost:3000/${userData.profile.profilePicture}`} alt="Profile Picture" />
+                    {profileData && profileData.profilePicture ? (
+                        <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} alt="Profile Picture" />
                         ) : (
                         <img src={defaultProfileImage} alt="Default Profile Picture" />
                         )}

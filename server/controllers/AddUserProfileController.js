@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const Profile = require('../models/Profile');
 
 const addUserProfile = async (req, res) => {
     const { profileBio, location, website, updatedName } = req.body;
@@ -10,10 +9,10 @@ const addUserProfile = async (req, res) => {
         // Check if files were uploaded and set image paths accordingly
         if (req.files) {
             if (req.files.profilePicture) {
-                updateFields['profile.profilePicture'] = req.files.profilePicture[0].path;
+                updateFields['profile.profilePicture'] = req.files.profilePicture[0].filename;
             }
             if (req.files.backgroundHeaderImage) {
-                updateFields['profile.backgroundHeaderImage'] = req.files.backgroundHeaderImage[0].path;
+                updateFields['profile.backgroundHeaderImage'] = req.files.backgroundHeaderImage[0].filename;
             }
         }
 
@@ -33,16 +32,23 @@ const addUserProfile = async (req, res) => {
             return res.status(404).send('User or user profile not found');
         }
 
-        res.status(200).send('User profile updated successfully');
+        res.status(200).send({
+            message: 'User profile updated successfully',
+            profile: {
+                profileBio: user.profile.profileBio,
+                location: user.profile.location,
+                website: user.profile.website,
+                updatedName: user.profile.updatedName,
+                profilePicture: user.profile.profilePicture ? `http://localhost:3000/uploads/${user.profile.profilePicture}` : '',
+                backgroundHeaderImage: user.profile.backgroundHeaderImage ? `http://localhost:3000/uploads/${user.profile.backgroundHeaderImage}` : '',
+            }
+        });
+        
     } catch (error) {
         console.error('Error updating user profile:', error);
         res.status(500).send('Internal Server Error');
     }
 };
-
-
-
-
 
 const getUserProfile = async (req, res) => {
     const currentUser = req.user.originalUsername;

@@ -3,7 +3,7 @@
 import '../styles/popup.css'
 import '../styles/editProfilePopup.css'
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -16,8 +16,9 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
     const [imageUrl, setImageUrl] = useState('');
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('');
     const [formattedUsername, setFormattedUsername] = useState('');
-    const [profilePictureFileName, setProfilePictureFileName] = useState('');
-
+    const [profilePicture, setProfilePicture] = useState('');
+    const profileImageInputRef = useRef(null);
+    const backgroundImageInputRef = useRef(null);
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('token');
@@ -41,45 +42,53 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
     };
 
     useEffect(() => {
-        if (profileData.profilePicture) {
-            const url = URL.createObjectURL(profileData.profilePicture);
-            setProfilePictureFileName(profileData.profilePicture.name);
-            setImageUrl(url);
+        if (profileData.profilePicture && typeof profileData.profilePicture === 'string') {
+            setImageUrl(`http://localhost:3000/uploads/${profileData.profilePicture}`);
         }
-    
-        // Cleanup function if needed
+
         return () => {
-            // Revoke the URL object created by URL.createObjectURL
             if (imageUrl) {
                 URL.revokeObjectURL(imageUrl);
             }
         };
     }, [profileData.profilePicture]);
-    
-    
 
     useEffect(() => {
-        if (profileData.backgroundHeaderImage) {
-            const background_url = URL.createObjectURL(profileData.backgroundHeaderImage);
-            setBackgroundImageUrl(background_url);
+        if (profileData.backgroundHeaderImage && typeof profileData.backgroundHeaderImage === 'string') {
+            setBackgroundImageUrl(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`);
         }
-    }, [profileData.backgroundHeaderImage]);
+
+        return () => {
+            if (backgroundImageUrl) {
+                URL.revokeObjectURL(backgroundImageUrl);
+            }
+        };
+    }, [profileData.backgroundHeaderImage, backgroundImageUrl]);
+    
 
     const handleProfileImageChange = (e) => {
         if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
             setProfileData((prevData) => ({
                 ...prevData,
-                profilePicture: e.target.files[0]
+                profilePicture: file
             }));
+            setImageUrl(URL.createObjectURL(file));
         }
     };
 
     const handleBackgroundImageChange = (e) => {
         if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
             setProfileData((prevData) => ({
                 ...prevData,
-                backgroundHeaderImage: e.target.files[0]
+                backgroundHeaderImage: file
             }));
+            if (backgroundImageUrl) {
+                URL.revokeObjectURL(backgroundImageUrl);
+            }
+            setBackgroundImageUrl(URL.createObjectURL(file));
+            console.log(file);
         }
     };
 
@@ -97,6 +106,11 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
             profilePicture: null
         }));
         setImageUrl('');
+
+        // Reset the file input
+        if (profileImageInputRef.current) {
+            profileImageInputRef.current.value = '';
+        }
     };
 
     const handleDeleteBackgroundClick = () => {
@@ -105,6 +119,11 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
             backgroundHeaderImage: null
         }));
         setBackgroundImageUrl('');
+
+        // Reset the file input
+        if (backgroundImageInputRef.current) {
+            backgroundImageInputRef.current.value = '';
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -131,10 +150,9 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
         });
         setProfileData(response.data);
         onSave(profileData);
-        console.log('File uploaded successfully:', response.data);
-    } catch (error) {
-        console.error('Error updating profile:', error);
-    }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
 };
 
 return (
@@ -220,28 +238,24 @@ return (
                     placeholder="Name"
                     className='edit-popup-name-input'
                     name="updatedName"
-                    value={profileData.updatedName || ''}
                     onChange={handleChange}
                 />
                 <textarea
                     placeholder='Bio'
                     className='edit-popup-bio-input'
                     name="profileBio"
-                    value={profileData.profileBio || ''}
                     onChange={handleChange}
                 />
                 <input
                     placeholder='Location'
                     className='edit-popup-location-input'
                     name="location"
-                    value={profileData.location || ''}
                     onChange={handleChange}
                 />
                 <input
                     placeholder='Website'
                     className='edit-popup-website-input'
                     name="website"
-                    value={profileData.website || ''}
                     onChange={handleChange}
                 />
             </form>
