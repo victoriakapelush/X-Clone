@@ -11,12 +11,9 @@ import axios from 'axios';
 function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
     const navigate = useNavigate();
     const [originalUsername, setOriginalUsername] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [backgroundImage, setBackgroundImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('');
     const [formattedUsername, setFormattedUsername] = useState('');
-    const [profilePicture, setProfilePicture] = useState('');
     const profileImageInputRef = useRef(null);
     const backgroundImageInputRef = useRef(null);
 
@@ -51,13 +48,12 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
                 URL.revokeObjectURL(imageUrl);
             }
         };
-    }, [profileData.profilePicture]);
+    }, [profileData.profilePicture, imageUrl]);
 
     useEffect(() => {
         if (profileData.backgroundHeaderImage && typeof profileData.backgroundHeaderImage === 'string') {
             setBackgroundImageUrl(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`);
         }
-
         return () => {
             if (backgroundImageUrl) {
                 URL.revokeObjectURL(backgroundImageUrl);
@@ -73,6 +69,9 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
                 ...prevData,
                 profilePicture: file
             }));
+            if (imageUrl) {
+                URL.revokeObjectURL(imageUrl);
+            }
             setImageUrl(URL.createObjectURL(file));
         }
     };
@@ -88,7 +87,6 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
                 URL.revokeObjectURL(backgroundImageUrl);
             }
             setBackgroundImageUrl(URL.createObjectURL(file));
-            console.log(file);
         }
     };
 
@@ -99,6 +97,7 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
     const handleBackgroundUploadClick = () => {
         document.getElementById('backgroundHeaderImage').click();
     };
+    
 
     const handleDeleteClick = () => {
         setProfileData((prevData) => ({
@@ -106,25 +105,26 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
             profilePicture: null
         }));
         setImageUrl('');
-
+    
         // Reset the file input
         if (profileImageInputRef.current) {
-            profileImageInputRef.current.value = '';
+            profileImageInputRef.current.value = ''; // Resetting the value of file input
         }
     };
-
+    
     const handleDeleteBackgroundClick = () => {
         setProfileData((prevData) => ({
             ...prevData,
             backgroundHeaderImage: null
         }));
         setBackgroundImageUrl('');
-
+    
         // Reset the file input
         if (backgroundImageInputRef.current) {
-            backgroundImageInputRef.current.value = '';
+            backgroundImageInputRef.current.value = ''; // Resetting the value of file input
         }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -135,21 +135,16 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
             formData.append('location', profileData.location);
             formData.append('website', profileData.website);
             formData.append('updatedName', profileData.updatedName);
-            if (profileData.profilePicture) {
-                formData.append('profilePicture', profileData.profilePicture);
-            }
-            if (profileData.backgroundHeaderImage) {
-                formData.append('backgroundHeaderImage', profileData.backgroundHeaderImage);
-            }
-
-          const response = await axios.post(`http://localhost:3000/profile/${formattedUsername}`, formData, {
+            formData.append('profilePicture', profileData.profilePicture);
+            formData.append('backgroundHeaderImage', profileData.backgroundHeaderImage);
+            
+            const response = await axios.post(`http://localhost:3000/profile/${formattedUsername}`, formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
         });
-        setProfileData(response.data);
-        onSave(profileData);
+        onSave(response.data.profile);
         } catch (error) {
             console.error('Error updating profile:', error);
         }
@@ -233,7 +228,7 @@ return (
                     style={{ display: 'none' }}
                 />
             </div>
-            <form className='flex-column edit-popup-form'>
+            <form className='flex-column edit-popup-form' encType="multipart/form-data">
                 <input
                     placeholder="Name"
                     className='edit-popup-name-input'

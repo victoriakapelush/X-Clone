@@ -14,10 +14,16 @@ import premium from '../assets/icons/premium.png'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import ToPost from './ToPost'
 
 function HomeNav() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const navigate = useNavigate();
     const [formattedUsername, setFormattedUsername] = useState('');
+
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
 
     const handleLogout = async (e) => {
       e.preventDefault();
@@ -112,7 +118,8 @@ function HomeNav() {
                         <p className='nav-links'>Profile</p>
                     </div>
                 </Link>
-                <button className='new-post-btn radius'>Post</button>
+                <button onClick={handleOpenPopup} className='new-post-btn radius'>Post</button>
+                {isPopupOpen && <ToPost />}
                 <button className='logout-btn radius' onClick={handleLogout}>Log out</button>
             </div>
         </>

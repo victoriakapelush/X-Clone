@@ -7,6 +7,7 @@ import Home from './components/Home.jsx'
 import Profile from './components/Profile.jsx'
 import PopupWindow from './components/PopupWindow.jsx'
 import EditProfilePopup from './components/EditProfilePopup.jsx'
+import ToPost from './components/ToPost.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import './styles/index.css'
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <PopupWindow />
+  },
+  {
+    path: "/",
+    element: <ToPost />
   }
 ]);
 

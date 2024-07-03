@@ -39,8 +39,8 @@ const addUserProfile = async (req, res) => {
                 location: user.profile.location,
                 website: user.profile.website,
                 updatedName: user.profile.updatedName,
-                profilePicture: user.profile.profilePicture ? `http://localhost:3000/uploads/${user.profile.profilePicture}` : '',
-                backgroundHeaderImage: user.profile.backgroundHeaderImage ? `http://localhost:3000/uploads/${user.profile.backgroundHeaderImage}` : '',
+                profilePicture: user.profile.profilePicture,
+                backgroundHeaderImage: user.profile.backgroundHeaderImage
             }
         });
         

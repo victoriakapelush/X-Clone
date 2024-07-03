@@ -58,7 +58,6 @@ function Profile() {
                     }
                 });
                 setUserData({ ...response.data });
-                console.log(response.data);
                 setProfileData({
                     profileBio: response.data.profile.profileBio || '',
                     location: response.data.profile.location || '',
@@ -77,7 +76,6 @@ function Profile() {
         fetchUserData(); 
     }, []); 
     
-     
     useEffect(() => {
         if (userData) {
             console.log('User data:', userData);
@@ -115,29 +113,29 @@ function Profile() {
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
                     {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup}/>}
                     <div className='flex-column personal-info-section'>
-                        {userData && userData.profile && <span className='profile-user-name'>{userData.profile.updatedName}</span>}
+                        {profileData && <span className='profile-user-name'>{profileData.updatedName}</span>}
                         {userData.formattedUsername && <span className='user-tag'>@{userData.formattedUsername}</span>}
                         {profileData && profileData.profileBio && (
                             <p className='user-profile-description'>{profileData.profileBio}</p>
                         )}
                         <div className='flex-row location-date-container'>
-                        {userData && userData.profile && userData.profile.location && (
+                        {profileData && profileData.location && (
                             <>
                                 <div className='flex-row location-container'>
                                     <svg viewBox="0 0 24 24" aria-hidden="true">
                                         <g><path d="M12 7c-1.93 0-3.5 1.57-3.5 3.5S10.07 14 12 14s3.5-1.57 3.5-3.5S13.93 7 12 7zm0 5c-.827 0-1.5-.673-1.5-1.5S11.173 9 12 9s1.5.673 1.5 1.5S12.827 12 12 12zm0-10c-4.687 0-8.5 3.813-8.5 8.5 0 5.967 7.621 11.116 7.945 11.332l.555.37.555-.37c.324-.216 7.945-5.365 7.945-11.332C20.5 5.813 16.687 2 12 2zm0 17.77c-1.665-1.241-6.5-5.196-6.5-9.27C5.5 6.916 8.416 4 12 4s6.5 2.916 6.5 6.5c0 4.073-4.835 8.028-6.5 9.27z"></path></g>
                                     </svg>
-                                    <span>{userData.profile.location}</span>
+                                    <span>{profileData.location}</span>
                                 </div>
                                 </>
                             )}
-                        {userData && userData.profile && userData.profile.website && (
+                        {profileData && profileData.website && (
                         <>
                             <div className='flex-row location-container'>
                                     <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07zm-2.12 3.53l-7.07 7.07-1.41-1.41 7.07-7.07 1.41 1.41zm-12.02.71l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07 1.95 1.96 5.11 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9z"></path></g></svg>
                                     <span>
-                                        <a href={userData.profile.website} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline"}}>
-                                            {userData.profile.website}
+                                        <a href='' target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline"}}>
+                                            {profileData.website}
                                         </a>
                                     </span>
                                 </div>

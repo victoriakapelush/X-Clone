@@ -95,7 +95,7 @@ return (
                     <div className='create-new-post-window-container flex-row'>
                         <Link to='/profile'>
                             {userData && userData.profile.profilePicture ? (
-                                <img className='profile-pic' src={`http://localhost:3000/${userData.profile.profilePicture}`} alt="Profile Picture" />
+                                <img className='profile-pic' src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`} alt="Profile Picture" />
                                 ) : (
                                 <img className='profile-pic' src={defaultProfileImage} alt="Default Profile Picture" />
                             )}
