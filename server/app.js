@@ -16,6 +16,7 @@ const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const homePage = require('./routes/homePage');
 const profilePage = require('./routes/profilePage');
+const post = require('./routes/post');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -66,6 +67,8 @@ app.use('/api/login', loginRouter);
 app.use('/', logoutRouter);
 app.use('/home', homePage);
 app.use('/profile', profilePage);
+app.use('/post', post);
+app.use('/profile/post', post);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
