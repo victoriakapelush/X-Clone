@@ -118,8 +118,6 @@ return (
                     </div>
                 </div>
                 <NewPost />
-                <NewPost />
-                <NewPost />
             </div>
         )}
         {!showPopup && <HomeExtra />}
