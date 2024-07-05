@@ -180,8 +180,6 @@ function Profile() {
                 </nav>
                 <div className='profile-post'>
                     <NewPost />
-                    <NewPost />
-                    <NewPost />
                 </div>
             </div>
             <HomeExtra />

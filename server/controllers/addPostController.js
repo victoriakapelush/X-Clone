@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const moment = require('moment');
 
 const getPost = async (req, res) => {
     const currentUser = req.user.originalUsername;
@@ -16,12 +17,10 @@ const getPost = async (req, res) => {
 
 const addPost = async (req, res) => {
     const { text } = req.body;
-    console.log(text, req.body);
     const currentUser = req.user.originalUsername;
 
     try {
         let filename = null;
-        console.log(req.file);
         if (req.file) {
             filename = req.file.filename;
         }
@@ -33,7 +32,8 @@ const addPost = async (req, res) => {
 
         const newPost = {
             text,
-            image: filename
+            image: filename,
+            time: new Date()
         };
 
         user.post.push(newPost);

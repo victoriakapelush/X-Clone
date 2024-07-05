@@ -25,6 +25,10 @@ function HomeNav() {
         setIsPopupOpen(true);
     };
 
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+
     const handleLogout = async (e) => {
       e.preventDefault();
       try {
@@ -46,7 +50,7 @@ function HomeNav() {
 
     return (
         <>
-        {isPopupOpen && <ToPost />}
+        {isPopupOpen && <ToPost onClose={handleClosePopup}/>}
             <div className='links-container flex-column'>
                 <Link className='flex-row header-and-mini-header' to='/home'>
                     <svg id='mini-header' className='radius' viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">

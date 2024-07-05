@@ -9,14 +9,81 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-function ToPost() {
+function ToPost({ onClose }) {
+    const [userData, setUserData] = useState({});
+    const [profile, setProfile] = useState({});
+    const [formattedUsername, setFormattedUsername] = useState('');
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const decoded = jwtDecode(token);
+                    const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
+                    setFormattedUsername(decodedUsername); 
+                }
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        };
+        fetchUserData(); 
+    }, []); 
+
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found in local storage.');
+                    return;
+                }
+                
+                const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+        
+                if (!response.data) {
+                    console.error('User data not found in response:', response.data);
+                    return;
+                }
+        
+                const profiles = response.data.profile || [];
+                setUserData({ ...response.data });
+                setProfile(profiles); 
+
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        getUserData();
+    }, [formattedUsername]); 
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const formData = new FormData();    
+            
+            const response = await axios.post(`http://localhost:3000/home/${formattedUsername}`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        } catch (error) {
+            console.error('Error creating a post:', error);
+        }
+};
 
     return (
         <div className="topost-popup-container flex-column">
             <div className="topost-black-window flexible-size flex-column">
                 <div className='edit-popup-header flex-row'>
                     <div className='edit-popup-close-header flex-row'>
-                        <button className='radius edit-popup-close-button'>
+                        <button className='radius edit-popup-close-button' onClick={() => onClose(null)}>
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <g><path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path></g>
                             </svg>
@@ -26,7 +93,7 @@ function ToPost() {
                 <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
                         <Link to='/profile'>
-                                <img className='profile-pic' alt="Profile Picture" />
+                                <img className='profile-pic' alt="Profile Picture" src={`http://localhost:3000/uploads/${profile.profilePicture}`} />
                         </Link>
                         <div className='form-container-new-post'>
                             <form>
@@ -39,18 +106,16 @@ function ToPost() {
                                         <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 9.5C8 8.119 8.672 7 9.5 7S11 8.119 11 9.5 10.328 12 9.5 12 8 10.881 8 9.5zm6.5 2.5c.828 0 1.5-1.119 1.5-2.5S15.328 7 14.5 7 13 8.119 13 9.5s.672 2.5 1.5 2.5zM12 16c-2.224 0-3.021-2.227-3.051-2.316l-1.897.633c.05.15 1.271 3.684 4.949 3.684s4.898-3.533 4.949-3.684l-1.896-.638c-.033.095-.83 2.322-3.053 2.322zm10.25-4.001c0 5.652-4.598 10.25-10.25 10.25S1.75 17.652 1.75 12 6.348 1.75 12 1.75 22.25 6.348 22.25 12zm-2 0c0-4.549-3.701-8.25-8.25-8.25S3.75 7.451 3.75 12s3.701 8.25 8.25 8.25 8.25-3.701 8.25-8.25z"></path></g></svg>
                                         <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 5c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zM2 7c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12V6h10v2zM6 15c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zm-4 2c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12v-2h10v2zM7 7c0 .552-.45 1-1 1s-1-.448-1-1 .45-1 1-1 1 .448 1 1z"></path></g></svg>
                                     </div>
-                                    <button className='new-post-btn radius smaller-size'>Post</button>
+                                    <button className='new-post-btn radius smaller-size' onClick={handleSubmit}>Post</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );
-    }
+}
     
 
 export default ToPost;
