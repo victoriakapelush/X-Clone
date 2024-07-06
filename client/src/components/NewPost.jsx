@@ -15,11 +15,13 @@ import HomeExtra from './HomeExtra'
 import back from '../assets/icons/back.png'
 import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
+import ToPost from './ToPost';
 
 function NewPost() {
     const [userData, setUserData] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
     const [postData, setPostData] = useState([]);
+
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -37,35 +39,38 @@ function NewPost() {
         fetchUserData(); 
     }, []); 
 
-    useEffect(() => {
-        const getUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    console.error('No token found in local storage.');
-                    return;
-                }
-                
-                const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (!response.data.post) {
-                    console.error('Post data not found in response:', response.data);
-                    return;
-                }
-        
-                setUserData({ ...response.data });
-                setPostData([ ...response.data.post ])
-            } catch (error) {
-                console.error('Error fetching user data:', error);
+    const getUserData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found in local storage.');
+                return;
             }
-        };
-        getUserData();
-    }, [formattedUsername]); 
+            
+            const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
+            if (!response.data.post) {
+                console.error('Post data not found in response:', response.data);
+                return;
+            }
+    
+            setUserData({ ...response.data });
+            setPostData([ ...response.data.post ]);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (formattedUsername) {
+            getUserData();
+        }
+    }, [formattedUsername]);  
+    
     return (
         <div>
             {postData.map((post, index) => (

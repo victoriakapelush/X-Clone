@@ -12,15 +12,17 @@ import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 
 function Home({ onClose, posts, setPosts }) {
-    const [text, setText] = useState('');
-    const [images, setImages] = useState([]);
     const [userData, setUserData] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
-    const fileInputRef = useRef(null);
+
     const [showPopup, setShowPopup] = useState(() => {
         const savedPopupState = localStorage.getItem('showPopup');
         return savedPopupState === 'false' ? false : true;
     });
+
+    const [text, setText] = useState('');
+    const [images, setImages] = useState([]);
+
 
     const handleTextChange = (e) => {
         setText(e.target.value);
@@ -88,12 +90,6 @@ useEffect(() => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-        formData.append('text', text);
-        images.forEach((image, index) => {
-            formData.append(`images[${index}]`, image);
-        });
 
     try {
         const token = localStorage.getItem('token');            

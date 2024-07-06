@@ -39,6 +39,15 @@
     min-height: 9rem;
   }
 
+  .topost-insert-image {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    top: 4rem;
+    background-color: var(--deep-grey);
+    margin-top: 1rem;
+  }
+
   
   
   
