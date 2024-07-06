@@ -13,6 +13,7 @@ function ToPost({ onClose }) {
     const [userData, setUserData] = useState({});
     const [profile, setProfile] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
+    const [text, setText] = useState('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -63,16 +64,21 @@ function ToPost({ onClose }) {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (text.trim() === '') {
+            alert('Content cannot be empty');
+            return;
+        }
         try {
-            const token = localStorage.getItem('token');
-            const formData = new FormData();    
-            
-            const response = await axios.post(`http://localhost:3000/home/${formattedUsername}`, formData, {
+            const token = localStorage.getItem('token');            
+            const response = await axios.post(`http://localhost:3000/post/${formattedUsername}`, { text }, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
         });
+        setText(response.data);
+        onClose(); 
         } catch (error) {
             console.error('Error creating a post:', error);
         }
@@ -97,7 +103,11 @@ function ToPost({ onClose }) {
                         </Link>
                         <div className='form-container-new-post'>
                             <form>
-                                <textarea className='topost-textarea' placeholder='What is happening?!'></textarea>
+                                <textarea className='topost-textarea' placeholder='What is happening?!'
+                                 name='text'
+                                 value={text}
+                                 onChange={(e) => setText(e.target.value)}>
+                                 </textarea>
                                 <div className='flex-row button-and-upload-pic'>
                                     <div className='upload-pic-container'>
                                         <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path></g></svg>
@@ -106,7 +116,7 @@ function ToPost({ onClose }) {
                                         <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 9.5C8 8.119 8.672 7 9.5 7S11 8.119 11 9.5 10.328 12 9.5 12 8 10.881 8 9.5zm6.5 2.5c.828 0 1.5-1.119 1.5-2.5S15.328 7 14.5 7 13 8.119 13 9.5s.672 2.5 1.5 2.5zM12 16c-2.224 0-3.021-2.227-3.051-2.316l-1.897.633c.05.15 1.271 3.684 4.949 3.684s4.898-3.533 4.949-3.684l-1.896-.638c-.033.095-.83 2.322-3.053 2.322zm10.25-4.001c0 5.652-4.598 10.25-10.25 10.25S1.75 17.652 1.75 12 6.348 1.75 12 1.75 22.25 6.348 22.25 12zm-2 0c0-4.549-3.701-8.25-8.25-8.25S3.75 7.451 3.75 12s3.701 8.25 8.25 8.25 8.25-3.701 8.25-8.25z"></path></g></svg>
                                         <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 5c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zM2 7c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12V6h10v2zM6 15c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zm-4 2c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12v-2h10v2zM7 7c0 .552-.45 1-1 1s-1-.448-1-1 .45-1 1-1 1 .448 1 1z"></path></g></svg>
                                     </div>
-                                    <button className='new-post-btn radius smaller-size' onClick={handleSubmit}>Post</button>
+                                    <button className='new-post-btn radius smaller-size' onClick={handleSubmit} type='submit'>Post</button>
                                 </div>
                             </form>
                         </div>

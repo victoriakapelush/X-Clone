@@ -578,10 +578,10 @@ a:hover, a:visited {
   border-top: 1px solid var(--deep-grey);
 }
 
-.form-container-new-post form textarea {
+.form-container-new-post form .post-textarea {
   width: 100%;
   background-color: transparent;
-  height: 4rem; 
+  height: 5rem; 
   box-sizing: border-box;
   resize: none; 
   border: none;
@@ -592,7 +592,7 @@ a:hover, a:visited {
   padding-top: 1.4rem;
 }
 
-textarea::placeholder {
+.post-textarea::placeholder {
   font-size: 1.3rem;
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
 import icon from '../assets/images/emoji.png';
@@ -19,7 +20,7 @@ function NewPost() {
     const [userData, setUserData] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
     const [postData, setPostData] = useState([]);
-    
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -50,15 +51,14 @@ function NewPost() {
                         Authorization: `Bearer ${token}`
                     }
                 });
-        
+
                 if (!response.data.post) {
                     console.error('Post data not found in response:', response.data);
                     return;
                 }
         
-                const postData = response.data.post || [];
                 setUserData({ ...response.data });
-                setPostData(postData); 
+                setPostData([ ...response.data.post ])
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -70,7 +70,11 @@ function NewPost() {
         <div>
             {postData.map((post, index) => (
                 <div key={index} className='post flex-row'>
-                    <img className='profile-pic' alt="Profile Image" src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}/>
+                    <img
+                        className='profile-pic'
+                        alt="Profile Image"
+                        src={`http://localhost:3000/uploads/${userData.profile.profilePicture || 'defaultProfileImage.jpg'}`}
+                    />                    
                     <div className='flex-column post-box'>
                         <Link to='/profile' className='link-to-profile'>
                             <span className='user-name'>{userData.originalUsername}</span> <span className='username-name'>@{userData.formattedUsername} · {post.time}</span>
@@ -132,8 +136,8 @@ function NewPost() {
                     </div>
                 </div>
             ))}
-        </div>
-    )
-}    
+    </div>
+    );
+} 
 
 export default NewPost
