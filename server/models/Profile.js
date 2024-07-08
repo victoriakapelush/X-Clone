@@ -3,13 +3,13 @@ const Schema = mongoose.Schema;
 
 const ProfileSchema = new Schema({
     updatedName: { type: String },
-    posts: { type: String, default: '0' },
+    posts: { type: Number },
     profileBio: { type: String, default: '' },
     location: { type: String, default: '' },
     website: { type: String, default: '' },
     registrationDate: { type: String },
-    following: { type: String, default: '0' },
-    followers: { type: String, default: '0' },
+    following: { type: Number },
+    followers: { type: Number },
     profilePicture: { type: String , default: null },
     backgroundHeaderImage: { type: String, default: null }
 });

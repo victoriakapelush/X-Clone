@@ -38,6 +38,7 @@ function Profile() {
             setUserData((prevUserData) => ({
                 ...prevUserData,
                 profile: { ...prevUserData.profile, ...updatedProfileData },
+                post: { ...prevUserData.post }
             }));
         }
     };
@@ -58,6 +59,7 @@ function Profile() {
                     }
                 });
                 setUserData({ ...response.data });
+                document.title = `${response.data.originalUsername} (@${response.data.formattedUsername}) / X`
                 setProfileData({
                     profileBio: response.data.profile.profileBio || '',
                     location: response.data.profile.location || '',

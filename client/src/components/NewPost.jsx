@@ -16,12 +16,12 @@ import back from '../assets/icons/back.png'
 import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import ToPost from './ToPost';
+import { formatDistanceToNow } from 'date-fns';
 
 function NewPost() {
     const [userData, setUserData] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
     const [postData, setPostData] = useState([]);
-
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -60,6 +60,7 @@ function NewPost() {
     
             setUserData({ ...response.data });
             setPostData([ ...response.data.post ]);
+
         } catch (error) {
             console.error('Error fetching user data:', error);
         }

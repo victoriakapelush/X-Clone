@@ -8,7 +8,7 @@ const PostSchema = new Schema({
     repost: { type: String, default: '0' },
     like: { type: String, default: '0' },
     share: { type: String, default: '0' },
-    time: { type: Date, default: Date.now }
+    time: { type: String }
 });
 
 module.exports = PostSchema; 

@@ -10,6 +10,7 @@ import HomeExtra from './HomeExtra'
 import PopupWindow from './PopupWindow'
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import PostReplacement from './PostReplacement.jsx'
 
 function Home({ onClose, posts, setPosts }) {
     const [userData, setUserData] = useState(null);
@@ -110,7 +111,7 @@ return (
     <div className="flex-row home-container">
         <HomeNav />
         {showPopup ? (
-            <PopupWindow onClose={handleClosePopup} />
+            <PopupWindow onClose={handleClosePopup} onSave={handleClosePopup} />
         ) : (
             <div className='profile-center'>
                 <div className='flex-row mini-header-btns-container'>
@@ -168,7 +169,7 @@ return (
                         </div>
                     </div>
                 </div>
-                <NewPost />
+                <PostReplacement />
             </div>
         )}
         {!showPopup && <HomeExtra />}

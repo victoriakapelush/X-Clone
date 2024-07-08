@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
-    const navigate = useNavigate();
     const [originalUsername, setOriginalUsername] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('');

@@ -53,7 +53,8 @@ const signupPost = async (req, res) => {
       website: '',
       registrationDate: 'Joined ' + currentMonthYear,
       following: '',
-      followers: ''
+      followers: '',
+      posts: 0
     };
 
     await user.save();

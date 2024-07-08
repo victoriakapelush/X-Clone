@@ -8,8 +8,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 
-function ToPost({ onClose, fetchPosts }) {
+function ToPost({ onClose, onSave }) {
     const [userData, setUserData] = useState({});
     const [profile, setProfile] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
@@ -74,8 +75,6 @@ function ToPost({ onClose, fetchPosts }) {
                 setUserData({ ...response.data });
                 setProfile(profiles);
                 setPost(posts);
-                fetchPosts();
-                onClose();
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -91,7 +90,7 @@ function ToPost({ onClose, fetchPosts }) {
             const formData = new FormData();    
             formData.append('text', text);
             formData.append('image', profileImage);
-            console.log('FormData entries:', [...formData.entries()]);
+
             const response = await axios.post(`http://localhost:3000/post/${formattedUsername}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,

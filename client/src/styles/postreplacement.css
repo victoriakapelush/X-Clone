@@ -1,0 +1,10 @@
+#post-replace-btn {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    padding: 1.2rem 1.7rem;
+    color: var(--white);
+}
+
+.border-top {
+    border-top: 1px solid var(--deep-grey);
+}

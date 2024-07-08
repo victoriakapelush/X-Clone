@@ -520,7 +520,7 @@ a:hover, a:visited {
 
 .mini-header-btns-container {
   border-bottom: 1px solid var(--deep-grey);
-  width: 100%;
+  width: 35rem;
   border-right: 1px solid var(--deep-grey);
 }
 
@@ -560,7 +560,7 @@ a:hover, a:visited {
 }
 
 .create-new-post-window {
-  width: 100%;
+  width: 35rem;
   height: fit-content;
   border-right: 1px solid var(--deep-grey);
 }

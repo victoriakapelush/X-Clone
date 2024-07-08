@@ -1,5 +1,6 @@
 const User = require('../models/User');
-const moment = require('moment');
+const format = require('date-fns/format');
+const { formatDistanceToNow } = require('date-fns');
 
 const getPost = async (req, res) => {
     const currentUser = req.user.originalUsername;
@@ -30,17 +31,21 @@ const addPost = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        const postTime = new Date();
+        const formattedTime = formatDistanceToNow(postTime, { addSuffix: true , includeSeconds: true });
+
         const newPost = {
             text,
             image: filename,
-            time: new Date()
+            time: formattedTime
         };
 
         user.post.push(newPost);
-        await user.save();
+        user.profile.posts = (user.profile.posts || 0) + 1; 
 
+        await user.save();
         res.status(201).json({ message: 'Post added successfully', post: newPost });
-    } catch (error) {
+        } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
