@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const Profile = require('../models/Profile');
 
 const signupGet = (req, res) => {
   User.find()
