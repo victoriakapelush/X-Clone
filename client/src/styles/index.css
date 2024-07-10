@@ -770,6 +770,18 @@ a:hover, a:visited {
   margin-top: 0;
 }
 
+.no-posts-message {
+  position: absolute;
+  top: 78%;
+  padding-left: 13rem;
+}
+
+.no-posts-message p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+
 .save-icons {
   gap: .7rem;
   align-content: center;

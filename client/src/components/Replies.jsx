@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from 'react-router-dom';
 
-function HomeExtra({ randomUser }) {
+function Replies() {
 
     return (
         <div className='profile-right flex-column'>
@@ -47,29 +47,9 @@ function HomeExtra({ randomUser }) {
             <div className='premium-header'>
                 <h3>Who to follow</h3>
             </div>
-            {randomUser && randomUser.slice(0, 3).map(user => (
-            <Link key={user.id} to={`/profile/${user.formattedUsername}`}>
-                <div className='who-tofollow-container flex-column'>
-                    <div className='who-tofollow-profile-box flex-row'>
-                        <div className='who-to-follow-single-user flex-row'>
-                            <div className='who-tofollow-image-box'>
-                                <img src={user.profile.profilePicture} alt={`${user.originalUsername}'s profile`} />
-                            </div>
-                            <div className='flex-column who-tofollow-name-box'>
-                                <span className='who-tofollow-namelink'>{user.originalUsername}</span>
-                                <span className='who-tofollow-iglink'>@{user.formattedUsername}</span>
-                            </div>
-                        </div>
-                        <div className='who-tofollow-btn'>
-                            <button className='radius'>Follow</button>
-                        </div>
-                    </div>
-                </div>
-            </Link>
-            ))}
         </div>
     </div>
     )
 }
 
-export default HomeExtra
+export default Replies

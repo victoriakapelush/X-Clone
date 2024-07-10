@@ -4,7 +4,7 @@
     border-right: 1px solid var(--deep-grey);
     border-left: 1px solid var(--deep-grey);
     flex: 1;
-    height: 40rem;
+    height: 100vh;
 }
 
 .profile-page {

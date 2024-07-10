@@ -53,13 +53,13 @@ function NewPost() {
                 }
             });
 
-            if (!response.data.post) {
+            if (!response.data.userProfile.post) {
                 console.error('Post data not found in response:', response.data);
                 return;
             }
     
-            setUserData({ ...response.data });
-            setPostData([ ...response.data.post ]);
+            setUserData({ ...response.data.userProfile });
+            setPostData([ ...response.data.userProfile.post ]);
 
         } catch (error) {
             console.error('Error fetching user data:', error);

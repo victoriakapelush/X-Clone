@@ -11,9 +11,11 @@ import PopupWindow from './PopupWindow'
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import PostReplacement from './PostReplacement.jsx'
+import OtherUsersProfiles from './OtherUsersProfiles';
 
 function Home({ onClose, posts, setPosts }) {
     const [userData, setUserData] = useState(null);
+    const [randomUser, setRandomUser] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
 
     const [showPopup, setShowPopup] = useState(() => {
@@ -75,7 +77,9 @@ function Home({ onClose, posts, setPosts }) {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setUserData(response.data); 
+                setUserData(response.data.userProfile); 
+                setRandomUser(response.data.randomUsers);
+
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -170,9 +174,10 @@ return (
                     </div>
                 </div>
                 <PostReplacement />
+                <OtherUsersProfiles randomUser={randomUser} />
             </div>
         )}
-        {!showPopup && <HomeExtra />}
+        {!showPopup && <HomeExtra randomUser={randomUser} />}
     </div>
 );
 }

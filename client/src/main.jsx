@@ -10,6 +10,8 @@ import EditProfilePopup from './components/EditProfilePopup.jsx'
 import ToPost from './components/ToPost.jsx'
 import Grok from './components/Grok.jsx'
 import Premium from './components/Premium.jsx'
+import Replies from './components/Replies.jsx'
+import OtherUsersProfiles from './components/OtherUsersProfiles.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import './styles/index.css'
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />
+  },
+  {
+    path: "/profile/:username",
+    element: <OtherUsersProfiles />
+  },
+  {
+    path: "/profile/:username/replies",
+    element: <Replies />
   },
   {
     path: "/profile",

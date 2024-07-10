@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import '../styles/profile.css'
@@ -18,6 +19,7 @@ function Profile() {
     const [originalUsername, setOriginalUsername] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [randomUser, setRandomUser] = useState(null);
     const [profileData, setProfileData] = useState({
         profileBio: '',
         location: '',
@@ -58,16 +60,17 @@ function Profile() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                setUserData({ ...response.data });
-                document.title = `${response.data.originalUsername} (@${response.data.formattedUsername}) / X`
+                setUserData({ ...response.data.userProfile });
+                document.title = `${response.data.userProfile.originalUsername} (@${response.data.userProfile.formattedUsername}) / X`
                 setProfileData({
-                    profileBio: response.data.profile.profileBio || '',
-                    location: response.data.profile.location || '',
-                    website: response.data.profile.website || '',
-                    updatedName: response.data.profile.updatedName || '',
-                    profilePicture: response.data.profile.profilePicture || '',
-                    backgroundHeaderImage: response.data.profile.backgroundHeaderImage || ''
+                    profileBio: response.data.userProfile.profile.profileBio || '',
+                    location: response.data.userProfile.profile.location || '',
+                    website: response.data.userProfile.profile.website || '',
+                    updatedName: response.data.userProfile.profile.updatedName || '',
+                    profilePicture: response.data.userProfile.profile.profilePicture || '',
+                    backgroundHeaderImage: response.data.userProfile.profile.backgroundHeaderImage || ''
                 });
+                setRandomUser(response.data.randomUsers);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -184,7 +187,7 @@ function Profile() {
                     <NewPost />
                 </div>
             </div>
-            <HomeExtra />
+            <HomeExtra randomUser={randomUser} />
         </div>
     )
 }
