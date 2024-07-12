@@ -8,6 +8,11 @@ import HomeNav from './HomeNav'
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import NewPost from './NewPost'
+import Replies from './Replies'
+import Highlights from './Highlights'
+import Media from './Media'
+import Likes from './Likes'
 import { useState, useEffect } from 'react';
 import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
@@ -15,16 +20,14 @@ import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 function OtherUsersProfiles() {
     const { username } = useParams();
     const [singleUser, setSingleUser] = useState({});
+    const [randomUser, setRandomUser] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [singlePostData, setSinglePostData] = useState([]);
+    const [activeTab, setActiveTab] = useState('posts');
 
-    function Replies() {
-        return <div>Replies Content</div>;
-      }
-      
-      function Subs() {
-        return <div>Subs Content</div>;
-      }
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+      };
     
     const fetchUserData = async () => {
         try {
@@ -45,8 +48,9 @@ function OtherUsersProfiles() {
                 if (response.data.singleUserProfile.profile && response.data.singleUserProfile.profile.posts) {
                     setSinglePostData(response.data.singleUserProfile.profile.posts);
                 }
+                setRandomUser(response.data.randomUsers);
                 // Debugging logs
-                console.log('User data:', response.data.singleUserProfile);
+                console.log('User data:', response.data.singleUserProfile.profile);
                 console.log('Post data:', response.data.singleUserProfile.post);
             }
         } catch (error) {
@@ -72,12 +76,20 @@ function OtherUsersProfiles() {
                         {singleUser && singleUser.profile && <span>{singleUser.profile.posts} posts</span>}
                     </div>
                 </header>
-            <div className='background-image-holder'>
-            {singleUser && singleUser.profile && <img src={singleUser.profile.backgroundImage}/>}
-            </div>
-            <div className='profile-photo-container flex-row'>
-            {singleUser && singleUser.profile && <img src={singleUser.profile.backgroundImage}/>}
-                <div className='flex-row subscribe-panel'>
+                <div className='background-image-holder'>
+                    {singleUser && singleUser.profile ? (
+                        <img src={`http://localhost:3000/uploads/${singleUser.profile.backgroundHeaderImage}`} alt="Background Image" />
+                    ) : (
+                        <div className='defaul-profile-image'></div>
+                    )}
+                </div>
+                <div className='profile-photo-container flex-row'>
+                    {singleUser && singleUser.profile ? (
+                        <img src={`http://localhost:3000/uploads/${singleUser.profile.profilePicture}`} alt="Profile Picture" />
+                    ) : (
+                        <div className='defaul-profile-image'></div>
+                    )}
+                 <div className='flex-row subscribe-panel'>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></svg>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M23 3v14h-2V5H5V3h18zM10 17c1.1 0 2-1.34 2-3s-.9-3-2-3-2 1.34-2 3 .9 3 2 3zM1 7h18v14H1V7zm16 10c-1.1 0-2 .9-2 2h2v-2zm-2-8c0 1.1.9 2 2 2V9h-2zM3 11c1.1 0 2-.9 2-2H3v2zm0 4c2.21 0 4 1.79 4 4h6c0-2.21 1.79-4 4-4v-2c-2.21 0-4-1.79-4-4H7c0 2.21-1.79 4-4 4v2zm0 4h2c0-1.1-.9-2-2-2v2z"></path></g></svg>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M22 5v2h-3v3h-2V7h-3V5h3V2h2v3h3zm-.86 13h-4.241c-.464 2.281-2.482 4-4.899 4s-4.435-1.719-4.899-4H2.87L4 9.05C4.51 5.02 7.93 2 12 2v2C8.94 4 6.36 6.27 5.98 9.3L5.13 16h13.73l-.38-3h2.02l.64 5zm-6.323 0H9.183c.412 1.164 1.51 2 2.817 2s2.405-.836 2.817-2z"></path></g></svg>                    
@@ -106,24 +118,35 @@ function OtherUsersProfiles() {
                 </div>
             </div>
             <nav className='profile-nav flex-row'>
-                <div className='blue-underline'>
-                    <Link className='profile-nav-link for-you-tab' to={`/profile/${singleUser.formattedUsername}`}>Posts</Link>
+                    <div className='blue-underline'>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'posts' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('posts')} >Posts</Link>
+                    </div>
+                    <div className='blue-underline'>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'replies' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('replies')} >Replies</Link>
+                    </div>
+                    <div className='blue-underline'>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'highlights' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('highlights')} >Highlights</Link>
+                    </div>
+                    <div className='blue-underline'>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'media' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('media')} >Media</Link>
+                    </div>
+                    <div className='blue-underline'>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'likes' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('likes')} >Likes</Link>
+                    </div>
+                </nav>
+                <div className='profile-post'>
+                    {activeTab === 'replies' && <Replies />}
+                    {activeTab === 'highlights' && <Highlights />}
+                    {activeTab === 'media' && <Media />}
+                    {activeTab === 'likes' && <Likes />}
                 </div>
-                <div className='blue-underline'>
-                    <Link className='profile-nav-link for-you-tab' to={`/profile/${singleUser.formattedUsername}/replies`}>Replies</Link>
-                </div>
-                <div className='blue-underline'>
-                    <Link className='profile-nav-link for-you-tab'>Subs</Link>
-                </div>
-                <div className='blue-underline'>
-                    <Link className='profile-nav-link for-you-tab'>Highlights</Link>
-                </div>
-                <div className='blue-underline'>
-                    <Link className='profile-nav-link for-you-tab'>Media</Link>
-                </div>
-            </nav>
                 <div>
-                {singlePostData && singlePostData.length > 0 ? (singlePostData.map((post, index) => (                
+                {singlePostData && singlePostData.length > 0 && (singlePostData.map((post, index) => (                
                     <div key={index} className='post flex-row'>
                     <img
                         className='profile-pic'
@@ -190,11 +213,7 @@ function OtherUsersProfiles() {
                         </div>
                     </div>
                 </div>
-                ))
-            ) : (
-                <div className='no-posts-message'>
-                    <p>There are no posts yet</p>
-                </div>
+                ))   
             )}
     </div>
         </div>

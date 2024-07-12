@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     email: { type: String },
     password: { type: String },
     profile: ProfileSchema,
-    post: [ PostSchema ]
+    post: [PostSchema]
 });
 
 module.exports = mongoose.model('User', UserSchema);

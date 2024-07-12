@@ -53,8 +53,12 @@ function HomeExtra({ randomUser }) {
                     <div className='who-tofollow-profile-box flex-row'>
                         <div className='who-to-follow-single-user flex-row'>
                             <div className='who-tofollow-image-box'>
-                                <img src={user.profile.profilePicture} alt={`${user.originalUsername}'s profile`} />
-                            </div>
+                                {user.profile.profilePicture ? (
+                                        <img src={`http://localhost:3000/uploads/${user.profile.profilePicture}`} alt={`${user.originalUsername}'s profile`} />
+                                    ) : (
+                                        <div className='no-profile-picture'></div>
+                                    )}
+                            </div>                            
                             <div className='flex-column who-tofollow-name-box'>
                                 <span className='who-tofollow-namelink'>{user.originalUsername}</span>
                                 <span className='who-tofollow-iglink'>@{user.formattedUsername}</span>

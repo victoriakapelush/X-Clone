@@ -76,11 +76,14 @@ function NewPost() {
         <div>
             {postData.map((post, index) => (
                 <div key={index} className='post flex-row'>
-                    <img
+                    {userData && userData.profile.profilePicture ? (
+                        <img
                         className='profile-pic'
                         alt="Profile Image"
-                        src={`http://localhost:3000/uploads/${userData.profile.profilePicture || 'defaultProfileImage.jpg'}`}
-                    />                    
+                        src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                    />  ) : ( 
+                        <div className='defaul-profile-image-post'></div>
+                    )}                   
                     <div className='flex-column post-box'>
                         <Link to='/profile' className='link-to-profile'>
                             <span className='user-name'>{userData.originalUsername}</span> <span className='username-name'>@{userData.formattedUsername} · {post.time}</span>

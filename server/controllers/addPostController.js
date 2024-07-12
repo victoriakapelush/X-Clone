@@ -34,11 +34,18 @@ const addPost = async (req, res) => {
         const postTime = new Date();
         const formattedTime = formatDistanceToNow(postTime, { addSuffix: true , includeSeconds: true });
 
-        const newPost = {
+        const newPost = ({
             text,
             image: filename,
-            time: formattedTime
-        };
+            time: formattedTime,
+            reply: 0,
+            repost: 0,
+            like: 0,
+            share: 0,
+            updatedName: user.profile.updatedName || user.originalUsername,
+            formattedUsername: user.formattedUsername,
+            profilePicture: user.profile.profilePicture
+        });
 
         user.post.push(newPost);
         user.profile.posts = (user.profile.posts || 0) + 1; 

@@ -550,8 +550,9 @@ a:hover, a:visited {
   color: var(--deep-grey);
 }
 
-.for-you-tab:active {
+.for-you-tab.active {
   color: var(--white);
+  border-bottom: 3px solid rgb(29, 155, 240);
 }
 
 .blue-underline:active {
@@ -600,11 +601,15 @@ a:hover, a:visited {
   fill: rgb(29, 155, 240);
   width: 1.3rem;
   height: 1.3rem;
-  margin-right: .5rem;
 }
 
 .upload-pic-container {
   width: 100%;
+}
+
+.upload-pic-container button {
+  background-color: transparent;
+  border: none;
 }
 
 .button-and-upload-pic {
@@ -681,7 +686,8 @@ a:hover, a:visited {
 }
 
 .who-tofollow-container {
-  min-width: 100%;
+  width: 100%;
+  margin-bottom: .5rem;
 }
 
 .who-tofollow-container:hover {
@@ -698,9 +704,10 @@ a:hover, a:visited {
   padding: 0 .3rem 0 0;
 }
 
-.who-tofollow-image-box img {
+.who-tofollow-image-box img, .who-tofollow-image-box div {
   width: 3rem;
   height: 3rem;
+  border-radius: 50%;
 }
 
 .who-to-follow-single-user {
@@ -735,6 +742,10 @@ a:hover, a:visited {
   color: var(--deep-grey);
 }
 
+.no-profile-picture {
+  background-color: var(--opacity);
+}
+
 /* SINGLE POST */
 
 .post {
@@ -745,6 +756,10 @@ a:hover, a:visited {
   border-right: 1px solid var(--deep-grey);
 }
 
+.random-post {
+  width: 35rem;
+}
+
 .post:hover {
   background-color: var(--opacity);
 }
@@ -753,6 +768,14 @@ a:hover, a:visited {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
+  margin: 10px 10px; 
+}
+
+.defaul-profile-image-post {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--opacity);
   margin: 10px 10px; 
 }
 
@@ -947,10 +970,55 @@ svg {
 
 /* MOBILE VERSION */
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
 
-  .home-container {
-    flex-direction: column;
+  .home-container, .profile-page {
+    flex-wrap: nowrap;
   }
+
+  .profile-center {
+    width: 80%;
+  }
+
+  .create-new-post-window, .mini-header-btns-container {
+    width: 92.7%;
+  }
+
+  .grok-page-container {
+    width: 100%;
+  }
+
+  .profile-right {
+    display: none;
+  }
+
+  .links-container {
+    width: 5rem;
+    padding: 0 1rem 0 1rem;
+  }
+
+  .av-links-container {
+    justify-content: flex-start;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .new-post-btn, .logout-btn {
+    width: 5rem;
+  }
+
+  .logout-btn {
+    margin-top: .2rem;
+  }
+
+  /* PROFILE */
+
+  .background-image-holder img {
+    width: 100%;
+    height: auto;
+  }
+
 }
 

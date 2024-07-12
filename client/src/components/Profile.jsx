@@ -10,12 +10,18 @@ import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import EditProfilePopup from './EditProfilePopup'
 import NewPost from './NewPost'
+import Replies from './Replies'
+import Highlights from './Highlights'
+import Media from './Media'
+import Likes from './Likes'
+import OtherUsersProfiles from './OtherUsersProfiles'
 import back from '../assets/icons/back.png'
 import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function Profile() {
     const [userData, setUserData] = useState({});
+    const [activeTab, setActiveTab] = useState('posts');
     const [originalUsername, setOriginalUsername] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -32,6 +38,10 @@ function Profile() {
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
     };
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+      };
 
     const handleClosePopup = (updatedProfileData) => {
         setIsPopupOpen(false);
@@ -106,14 +116,14 @@ function Profile() {
                     {profileData && profileData.backgroundHeaderImage ? (
                         <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
                     ) : (
-                        <img src={defaultBackgroundImage} alt="Default Profile Header Background Picture" />
+                        <div className='defaul-profile-image-background'></div>
                     )}
                 </div>
                     <div className='profile-photo-container flex-row'>
                     {profileData && profileData.profilePicture ? (
                         <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} alt="Profile Picture" />
                         ) : (
-                        <img src={defaultProfileImage} alt="Default Profile Picture" />
+                        <div className='defaul-profile-image-profile'></div>
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
                     {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup}/>}
@@ -143,11 +153,12 @@ function Profile() {
                                             {profileData.website}
                                         </a>
                                     </span>
-                                </div>
-                                </>)}
+                            </div>
+                        </>)}
                             <div className='flex-row location-container'>
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M7 4V3h2v1h6V3h2v1h1.5C19.89 4 21 5.12 21 6.5v12c0 1.38-1.11 2.5-2.5 2.5h-13C4.12 21 3 19.88 3 18.5v-12C3 5.12 4.12 4 5.5 4H7zm0 2H5.5c-.27 0-.5.22-.5.5v12c0 .28.23.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5H17v1h-2V6H9v1H7V6zm0 6h2v-2H7v2zm0 4h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2z"></path></g></svg>                            
-                                {userData.profile ? (<span>{userData.profile.registrationDate}</span>) : <span>No registration date available</span>}                            </div>
+                                {userData.profile ? (<span>{userData.profile.registrationDate}</span>) : <span>No registration date available</span>}                            
+                            </div>
                         </div>
                         <div className='flex-row following-container'>
                             {userData.profile && (
@@ -168,23 +179,32 @@ function Profile() {
                 </div>
                 <nav className='profile-nav flex-row'>
                     <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Posts</Link>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'posts' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('posts')} >Posts</Link>
                     </div>
                     <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Replies</Link>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'replies' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('replies')} >Replies</Link>
                     </div>
                     <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Subs</Link>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'highlights' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('highlights')} >Highlights</Link>
                     </div>
                     <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Highlights</Link>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'media' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('media')} >Media</Link>
                     </div>
                     <div className='blue-underline'>
-                        <Link className='profile-nav-link for-you-tab'>Media</Link>
+                        <Link className={`profile-nav-link for-you-tab ${activeTab === 'likes' ? 'active' : ''}`}
+                            onClick={() => handleTabChange('likes')} >Likes</Link>
                     </div>
                 </nav>
                 <div className='profile-post'>
-                    <NewPost />
+                    {activeTab === 'posts' && <NewPost />}
+                    {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
+                    {activeTab === 'highlights' && <Highlights />}
+                    {activeTab === 'media' && <Media />}
+                    {activeTab === 'likes' && <Likes />}
                 </div>
             </div>
             <HomeExtra randomUser={randomUser} />

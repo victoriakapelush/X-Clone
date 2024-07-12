@@ -12,14 +12,11 @@ import lists from '../assets/icons/lists.png'
 import communities from '../assets/icons/communities.png'
 import premium from '../assets/icons/premium.png'
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import ToPost from './ToPost'
 
 function HomeNav() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const navigate = useNavigate();
-    const [formattedUsername, setFormattedUsername] = useState('');
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
@@ -30,22 +27,13 @@ function HomeNav() {
     };
 
     const handleLogout = async (e) => {
-      e.preventDefault();
-      try {
-        const getToken = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`);
-        const { token } = response.data;
-        localStorage.removeItem('token', token);
-        navigate('/');
-        if (getToken) {
-            const decoded = jwtDecode(token);
-            const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
-            setFormattedUsername(decodedUsername); 
+        e.preventDefault();
+        try {
+            localStorage.removeItem('token');
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
         }
-    } catch (error) {
-        console.error('Logout error:', error);
-        console.error('Error decoding token:', error);
-      }
     };
 
     return (

@@ -1,0 +1,33 @@
+.highlights-container {
+    height: 100%;
+    justify-content: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.highlights-container h1, .highlights-container p, .highlights-container button {
+    margin: 0;
+}
+
+.highlights-container h1 {
+    padding-top: 1rem;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.highlights-container p {
+    color: var(--deep-grey);
+    padding: 1rem 0 1rem 0;
+    text-align: left;
+}
+
+.highlights-container button {
+    padding: .7rem 1rem;
+    border: 1px solid var(--white);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--black);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+}

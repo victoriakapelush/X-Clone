@@ -18,6 +18,7 @@ const homePage = require('./routes/homePage');
 const profilePage = require('./routes/profilePage');
 const post = require('./routes/post');
 const singleUser = require('./routes/singleUser');
+const randomPosts = require('./routes/randomPosts');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -65,12 +66,13 @@ app.use(passport.session());
 app.use('/api/signup', indexRouter, authRoutes);
 app.use('/', authRoutes);
 app.use('/api/login', loginRouter);
-app.use('/', logoutRouter);
+app.use('/home', logoutRouter);
 app.use('/home', homePage);
 app.use('/profile', profilePage);
 app.use('/post', post);
 app.use('/profile/post', post);
 app.use('/api/profile', singleUser);
+app.use('/api/posts', randomPosts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
