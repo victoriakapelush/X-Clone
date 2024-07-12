@@ -14,6 +14,7 @@ import Replies from './Replies'
 import Highlights from './Highlights'
 import Media from './Media'
 import Likes from './Likes'
+import FullSizeImage from './FullSizeImage'
 import OtherUsersProfiles from './OtherUsersProfiles'
 import back from '../assets/icons/back.png'
 import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
@@ -21,10 +22,13 @@ import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function Profile() {
     const [userData, setUserData] = useState({});
+    const [fullImage, setFullImage] = useState(null);
     const [activeTab, setActiveTab] = useState('posts');
     const [originalUsername, setOriginalUsername] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isImageOpen, setIsImageOpen] = useState(false);
+    const [fullImageUrl, setFullImageUrl] = useState('');    
     const [randomUser, setRandomUser] = useState(null);
     const [profileData, setProfileData] = useState({
         profileBio: '',
@@ -34,6 +38,14 @@ function Profile() {
         profilePicture: null,
         backgroundHeaderImage: null
     });
+
+    const handleImageClick = () => {
+        setIsImageOpen(true);
+    };
+    
+    const handleCloseImage = () => {
+        setIsImageOpen(false);
+    };
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
@@ -112,7 +124,8 @@ function Profile() {
                         {userData && userData.profile && <span>{userData.profile.posts} posts</span>}
                     </div>
                 </header>
-                <div className='background-image-holder'>
+                <div className='background-image-holder' onClick={handleImageClick}>
+                {isImageOpen && <FullSizeImage onClick={handleCloseImage} profileData={profileData}/>}
                     {profileData && profileData.backgroundHeaderImage ? (
                         <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
                     ) : (
