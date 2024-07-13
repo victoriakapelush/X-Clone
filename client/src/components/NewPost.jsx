@@ -75,22 +75,25 @@ function NewPost() {
     return (
         <div>
             {postData.map((post, index) => (
-                <div key={index} className='post flex-row'>
-                    {userData && userData.profile.profilePicture ? (
-                        <img
-                        className='profile-pic'
-                        alt="Profile Image"
-                        src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
-                    />  ) : ( 
-                        <div className='defaul-profile-image-post'></div>
-                    )}                   
-                    <div className='flex-column post-box'>
-                        <Link to='/profile' className='link-to-profile'>
-                            <span className='user-name'>{userData.originalUsername}</span> <span className='username-name'>@{userData.formattedUsername} · {post.time}</span>
-                        </Link>
-                        {post.text && <p className='post-text'>{post.text}</p>}
-                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
-                        <div className='flex-row post-icons-container'>
+                <div key={index} className='post flex-column'>
+                    <div className='flex-row'>
+                        {userData && userData.profile.profilePicture ? (
+                            <img
+                            className='profile-pic'
+                            alt="Profile Image"
+                            src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                        />  ) : ( 
+                            <div className='defaul-profile-image-post'></div>
+                        )}                   
+                        <div className='flex-column post-box'>
+                            <Link to='/profile' className='link-to-profile'>
+                                <span className='user-name'>{userData.originalUsername}</span> <span className='username-name'>@{userData.formattedUsername} · {post.time}</span>
+                            </Link>
+                            {post.text && <p className='post-text'>{post.text}</p>}
+                            {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
+                        </div>
+                    </div>
+                    <div className='flex-row post-icons-container'>
                             <Link to='/home'>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
@@ -142,7 +145,7 @@ function NewPost() {
                                 </Link>
                             </div>
                         </div>
-                    </div>
+
                 </div>
             ))}
     </div>

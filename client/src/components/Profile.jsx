@@ -22,13 +22,13 @@ import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function Profile() {
     const [userData, setUserData] = useState({});
-    const [fullImage, setFullImage] = useState(null);
     const [activeTab, setActiveTab] = useState('posts');
     const [originalUsername, setOriginalUsername] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isImageOpen, setIsImageOpen] = useState(false);
-    const [fullImageUrl, setFullImageUrl] = useState('');    
+    const [imageUrl, setImageUrl] = useState('');
+    const [imageType, setImageType] = useState('');
     const [randomUser, setRandomUser] = useState(null);
     const [profileData, setProfileData] = useState({
         profileBio: '',
@@ -39,13 +39,15 @@ function Profile() {
         backgroundHeaderImage: null
     });
 
-    const handleImageClick = () => {
+    const handleImageClick = (url, type) => {
+        setImageUrl(url);
+        setImageType(type);
         setIsImageOpen(true);
-    };
+      };
     
-    const handleCloseImage = () => {
+      const handleCloseImage = () => {
         setIsImageOpen(false);
-    };
+      };
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
@@ -124,15 +126,15 @@ function Profile() {
                         {userData && userData.profile && <span>{userData.profile.posts} posts</span>}
                     </div>
                 </header>
-                <div className='background-image-holder' onClick={handleImageClick}>
-                {isImageOpen && <FullSizeImage onClick={handleCloseImage} profileData={profileData}/>}
+                <div className='background-image-holder' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`, 'background-image')}>
+                {isImageOpen && <FullSizeImage onClick={handleCloseImage} imageUrl={imageUrl} imageType={imageType} />}
                     {profileData && profileData.backgroundHeaderImage ? (
                         <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
                     ) : (
                         <div className='defaul-profile-image-background'></div>
                     )}
                 </div>
-                    <div className='profile-photo-container flex-row'>
+                    <div className='profile-photo-container flex-row' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.profilePicture}`, 'profile-picture')}>
                     {profileData && profileData.profilePicture ? (
                         <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} alt="Profile Picture" />
                         ) : (

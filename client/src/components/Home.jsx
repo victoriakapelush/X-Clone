@@ -3,7 +3,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import NewPost from './NewPost'
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
@@ -12,16 +11,22 @@ import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import PostReplacement from './PostReplacement.jsx'
 import OtherUsersProfiles from './OtherUsersProfiles';
+import RandomPosts from './RandomPosts.jsx';
 
-function Home({ onClose, posts, setPosts }) {
+function Home() {
     const [userData, setUserData] = useState(null);
     const [randomUser, setRandomUser] = useState(null);
+    const [activeTab, setActiveTab] = useState('following');
     const [formattedUsername, setFormattedUsername] = useState('');
     const [text, setText] = useState('');
     const [profileImage, setProfileImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [error, setError] = useState('');
 
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+      };
+      
     const [showPopup, setShowPopup] = useState(() => {
         const savedPopupState = localStorage.getItem('showPopup');
         return savedPopupState === 'false' ? false : true;
@@ -136,13 +141,13 @@ return (
                 <div className='flex-row mini-header-btns-container'>
                     <div className='mini-header-btn'>
                         <div className='blue-underline flex-column'>
-                            <Link to="/home" className='for-you-tab'>For you</Link>
+                            <Link to="/home" className={`for-you-tab ${activeTab === 'foryou' ? 'active' : ''}`} onClick={() => handleTabChange('foryou')}>For you</Link>
                             <div className='blue-underscore'></div>
                         </div>
                     </div>
                     <div className='mini-header-btn'>
                         <div className='blue-underline flex-column'>
-                            <Link to="/home" className='for-you-tab'>Following</Link>
+                            <Link to="/home" className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} onClick={() => handleTabChange('following')}>Following</Link>
                             <div className='blue-underscore'></div>
                         </div>
                     </div>
@@ -222,8 +227,16 @@ return (
                         </div>
                     </div>
                 </div>
-                <PostReplacement />
-                <OtherUsersProfiles randomUser={randomUser} />
+                {activeTab === 'foryou' && (
+                    <div className='home-profile-posts'>
+                        <RandomPosts />
+                    </div>
+                )}
+                {activeTab === 'following' && (
+                    <div className='home-profile-following-posts'>
+                        <PostReplacement />
+                    </div>
+                )}
             </div>
         )}
         {!showPopup && <HomeExtra randomUser={randomUser} />}

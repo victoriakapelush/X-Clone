@@ -10,8 +10,14 @@
     z-index: 1000;
 }
 
-.modal-content img {
+.modal-content.background-image img {
     width: 70rem;
     height: auto;
-}
+  }
+  
+  .modal-content.profile-picture img {
+    width: 25rem;
+    height: 25rem;
+    border-radius: 50%;
+  }
 

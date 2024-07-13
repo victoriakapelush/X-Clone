@@ -405,7 +405,6 @@ a:hover, a:visited {
 }
 
 .links-container {
-  border-right: 1px solid var(--deep-grey);
   /*width: 400px;*/
   padding: 0 3rem 0 6rem;
   position: sticky;
@@ -486,15 +485,15 @@ a:hover, a:visited {
 }
 
 .profile-center {
-  /*width: 60%;*/
-  flex: 1;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
   margin-right: 1.5rem;
 }
 
 .header-and-mini-header {
   align-content: center;
   gap: .3rem;
+  border-radius: 50%;
 }
 
 .header-and-mini-header h1 {
@@ -507,21 +506,21 @@ a:hover, a:visited {
 
 #mini-header {
   justify-content: flex-start;
-  padding: .1rem .5rem .1rem 0;
+  padding: .1rem .1rem .1rem .1rem;
   border: 1px solid transparent;
-  border-radius: 50%;
   width: 3rem;
-  height: auto;
+  height: 3rem;
 }
 
-#mini-header:hover {
+.header-and-mini-header:hover {
   background-color: rgba(231, 233, 234, 0.1);
 }
 
 .mini-header-btns-container {
   border-bottom: 1px solid var(--deep-grey);
-  width: 35rem;
+  width: 100%;
   border-right: 1px solid var(--deep-grey);
+  border-left: 1px solid var(--deep-grey);
 }
 
 .mini-header-btn {
@@ -550,24 +549,25 @@ a:hover, a:visited {
   color: var(--deep-grey);
 }
 
-.for-you-tab.active {
-  color: var(--white);
+.for-you-tab.active ~ .blue-underscore {
   border-bottom: 3px solid rgb(29, 155, 240);
 }
 
-.blue-underline:active {
-  border-bottom: 3px solid rgb(29, 155, 240);
-  font-weight: 500;
+.for-you-tab {
+  color: var(--white);
 }
 
 .create-new-post-window {
-  width: 35rem;
-  height: fit-content;
+  height: auto;
+  width: 100%;
   border-right: 1px solid var(--deep-grey);
+  border-bottom: 1px solid var(--deep-grey);
+  border-left: 1px solid var(--deep-grey);
 }
 
 .create-new-post-window-container {
   align-items: self-start;
+  width: 100%;
 }
 
 .form-container-new-post {
@@ -746,10 +746,16 @@ a:hover, a:visited {
   background-color: var(--opacity);
 }
 
+.home-profile-posts {
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
 /* SINGLE POST */
 
 .post {
-  border-top: 1px solid var(--deep-grey);
+  border-left: 1px solid var(--deep-grey);
   border-bottom: 1px solid var(--deep-grey);
   width: 100%;
   height: auto;
@@ -757,7 +763,7 @@ a:hover, a:visited {
 }
 
 .random-post {
-  width: 35rem;
+  width: 100%;
 }
 
 .post:hover {
@@ -772,8 +778,10 @@ a:hover, a:visited {
 }
 
 .defaul-profile-image-post {
-  width: 3rem;
-  height: 3rem;
+  max-width: 3rem;
+  max-height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
   border-radius: 50%;
   background-color: var(--opacity);
   margin: 10px 10px; 
@@ -782,7 +790,7 @@ a:hover, a:visited {
 .post-icons-container {
   margin-top: .4rem;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .post-icon {
@@ -791,6 +799,10 @@ a:hover, a:visited {
 
 .post-text {
   margin-top: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
 }
 
 .no-posts-message {
@@ -803,7 +815,6 @@ a:hover, a:visited {
   margin: 0;
   font-size: 1.2rem;
 }
-
 
 .save-icons {
   gap: .7rem;
@@ -897,13 +908,17 @@ svg {
 }
 
 .post-box {
-  height: fit-content;
+  max-width: 500px;
   width: 100%;
+  height: auto;
   margin: 10px 20px 10px 0; 
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
 .post-image {
-  width: 30rem;
+  max-width: 100%;
+  min-width: 10rem;
   height: auto;
 }
 
@@ -974,14 +989,11 @@ svg {
 
   .home-container, .profile-page {
     flex-wrap: nowrap;
+    width: 100%;
   }
 
   .profile-center {
     width: 80%;
-  }
-
-  .create-new-post-window, .mini-header-btns-container {
-    width: 92.7%;
   }
 
   .grok-page-container {
@@ -1013,12 +1025,14 @@ svg {
     margin-top: .2rem;
   }
 
-  /* PROFILE */
-
-  .background-image-holder img {
-    width: 100%;
+  .post-text {
+    max-width: 80%;
     height: auto;
   }
+
+  /* PROFILE */
+
+
 
 }
 

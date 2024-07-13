@@ -224,6 +224,10 @@ svg {
     padding: 1rem 2rem;
 }
 
+.profile-nav-link.active {
+    border-bottom: 3px solid rgb(29, 155, 240);
+}
+
 .profile-nav .blue-underline {
     padding-bottom: 1rem;
 }
