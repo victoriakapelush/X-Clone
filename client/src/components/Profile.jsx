@@ -142,7 +142,8 @@ function Profile() {
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
                     {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup}/>}
-                    <div className='flex-column personal-info-section'>
+                </div>
+                <div className='flex-column personal-info-section'>
                         {profileData && <span className='profile-user-name'>{profileData.updatedName}</span>}
                         {userData.formattedUsername && <span className='user-tag'>@{userData.formattedUsername}</span>}
                         {profileData && profileData.profileBio && (
@@ -191,7 +192,6 @@ function Profile() {
                         </div>
                         <span className='followed-not'>Not followed by anyone you're following</span>
                     </div>
-                </div>
                 <nav className='profile-nav flex-row'>
                     <div className='blue-underline'>
                         <Link className={`profile-nav-link for-you-tab ${activeTab === 'posts' ? 'active' : ''}`}

@@ -405,14 +405,16 @@ a:hover, a:visited {
 }
 
 .links-container {
-  /*width: 400px;*/
   padding: 0 3rem 0 6rem;
   position: sticky;
+  position: -webkit-sticky; /* For Safari */
   color: var(--white);
   align-items: flex-start;
   height: 100%;
   top: 0;
   flex: 1;
+  box-sizing: border-box;
+  z-index: 1000; /* Ensure it stays on top */
 }
 
 .nav-links {
@@ -527,22 +529,26 @@ a:hover, a:visited {
   text-align: center;
   font-size: 1.1rem;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   width: 100%;
   height: 100%;
+  border-bottom: 1px solid transparent;
 }
 
 .mini-header-btn:hover {
   background-color: rgba(231, 233, 234, 0.1);
 }
 
+.mini-header-btn.active {
+  border-bottom: 3px solid rgb(29, 155, 240);
+}
+
 .blue-underline {
-  width: fit-content;
-  margin: 0 auto;
-  gap: 1rem;
-  align-items: stretch;
-  align-self: center;
-  height: 100%;
+  height: auto;
+  max-width: 100%;
   border-bottom: 3px solid transparent;
+  flex: 1;
+  text-align: center;
 }
 
 .for-you-tab {
@@ -756,8 +762,8 @@ a:hover, a:visited {
 
 .post {
   border-left: 1px solid var(--deep-grey);
-  border-bottom: 1px solid var(--deep-grey);
-  width: 100%;
+  border-top: 1px solid var(--deep-grey);
+  max-width: 100%;
   height: auto;
   border-right: 1px solid var(--deep-grey);
 }
@@ -989,11 +995,14 @@ svg {
 
   .home-container, .profile-page {
     flex-wrap: nowrap;
-    width: 100%;
   }
 
   .profile-center {
     width: 80%;
+  }
+
+  .profile-nav {
+    flex-wrap: wrap;
   }
 
   .grok-page-container {

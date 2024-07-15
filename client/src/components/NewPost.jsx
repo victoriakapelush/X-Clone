@@ -73,7 +73,7 @@ function NewPost() {
     }, [formattedUsername]);  
     
     return (
-        <div>
+        <div className='profile-post-new-post'>
             {postData.map((post, index) => (
                 <div key={index} className='post flex-column'>
                     <div className='flex-row'>

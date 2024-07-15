@@ -139,19 +139,29 @@ return (
         ) : (
             <div className='profile-center'>
                 <div className='flex-row mini-header-btns-container'>
-                    <div className='mini-header-btn'>
+                    <div className={`mini-header-btn ${activeTab === 'foryou' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
-                            <Link to="/home" className={`for-you-tab ${activeTab === 'foryou' ? 'active' : ''}`} onClick={() => handleTabChange('foryou')}>For you</Link>
-                            <div className='blue-underscore'></div>
+                        <Link 
+                            to="/home" 
+                            className={`for-you-tab ${activeTab === 'foryou' ? 'active' : ''}`} 
+                            onClick={() => handleTabChange('foryou')}
+                        >
+                            For you
+                        </Link>
                         </div>
                     </div>
-                    <div className='mini-header-btn'>
+                    <div className={`mini-header-btn ${activeTab === 'following' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
-                            <Link to="/home" className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} onClick={() => handleTabChange('following')}>Following</Link>
-                            <div className='blue-underscore'></div>
+                        <Link 
+                            to="/home" 
+                            className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} 
+                            onClick={() => handleTabChange('following')}
+                        >
+                            Following
+                        </Link>
                         </div>
                     </div>
-                </div>
+                </div>          
                 <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
                         <Link to='/profile'>

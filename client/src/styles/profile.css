@@ -3,14 +3,13 @@
     margin-right: 2rem;
     border-right: 1px solid var(--deep-grey);
     border-left: 1px solid var(--deep-grey);
-    flex: 1;
-    min-height: 100vh;
-    width: 100%;
+    width: 80%;
+    max-width: 100%;
+    height: 100%;
 }
 
 .profile-page {
-    overflow: scroll;
-    position: fixed;
+    position: relative;
 }
 
 .profile-page .links-container {
@@ -60,17 +59,21 @@
 }
 
 .background-image-holder {
-    width: 600px;
-    height: 200px;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    max-height: 200px;
     margin: 0;
     padding: 0;
-}
-
-.background-image-holder img {
-    width: 600px;
-    height: 200px;
+    overflow: hidden; /* To ensure the aspect ratio is maintained and the image doesn't overflow */
+  }
+  
+  .background-image-holder img {
+    width: 100%;
+    height: auto;
     background-color: var(--opacity);
-}
+    display: block; /* Removes extra space below the image */
+  }
 
 .defaul-profile-image-background {
     background-color: var(--opacity);
@@ -89,9 +92,11 @@
 }
 
 .profile-photo-container {
-    height: fit-content;
+    max-width: 100%;
+    height: auto;
     justify-content: space-between;
     margin-left: 1rem;
+    position: relative;
 }
 
 .profile-photo-container img {
@@ -100,7 +105,7 @@
     border-radius: 50%;
     border: 3px solid var(--black);
     position: absolute;
-    bottom: 60%;
+    top: -5rem;
     background-color: var(--opacity);
 }
 
@@ -147,23 +152,27 @@ svg {
 }
 
 .personal-info-section {
-    height: fit-content;
-    top: 40%;
-    position: absolute;
+    top: 38.8%;
     margin-top: 1rem;
+    width: 80%;
+    max-width: 100%;
+    height: fit-content;
 }
 
 .profile-user-name {
     font-weight: 600;
     font-size: 1.2rem;
+    padding-left: 1rem;
 }
 
 .user-tag {
+    padding-left: 1rem;
     color: var(--deep-grey);
     margin-bottom: 1rem;
 }
 
 .user-profile-description {
+    padding-left: 1rem;
     margin-bottom: .5rem;
     margin-right: 1rem;
     width: 100%;
@@ -176,6 +185,7 @@ svg {
     gap: 1rem;
     color: var(--deep-grey);
     font-size: 1rem;
+    padding-left: 1rem;
 }
 
 .location-container svg {
@@ -193,6 +203,7 @@ svg {
     gap: 1rem;
     margin-top: .5rem;
     margin-bottom: .5rem;
+    padding-left: 1rem;
 }
 
 .following-grey {
@@ -209,27 +220,27 @@ svg {
     font-size: .8rem;
     color: var(--deep-grey);
     font-weight: lighter;
+    padding-left: 1rem;
 }
 
 .profile-nav {
-    margin: 0 0rem 1rem 0rem;
-    top: 70%;
-    position: absolute;
-    justify-content: center;
-    border-bottom: 1px solid var(--deep-grey);
-    width: 41.7%;
+    margin: 2rem 0rem 0rem 0rem;
+    justify-content: space-between;
+    max-width: 100%;
+    height: auto;
 }
 
 .profile-nav-link {
     padding: 1rem 2rem;
+    max-width: 100%;
+    height: auto;
+    flex: 1;
+    display: block;
+    border-bottom: 3px solid transparent;
 }
 
 .profile-nav-link.active {
     border-bottom: 3px solid rgb(29, 155, 240);
-}
-
-.profile-nav .blue-underline {
-    padding-bottom: 1rem;
 }
 
 .profile-nav .profile-nav-link:hover {
@@ -237,14 +248,17 @@ svg {
 }
 
 .profile-post {
-    position: absolute;
-    top: 75%;
-    width: 41%;
+    max-width: 100%;
+    height: auto;
 }
 
-.profile-post .post {
-    width: 101.5%;
-    border-left: 1px solid var(--deep-grey);
+.profile-post-new-post {
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    display: block;
+
 }
 
 .edit-profile-btn {
