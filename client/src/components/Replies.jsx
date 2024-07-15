@@ -8,7 +8,7 @@ function Replies({ randomUser }) {
 return (
     <div className='profile-right replies-profile-right flex-column'>
         <div className='flex-column replies-container'>
-            <div className='premium-header'>
+            <div className='premium-header replies-header-who-tofollow'>
                 <h3>Who to follow</h3>
             </div>
             {randomUser && randomUser.slice(0, 3).map(user => (

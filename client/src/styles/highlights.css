@@ -1,8 +1,10 @@
 .highlights-container {
-    height: 100%;
+    height: auto;
     justify-content: center;
-    width: 60%;
-    margin: 0 auto;
+    align-items: center;
+    max-width: 100%;
+    border-top: 1px solid var(--deep-grey);
+    padding: 3rem 2rem 4rem 2rem;
 }
 
 .highlights-container h1, .highlights-container p, .highlights-container button {

@@ -8,8 +8,16 @@
 
 .replies-profile-right {
     width: 100%;
+    height: auto;
+    margin-top: 0 !important;
+    border-top: 1px solid var(--deep-grey);
+    padding-bottom: 1rem;
 }
 
 .replies-who-to-follow-container {
     margin-bottom: 1rem;
+}
+
+.replies-header-who-tofollow {
+    padding-top: 1rem;
 }

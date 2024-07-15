@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function HomeExtra({ randomUser }) {
 
     return (
-        <div className='profile-right flex-column'>
+        <div className='profile-right flex-column profile-right-no-display'>
         <div className='flex-column premium-subscribe-container'>
             <div className='premium-header'>
                 <h3>Subscribe to Premium</h3>
