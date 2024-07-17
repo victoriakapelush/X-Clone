@@ -6,6 +6,7 @@ const PostSchema = new Schema({
     image: { type: String },
     reply: { type: Number },
     repost: { type: Number },
+    likeCount: { type: Number },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     share: { type: Number },
     time: { type: String },

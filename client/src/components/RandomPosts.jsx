@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
@@ -5,40 +6,67 @@ import axios from 'axios';
 import '../styles/profile.css'
 
 function RandomPosts() {
+    const token = localStorage.getItem('token');
     const [formattedUsername, setFormattedUsername] = useState('');
     const [randomPosts, setRandomPosts] = useState([]);
-    const [likeCount, setLikeCount] = useState(0);
     const [likeColor, setLikeColor] = useState('pink');
-    const [postID, setPostID] = useState('');
+    const [userID, setUserID] = useState('');
 
-    const handleLike = async () => {
-        const newLikeCount = likeCount + 1;
-        setLikeColor('pink'); // Example color change on like
-
+    const handleLike = async (postId) => {
         try {
-            console.log(`Post ID: ${randomPosts._id}`); // Log the post ID
-            await axios.post('http://localhost:3000/api/saveLikeCount', {
-                _id: randomPosts._id,
-                likeCount: newLikeCount,
+            // Find the post by ID and get its current likes and likeCount
+            const postIndex = randomPosts.findIndex(post => post._id === postId);
+            const currentPost = randomPosts[postIndex];
+
+            // Check if the user has already liked the post
+            const userIndex = currentPost.likes.indexOf(userID);
+
+            let updatedLikes;
+            let updatedLikeCount;
+
+            if (userIndex === -1) {
+                // User has not liked the post yet, so add their ID to the likes array and increment likeCount
+                updatedLikes = [...currentPost.likes, userID];
+                updatedLikeCount = currentPost.likeCount + 1;
+            } else {
+                // User already liked the post, so remove their ID from the likes array and decrement likeCount
+                updatedLikes = currentPost.likes.filter(user => user !== userID);
+                updatedLikeCount = Math.max(currentPost.likeCount - 1, 0); // Ensure likeCount does not go below 0
+            }
+
+            // Update the backend
+            await axios.post('http://localhost:3000/api/saveLikeCount', 
+            { 
+                _id: postId,
+                likeCount: updatedLikeCount,
+                userId: userID
+            }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Add your JWT token here
+                    'Content-Type': 'application/json'
+                }
             });
-            setLikeCount(newLikeCount);
-            setPostID(randomPosts._id);
-            console.log('Like count saved successfully');
+
+            // Update the frontend state
+            const updatedPosts = randomPosts.map(post =>
+                post._id === postId ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes } : post
+            );
+            setRandomPosts(updatedPosts);
+
         } catch (error) {
-            console.error('Error saving like count', error);
+            console.error('Error updating like status:', error);
         }
     };
-    
-    
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 if (token) {
                     const decoded = jwtDecode(token);
                     const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
                     setFormattedUsername(decodedUsername); 
+                    setUserID(decoded.id);
                 }
             } catch (error) {
                 console.error('Error decoding token:', error);
@@ -65,7 +93,13 @@ function RandomPosts() {
                 console.error('Post data not found in response:', response.data);
                 return;
             }
-            setRandomPosts([ ...response.data.posts ]);
+            const postsData = response.data.posts.map(post => ({
+                ...post, 
+                likeCount: post.likeCount, 
+                likes: post.likes 
+            }));
+    
+            setRandomPosts(postsData);        
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -127,10 +161,10 @@ function RandomPosts() {
                             </Link> 
                             <Link to='/home'>
                                 <div className={`icon-container color-hover flex-row ${likeColor === 'pink' ? 'pink-svg' : ''}`} id="pink-svg">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' onClick={handleLike}>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' onClick={() => handleLike(post._id)}>
                                         <g><path d="M16.697 5.5c-1.222-.06-2.679.51-3.89 2.16l-.805 1.09-.806-1.09C9.984 6.01 8.526 5.44 7.304 5.5c-1.243.07-2.349.78-2.91 1.91-.552 1.12-.633 2.78.479 4.82 1.074 1.97 3.257 4.27 7.129 6.61 3.87-2.34 6.052-4.64 7.126-6.61 1.111-2.04 1.03-3.7.477-4.82-.561-1.13-1.666-1.84-2.908-1.91zm4.187 7.69c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"></path></g>
                                     </svg>
-                                    <span className="count">{post.like}</span>
+                                    <span className="count">{post.likeCount}</span>
                                 </div>
                             </Link>                      
                             <div className='save-icons flex-row'>

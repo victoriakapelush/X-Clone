@@ -43,7 +43,8 @@ const addPost = async (req, res) => {
             time: formattedTime,
             reply: 0,
             repost: 0,
-            like: 0,
+            likeCount: 0,
+            likes: [],
             share: 0,
             user: user._id
         });
