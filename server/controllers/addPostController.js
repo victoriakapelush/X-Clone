@@ -1,18 +1,21 @@
 const User = require('../models/User');
-const format = require('date-fns/format');
+const Post = require('../models/Post');
 const { formatDistanceToNow } = require('date-fns');
 
 const getPost = async (req, res) => {
-    const currentUser = req.user.originalUsername;
+    const currentUser = req.user.id;
     try {
-        const post = await User.findOne({ originalUsername: currentUser });
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+        const user = await User.findById(currentUser);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        res.json(post);    
+    
+        // Find all posts made by the user
+        const posts = await Post.find({ user: currentUser });
+    
+        res.status(200).json({ posts });
     } catch (error) {
-        console.error('Error fetching post:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
@@ -34,7 +37,7 @@ const addPost = async (req, res) => {
         const postTime = new Date();
         const formattedTime = formatDistanceToNow(postTime, { addSuffix: true , includeSeconds: true });
 
-        const newPost = ({
+        const newPost = new Post({
             text,
             image: filename,
             time: formattedTime,
@@ -42,12 +45,10 @@ const addPost = async (req, res) => {
             repost: 0,
             like: 0,
             share: 0,
-            updatedName: user.profile.updatedName || user.originalUsername,
-            formattedUsername: user.formattedUsername,
-            profilePicture: user.profile.profilePicture
+            user: user._id
         });
 
-        user.post.push(newPost);
+        await newPost.save();
         user.profile.posts = (user.profile.posts || 0) + 1; 
 
         await user.save();

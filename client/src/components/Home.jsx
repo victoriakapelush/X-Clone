@@ -112,7 +112,7 @@ const handleSubmit = async (e) => {
         formData.append('text', text);
         formData.append('image', profileImage);
 
-        const response = await axios.post(`http://localhost:3000/post/${formattedUsername}`, formData, {
+        const response = await axios.post(`http://localhost:3000/api/profile/post/${formattedUsername}`, formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'

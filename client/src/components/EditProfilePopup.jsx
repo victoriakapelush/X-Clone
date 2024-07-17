@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
+function EditProfilePopup({ profileData, setProfileData, onClose, onSave, setIsImageOpen }) {
     const [originalUsername, setOriginalUsername] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('');
@@ -96,7 +96,6 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
     const handleBackgroundUploadClick = () => {
         document.getElementById('backgroundHeaderImage').click();
     };
-    
 
     const handleDeleteClick = () => {
         setProfileData((prevData) => ({
@@ -144,6 +143,7 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave }) {
             }
         });
         onSave(response.data.profile);
+        setIsImageOpen(false);
         } catch (error) {
             console.error('Error updating profile:', error);
         }

@@ -546,7 +546,6 @@ a:hover, a:visited {
 .blue-underline {
   height: auto;
   max-width: 100%;
-  border-bottom: 3px solid transparent;
   flex: 1;
   text-align: center;
 }

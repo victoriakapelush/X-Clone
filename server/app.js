@@ -71,12 +71,11 @@ app.use('/api/login', loginRouter);
 app.use('/home', logoutRouter);
 app.use('/home', homePage);
 app.use('/profile', profilePage);
-app.use('/post', post);
-app.use('/profile/post', post);
+app.use('/api/profile/post', post);
 app.use('/api/profile', singleUser);
-app.use('/api/posts', randomPosts);
+app.use('/api/home/posts', randomPosts);
 app.use('/home/connect_people', allUsers);
-app.use('api/saveLikeCount', saveLike);
+app.use('/api/saveLikeCount', saveLike);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

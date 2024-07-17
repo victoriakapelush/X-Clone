@@ -141,7 +141,7 @@ function Profile() {
                         <div className='defaul-profile-image-profile'></div>
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
-                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup}/>}
+                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup} setIsImageOpen={setIsImageOpen} />}
                 </div>
                 <div className='flex-column personal-info-section'>
                         {profileData && <span className='profile-user-name'>{profileData.updatedName}</span>}

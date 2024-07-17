@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const PostSchema = new Schema({
     text: { type: String },
     image: { type: String },
     reply: { type: Number },
     repost: { type: Number },
-    like: { type: Number },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     share: { type: Number },
     time: { type: String },
-    updatedName: { type: String },
-    formattedUsername: { type: String, unique: true },
-    profilePicture: { type: String , default: null }
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-module.exports = PostSchema; 
+const Post = mongoose.model('Post', PostSchema);
+module.exports = Post;

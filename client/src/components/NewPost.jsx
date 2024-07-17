@@ -1,22 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
-import icon from '../assets/images/emoji.png';
-import random from '../assets/images/random.jpg'
-// eslint-disable-next-line no-unused-vars
-import likeafter from '../assets/icons/like-after.png';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
-/* eslint-disable react/no-unescaped-entities */
 import '../styles/profile.css'
-import HomeNav from './HomeNav'
-import HomeExtra from './HomeExtra'
-import back from '../assets/icons/back.png'
-import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
-import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
-import ToPost from './ToPost';
-import { formatDistanceToNow } from 'date-fns';
 
 function NewPost() {
     const [userData, setUserData] = useState({});
@@ -59,40 +45,69 @@ function NewPost() {
             }
     
             setUserData({ ...response.data.userProfile });
-            setPostData([ ...response.data.userProfile.post ]);
 
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
 
+    const getPost = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found in local storage.');
+                return;
+            }
+            
+            const response = await axios.get(`http://localhost:3000/api/profile/post/${formattedUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (!response.data.posts) {
+                console.error('Post data not found in response:', response.data.posts);
+                return;
+            }
+    
+            setPostData([ ...response.data.posts ]);
+
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+
     useEffect(() => {
         if (formattedUsername) {
             getUserData();
+            getPost();
         }
     }, [formattedUsername]);  
-    
+
     return (
         <div className='profile-post-new-post'>
             {postData.map((post, index) => (
                 <div key={index} className='post flex-column'>
                     <div className='flex-row'>
-                        {userData && userData.profile.profilePicture ? (
+                        {userData?.profile?.profilePicture ? (
                             <img
-                            className='profile-pic'
-                            alt="Profile Image"
-                            src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
-                        />  ) : ( 
+                                className='profile-pic'
+                                alt="Profile Image"
+                                src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                            />  
+                        ) : ( 
                             <div className='defaul-profile-image-post'></div>
                         )}                   
                         <div className='flex-column post-box'>
                             <Link to='/profile' className='link-to-profile'>
-                                <span className='user-name'>{userData.originalUsername}</span> <span className='username-name'>@{userData.formattedUsername} · {post.time}</span>
+                                <span className='user-name'>{userData?.profile?.updatedName} </span> 
+                                <span className='username-name'>@{userData?.formattedUsername} · {post?.time}</span>
                             </Link>
                             {post.text && <p className='post-text'>{post.text}</p>}
                             {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
                         </div>
-                    </div>
+                    </div>                    
                     <div className='flex-row post-icons-container'>
                             <Link to='/home'>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">
@@ -145,11 +160,10 @@ function NewPost() {
                                 </Link>
                             </div>
                         </div>
-
                 </div>
             ))}
     </div>
     );
 } 
 
-export default NewPost
+export default NewPost;

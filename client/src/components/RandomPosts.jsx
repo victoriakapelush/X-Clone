@@ -1,42 +1,35 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
-import icon from '../assets/images/emoji.png';
-import random from '../assets/images/random.jpg'
-// eslint-disable-next-line no-unused-vars
-import likeafter from '../assets/icons/like-after.png';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
-/* eslint-disable react/no-unescaped-entities */
 import '../styles/profile.css'
-import HomeNav from './HomeNav'
-import HomeExtra from './HomeExtra'
-import back from '../assets/icons/back.png'
-import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
-import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
-import ToPost from './ToPost';
-import { formatDistanceToNow } from 'date-fns';
 
 function RandomPosts() {
     const [formattedUsername, setFormattedUsername] = useState('');
     const [randomPosts, setRandomPosts] = useState([]);
     const [likeCount, setLikeCount] = useState(0);
     const [likeColor, setLikeColor] = useState('pink');
+    const [postID, setPostID] = useState('');
 
     const handleLike = async () => {
         const newLikeCount = likeCount + 1;
-        setLikeCount(newLikeCount);
-        setLikeColor('pink');
+        setLikeColor('pink'); // Example color change on like
 
         try {
-            await axios.post('http://localhost:3000/api/saveLikeCount', { count: newLikeCount });
-            console.log('Count saved successfully');
-          } catch (error) {
-            console.error('Error saving count', error);
-          }
-
-    }
+            console.log(`Post ID: ${randomPosts._id}`); // Log the post ID
+            await axios.post('http://localhost:3000/api/saveLikeCount', {
+                _id: randomPosts._id,
+                likeCount: newLikeCount,
+            });
+            setLikeCount(newLikeCount);
+            setPostID(randomPosts._id);
+            console.log('Like count saved successfully');
+        } catch (error) {
+            console.error('Error saving like count', error);
+        }
+    };
+    
+    
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -62,7 +55,7 @@ function RandomPosts() {
                 return;
             }
             
-            const response = await axios.get(`http://localhost:3000/api/posts/${formattedUsername}`, {
+            const response = await axios.get(`http://localhost:3000/api/home/posts/${formattedUsername}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -73,7 +66,6 @@ function RandomPosts() {
                 return;
             }
             setRandomPosts([ ...response.data.posts ]);
-            console.log(randomPosts)
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -90,17 +82,17 @@ function RandomPosts() {
             {randomPosts.map((post, index) => (
                 <div key={index} className='post random-post flex-column'>
                     <div className='flex-row'>
-                        {post && post.profilePicture ? (
+                        {post && post.user.profile.profilePicture ? (
                             <img
                             className='profile-pic'
                             alt="Profile Image"
-                            src={`http://localhost:3000/uploads/${post.profilePicture}`}
+                            src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
                         />  ) : ( 
                             <div className='defaul-profile-image-post'></div>
                         )}                   
                         <div className='flex-column post-box'>
                             <Link to='/profile' className='link-to-profile'>
-                                <span className='user-name'>{post.updatedName}</span> <span className='username-name'>@{post.formattedUsername} · {post.time}</span>
+                                <span className='user-name'>{post.user.profile.updatedName}</span> <span className='username-name'>@{post.user.formattedUsername} · {post.time}</span>
                             </Link>
                             {post.text && <p className='post-text'>{post.text}</p>}
                             {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
@@ -138,7 +130,7 @@ function RandomPosts() {
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' onClick={handleLike}>
                                         <g><path d="M16.697 5.5c-1.222-.06-2.679.51-3.89 2.16l-.805 1.09-.806-1.09C9.984 6.01 8.526 5.44 7.304 5.5c-1.243.07-2.349.78-2.91 1.91-.552 1.12-.633 2.78.479 4.82 1.074 1.97 3.257 4.27 7.129 6.61 3.87-2.34 6.052-4.64 7.126-6.61 1.111-2.04 1.03-3.7.477-4.82-.561-1.13-1.666-1.84-2.908-1.91zm4.187 7.69c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"></path></g>
                                     </svg>
-                                    <span className="count">{likeCount}</span>
+                                    <span className="count">{post.like}</span>
                                 </div>
                             </Link>                      
                             <div className='save-icons flex-row'>
