@@ -8,6 +8,7 @@ function NewPost() {
     const [userData, setUserData] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
     const [postData, setPostData] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -85,6 +86,10 @@ function NewPost() {
         }
     }, [formattedUsername]);  
 
+    const toggleText = () => {
+        setIsExpanded(!isExpanded);
+    }
+
     return (
         <div className='profile-post-new-post'>
             {postData.map((post, index) => (
@@ -104,7 +109,7 @@ function NewPost() {
                                 <span className='user-name'>{userData?.profile?.updatedName} </span> 
                                 <span className='username-name'>@{userData?.formattedUsername} · {post?.time}</span>
                             </Link>
-                            {post.text && <p className='post-text'>{post.text}</p>}
+                            <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>
                             {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
                         </div>
                     </div>                    

@@ -805,6 +805,22 @@ a:hover, a:visited {
   white-space: wrap;
 }
 
+.post-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 10;  /* Number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+  height: auto;
+  cursor: pointer;
+}
+
+.post-text.expanded {
+  -webkit-line-clamp: unset; 
+  overflow: visible;
+}
+
 .no-posts-message {
   position: absolute;
   top: 78%;
@@ -1026,11 +1042,6 @@ svg {
 
   .logout-btn {
     margin-top: .2rem;
-  }
-
-  .post-text {
-    max-width: 80%;
-    height: auto;
   }
 
   /* PROFILE */

@@ -14,7 +14,6 @@ function RandomPosts() {
 
     const handleLike = async (postId) => {
         try {
-            // Find the post by ID and get its current likes and likeCount
             const postIndex = randomPosts.findIndex(post => post._id === postId);
             const currentPost = randomPosts[postIndex];
 
@@ -34,21 +33,17 @@ function RandomPosts() {
                 updatedLikeCount = Math.max(currentPost.likeCount - 1, 0); // Ensure likeCount does not go below 0
             }
 
-            // Update the backend
-            await axios.post('http://localhost:3000/api/saveLikeCount', 
+            await axios.put('http://localhost:3000/api/saveLikeCount', 
             { 
-                _id: postId,
-                likeCount: updatedLikeCount,
-                userId: userID
+                _id: postId
             }, 
             {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Add your JWT token here
+                    Authorization: `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 }
             });
 
-            // Update the frontend state
             const updatedPosts = randomPosts.map(post =>
                 post._id === postId ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes } : post
             );
