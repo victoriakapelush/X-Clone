@@ -11,6 +11,7 @@ import ToPost from './components/ToPost.jsx'
 import Grok from './components/Grok.jsx'
 import Premium from './components/Premium.jsx'
 import Replies from './components/Replies.jsx'
+import Bookmarks from './components/Bookmarks.jsx'
 import OtherUsersProfiles from './components/OtherUsersProfiles.jsx'
 import ConnectPeople from './components/ConnectPeople.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
   {
     path: "/premium",
     element: <Premium />
+  },
+  {
+    path: "/bookmarks",
+    element: <Bookmarks />
   }
 ]);
 
