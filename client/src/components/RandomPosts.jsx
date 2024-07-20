@@ -12,8 +12,8 @@ function RandomPosts() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [userID, setUserID] = useState('');
     const [likedStates, setLikedStates] = useState([]);
-    const [isBookmarked, setIsBookmarked] = useState(false);
     const [bookmarkedStates, setBookmarkedStates] = useState([]);
+    const [isBookmarked, setIsBookmarked] = useState(false);
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
@@ -65,6 +65,48 @@ function RandomPosts() {
         }
     };
 
+    const handleBookmark = async (postId, index) => {
+        try {
+          const postIndex = randomPosts.findIndex(post => post._id === postId);
+          const currentPost = randomPosts[postIndex];
+      
+          // Check if the user has already bookmarked the post
+          const userIndex = currentPost.user.bookmarks.indexOf(userID);
+      
+          let updatedBookmarks;
+      
+          if (userIndex === -1) {
+            // User has not bookmarked the post yet, so add their ID to the bookmarks array
+            updatedBookmarks = [...currentPost.user.bookmarks, userID];
+            setIsBookmarked(true);
+          } else {
+            // User already bookmarked the post, so remove their ID from the bookmarks array
+            updatedBookmarks = currentPost.user.bookmarks.filter(user => user !== userID);
+            setIsBookmarked(false);
+          }
+      
+          await axios.put(`http://localhost:3000/api/bookmarks/${formattedUsername}`, 
+          { 
+            postId: postId
+          }, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, 
+              'Content-Type': 'application/json'
+            }
+          });
+      
+          const updatedPosts = randomPosts.map(post =>
+            post._id === postId ? { ...post, bookmarks: updatedBookmarks } : post
+          );
+          setRandomPosts(updatedPosts);
+        } catch (error) {
+        console.error('Error updating bookmark status:', error);
+        }
+      };
+      
+
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -105,7 +147,7 @@ function RandomPosts() {
                 likes: post.likes 
             }));
     
-            setRandomPosts(postsData);        
+            setRandomPosts(postsData);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -179,8 +221,7 @@ function RandomPosts() {
                             </Link>                      
                             <div className='save-icons flex-row'>
                                 <Link to='/home'>
-                                    <div className="icon-container color-hover" id="save-svg">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
+                                    <div className={`icon-container bookmark-icon color-hover ${isBookmarked ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                             <g>
                                                 <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
                                             </g>

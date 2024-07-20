@@ -908,13 +908,16 @@ svg {
   background-color: rgba(29, 155, 240, 0.1);
 }
 
-.bookmarked svg path {
+.bookmarked {
   fill: var(--blue);
-  color: var(--blue);
+}
+
+.bookmark-icon.bookmarked svg path {
+  fill: var(--blue);
 }
 
 .not-bookmarked {
-  color: var(--deep-grey);
+  fill: var(--deep-grey);
 }
 
 #blue-svg:hover svg {
@@ -933,7 +936,7 @@ svg {
   fill: var(--deep-grey); 
 }
 
-.icon-container:hover svg path {
+.bookmark-icon:hover svg path {
   fill: var(--blue);
 }
 
