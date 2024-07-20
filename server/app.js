@@ -21,6 +21,7 @@ const singleUser = require('./routes/singleUser');
 const randomPosts = require('./routes/randomPosts');
 const allUsers = require('./routes/allUsers');
 const saveLike = require('./routes/saveLike');
+const bookmarks = require('./routes/bookmarks');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -70,6 +71,7 @@ app.use('/', authRoutes);
 app.use('/api/login', loginRouter);
 app.use('/home', logoutRouter);
 app.use('/home', homePage);
+app.use('/api/bookmarks', bookmarks);
 app.use('/profile', profilePage);
 app.use('/api/profile/post', post);
 app.use('/api/profile', singleUser);

@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
+/* eslint-disable react/prop-types */
+import { createContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
-export const useToken = () => {
+const TokenContext = createContext({
+    formattedUsername: '',
+    setFormattedUsername: () => {},
+});
+
+export const TokenProvider = ({ children }) => {
     const [formattedUsername, setFormattedUsername] = useState('');
 
     useEffect(() => {
@@ -18,8 +24,14 @@ export const useToken = () => {
             }
         };
         fetchTokenData(); 
-    }, []); 
+    }, []);
 
-    return formattedUsername;
+    return (
+        <TokenContext.Provider value={{ formattedUsername, setFormattedUsername }}>
+            {children}
+        </TokenContext.Provider>
+    );
 };
+
+export default TokenContext;
 

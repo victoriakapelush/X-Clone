@@ -46,5 +46,28 @@
 .bookmarks-input:focus-within {
     border-color: rgb(29, 155, 240);
     box-shadow: rgb(29, 155, 240);
-  }
+}
+
+.bookmarks-no-posts {
+    justify-content: center;
+    align-content: center;
+    width: 22rem;
+    margin: 0 auto;
+}
+
+.bookmarks-no-posts h1, .bookmarks-no-posts p {
+    margin: 0;
+    padding-top: 1rem;
+    text-align: left;
+}
+
+.bookmarks-no-posts h1 {
+    font-weight: bold;
+    font-size: 2rem;
+    padding-top: 1rem;
+}
+
+.bookmarks-no-posts p {
+    color: var(--deep-grey);
+}
 

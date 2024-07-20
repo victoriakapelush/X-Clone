@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import user from '../assets/icons/user.png'

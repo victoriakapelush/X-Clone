@@ -1,22 +1,50 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import '../styles/bookmarks.css';
 import '../styles/connectPeople.css';
 import HomeNav from './HomeNav';
 import HomeExtra from './HomeExtra';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { jwtDecode } from "jwt-decode";
+import SingleBookmark from './SingleBookmark';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-
+import TokenContext from './TokenContext';
 
 function Bookmarks() {
+    const [bookmarks, setBookmarks] = useState([]);
+    const { formattedUsername } = useContext(TokenContext);
+
+    useEffect(() => {
+        document.title = 'Bookmarks / X';
+    });
+    
+        const fetchBookmarks = async () => {
+            if (!formattedUsername) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://localhost:3000/api/bookmarks/${formattedUsername}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });                
+                setBookmarks(response.data.bookmarks || []);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+    useEffect(() => {
+        fetchBookmarks();
+        console.log(bookmarks);
+    }, [formattedUsername]);
+
     return(
         <div className='flex-row profile-page'>
             <HomeNav />
             <div className='connect-center-container flex-column'>
                 <div className='profile-header-name bookmarks-header flex-column'>
                     <h2>Bookmarks</h2>
-                    <span>@vicky_kap</span>
+                    <span>@{formattedUsername}</span>
                 </div>
                 <div className='bookmarks-search flex-row'>
                     <div className='bookmarks-input flex-row' contentEditable="true">
@@ -30,10 +58,10 @@ function Bookmarks() {
                         <input placeholder='Search Bookmarks' className='bookmarks-search-text'></input>
                     </div>
                 </div>
+                <SingleBookmark bookmarks={bookmarks}/>
             </div>
             <HomeExtra />
         </div>
-
     )
 }
 
