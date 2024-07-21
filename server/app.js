@@ -22,6 +22,7 @@ const randomPosts = require('./routes/randomPosts');
 const allUsers = require('./routes/allUsers');
 const saveLike = require('./routes/saveLike');
 const bookmarks = require('./routes/bookmarks');
+const likes = require('./routes/likes');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -78,6 +79,7 @@ app.use('/api/profile', singleUser);
 app.use('/api/home/posts', randomPosts);
 app.use('/home/connect_people', allUsers);
 app.use('/api/saveLikeCount', saveLike);
+app.use('/api/profile/likes', likes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

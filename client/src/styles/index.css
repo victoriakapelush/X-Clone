@@ -952,6 +952,10 @@ svg {
   fill: rgba(255, 204, 0, 1);
 }
 
+#blue-svg:hover svg path {
+  fill: var(--blue);
+}
+
 .post-box {
   max-width: 500px;
   width: 100%;
