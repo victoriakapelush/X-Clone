@@ -10,7 +10,8 @@ const PostSchema = new Schema({
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     share: { type: Number },
     time: { type: String },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    bookmarks: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 const Post = mongoose.model('Post', PostSchema);

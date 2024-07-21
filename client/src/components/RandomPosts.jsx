@@ -64,27 +64,34 @@ function RandomPosts() {
             console.error('Error updating like status:', error);
         }
     };
-
-    const handleBookmark = async (postId, index) => {
+    
+      const handleBookmark = async (postId, index) => {
+        if (!userID) {
+          console.error('User ID is invalid');
+          return;
+        }
+    
         try {
           const postIndex = randomPosts.findIndex(post => post._id === postId);
           const currentPost = randomPosts[postIndex];
-      
+    
           // Check if the user has already bookmarked the post
-          const userIndex = currentPost.user.bookmarks.indexOf(userID);
+          const userBookmarkIndex = currentPost.user.bookmarks.indexOf(postId);
+          const postBookmarkIndex = currentPost.bookmarks.indexOf(userID);
+
+          let updatedUserBookmarks;
+          let updatedPostBookmarks;
       
-          let updatedBookmarks;
-      
-          if (userIndex === -1) {
-            // User has not bookmarked the post yet, so add their ID to the bookmarks array
-            updatedBookmarks = [...currentPost.user.bookmarks, userID];
-            setIsBookmarked(true);
+          if (userBookmarkIndex === -1 && postBookmarkIndex === -1) {
+            // User has not bookmarked the post yet, so add their ID to both bookmarks arrays
+            updatedUserBookmarks = [...currentPost.user.bookmarks, postId];
+            updatedPostBookmarks = [...currentPost.bookmarks, userID];
           } else {
-            // User already bookmarked the post, so remove their ID from the bookmarks array
-            updatedBookmarks = currentPost.user.bookmarks.filter(user => user !== userID);
-            setIsBookmarked(false);
-          }
-      
+            // User already bookmarked the post, so remove their ID from both bookmarks arrays
+            updatedUserBookmarks = currentPost.user.bookmarks.filter(bookmark => bookmark !== postId);
+            updatedPostBookmarks = currentPost.bookmarks.filter(bookmark => bookmark !== userID);
+          } 
+
           await axios.put(`http://localhost:3000/api/bookmarks/${formattedUsername}`, 
           { 
             postId: postId
@@ -95,16 +102,35 @@ function RandomPosts() {
               'Content-Type': 'application/json'
             }
           });
-      
-          const updatedPosts = randomPosts.map(post =>
-            post._id === postId ? { ...post, bookmarks: updatedBookmarks } : post
-          );
-          setRandomPosts(updatedPosts);
+    
+         // Update `randomPosts` atomically
+    const updatedPosts = randomPosts.map(post =>
+        post._id === postId ? { 
+          ...post, 
+          user: { 
+            ...post.user, 
+            bookmarks: updatedUserBookmarks 
+          },
+          bookmarks: updatedPostBookmarks
+        } : post
+      );
+      setRandomPosts(updatedPosts);
+  
+      // Update `bookmarkedStates` atomically
+      setBookmarkedStates(prevStates =>
+        prevStates.map((bookmarked, idx) => idx === index ? !bookmarked : bookmarked)
+      );
+    
         } catch (error) {
-        console.error('Error updating bookmark status:', error);
+          console.error('Error updating bookmark status:', error);
         }
       };
-      
+
+      useEffect(() => {
+        const initialBookmarkedStates = randomPosts.map(post => post.bookmarks.includes(userID));
+        setBookmarkedStates(initialBookmarkedStates);
+        console.log('initial states: ', initialBookmarkedStates)
+      }, [randomPosts, userID]);
 
 
     useEffect(() => {
@@ -158,8 +184,6 @@ function RandomPosts() {
             getUserData();
         }
     }, [formattedUsername]);  
-
-
 
     return (
         <div>
@@ -221,7 +245,8 @@ function RandomPosts() {
                             </Link>                      
                             <div className='save-icons flex-row'>
                                 <Link to='/home'>
-                                    <div className={`icon-container bookmark-icon color-hover ${isBookmarked ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
+                                    <div className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>                                        
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' fill={bookmarkedStates[index] ? "bookmarked" : "not-bookmarked"}>
                                             <g>
                                                 <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
                                             </g>
