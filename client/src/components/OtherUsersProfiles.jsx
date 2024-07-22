@@ -139,7 +139,8 @@ function OtherUsersProfiles() {
                             onClick={() => handleTabChange('likes')} >Likes</Link>
                     </div>
                 </nav>
-                <div className='profile-post'>
+                <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
+                    {activeTab === 'posts' && <NewPost />}
                     {activeTab === 'replies' && <Replies />}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}

@@ -43,6 +43,7 @@ function ConnectPeople() {
                     }
                 });
                 setSingleUserData(response.data.users);
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }

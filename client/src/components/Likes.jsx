@@ -6,11 +6,13 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function Likes() {
     const [likes, setLikes] = useState([]);
     const { formattedUsername } = useContext(TokenContext);
     const [isExpanded, setIsExpanded] = useState(false);
+    const { username } = useParams(); 
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
@@ -22,7 +24,7 @@ function Likes() {
     
           try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:3000/api/profile/likes/${formattedUsername}`, {
+            const response = await axios.get(`http://localhost:3000/api/profile/likes/${username}`, {
               headers: {
                 Authorization: `Bearer ${token}` 
               }
@@ -64,7 +66,7 @@ return (
                             <span className='user-name'>{post.user.profile.updatedName}</span> <span className='username-name'>@{post.user.formattedUsername} · {post.time}</span>
                         </Link>
                         {post.text && <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>}
-                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
+                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} />}
                     </div>
                 </div>
                 <div className='flex-row post-icons-container'>
@@ -115,17 +117,17 @@ return (
                                 </div>
                             </Link>
                             <Link to='/home'>
-                                <div className="icon-container color-hover" id="send-svg">
+                                <div className="icon-container sendpost-icon color-hover" id="send-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g><path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path></g>
                                     </svg>
                                 </div>
                             </Link>
                         </div>
-                </div>
-                </div>
-            ))
-        )
+                    </div>
+            </div>
+        ))
+    )
 )}
 
 export default Likes

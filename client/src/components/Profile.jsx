@@ -214,8 +214,7 @@ function Profile() {
                             onClick={() => handleTabChange('likes')} >Likes</Link>
                     </div>
                 </nav>
-                <div className='profile-post'>
-                    {activeTab === 'posts' && <NewPost />}
+                <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    {activeTab === 'posts' && <NewPost />}
                     {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}

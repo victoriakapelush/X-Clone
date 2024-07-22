@@ -34,7 +34,18 @@
     margin-bottom: 2rem;
 }
 
-.media-gallery {
-    max-width: 100%;
-    height: auto;
+.mediapost-image {
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    margin: 0;
 }
+
+.extra-media-class {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+}
+
+

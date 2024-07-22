@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import '../styles/connectPeople.css';
+import { Link } from 'react-router-dom';
 
 function SingleUserBriefProfile({ singleUserData }) {
     return (
@@ -10,7 +11,7 @@ function SingleUserBriefProfile({ singleUserData }) {
                         <img src={`http://localhost:3000/uploads/${singleUserData.profile.profilePicture}`} />
                     </div>                            
                     <div className='flex-column brief-profile-name-box'>
-                        <span className='who-tofollow-namelink'>{singleUserData.originalUsername}</span>
+                        <Link to={`/profile/${singleUserData.formattedUsername}`} className='who-tofollow-namelink'>{singleUserData.originalUsername}</Link>
                         <span className='who-tofollow-iglink'>@{singleUserData.formattedUsername}</span>
                     </div>
                 </div>

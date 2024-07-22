@@ -940,6 +940,10 @@ svg {
   fill: var(--blue);
 }
 
+.sendpost-icon:hover svg path {
+  fill: var(--blue);
+}
+
 #green-svg:hover svg path {
   fill: rgba(23, 191, 99, 1);
 }
