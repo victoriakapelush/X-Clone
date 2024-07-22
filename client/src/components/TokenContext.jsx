@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
@@ -5,15 +6,16 @@ import { jwtDecode } from 'jwt-decode';
 const TokenContext = createContext({
     formattedUsername: '',
     setFormattedUsername: () => {},
+    token: ''
 });
 
 export const TokenProvider = ({ children }) => {
     const [formattedUsername, setFormattedUsername] = useState('');
-
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    
     useEffect(() => {
         const fetchTokenData = () => {
             try {
-                const token = localStorage.getItem('token');
                 if (token) {
                     const decoded = jwtDecode(token);
                     const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
@@ -24,10 +26,10 @@ export const TokenProvider = ({ children }) => {
             }
         };
         fetchTokenData(); 
-    }, []);
+    }, [formattedUsername]);
 
     return (
-        <TokenContext.Provider value={{ formattedUsername, setFormattedUsername }}>
+        <TokenContext.Provider value={{ formattedUsername, setFormattedUsername, token }}>
             {children}
         </TokenContext.Provider>
     );

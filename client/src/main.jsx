@@ -18,6 +18,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import './styles/index.css'
 import { TokenProvider } from './components/TokenContext.jsx'
+import { UserProvider } from './components/UserContext.jsx'
 
 const router = createBrowserRouter([
   {
@@ -82,7 +83,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <GoogleOAuthProvider clientId="345678472636-guk838eoghf55jeq1m0ul3iljtkrmocc.apps.googleusercontent.com">
     <React.StrictMode>
       <TokenProvider>
-        <RouterProvider router={router} />
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
       </TokenProvider>
     </React.StrictMode>
   </GoogleOAuthProvider>

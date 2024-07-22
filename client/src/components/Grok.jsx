@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import '../styles/grok.css'
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import HomeExtra from './HomeExtra';
 import HomeNav from './HomeNav';
+import UserContext from './UserContext';
 
 function Grok() {
+    const {randomUser, setRandomUser} = useContext(UserContext);
 
     useEffect(() => {
         document.title = 'Grok / X'
@@ -17,7 +20,7 @@ function Grok() {
                 <p>Premium subscribers can now use our most advanced AI, Grok, on X.</p>
                 <button>Subscribe now</button>
             </div>
-            <HomeExtra />
+            <HomeExtra randomUser={randomUser}/>
         </div>
     )
 }

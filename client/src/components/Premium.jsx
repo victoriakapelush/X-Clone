@@ -1,8 +1,13 @@
-import { useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { useEffect, useContext } from 'react';
 import HomeExtra from './HomeExtra';
 import HomeNav from './HomeNav';
+import UserContext from './UserContext';
 
 function Premium() {
+    const { userData, fetchUserData } = useContext(UserContext);
+    const {randomUser, setRandomUser} = useContext(UserContext);
 
     useEffect(() => {
         document.title = 'Premium / X'
@@ -16,7 +21,7 @@ function Premium() {
                 <p>Enjoy an enhanced experience, exclusive creator tools, top-tier verification and security.</p>
                 <button id="post-replace-btn">Subscribe & Pay</button>
             </div>
-            <HomeExtra />
+            <HomeExtra randomUser={randomUser}/>
         </div>
     )
 }

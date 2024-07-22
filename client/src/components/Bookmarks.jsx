@@ -8,10 +8,12 @@ import SingleBookmark from './SingleBookmark';
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
+import UserContext from './UserContext';
 
 function Bookmarks() {
     const [bookmarks, setBookmarks] = useState([]);
     const { formattedUsername } = useContext(TokenContext);
+    const {randomUser, setRandomUser} = useContext(UserContext);
 
     useEffect(() => {
         document.title = 'Bookmarks / X';
@@ -60,7 +62,7 @@ function Bookmarks() {
                 </div>
                 <SingleBookmark bookmarks={bookmarks}/>
             </div>
-            <HomeExtra />
+            <HomeExtra randomUser={randomUser}/>
         </div>
     )
 }
