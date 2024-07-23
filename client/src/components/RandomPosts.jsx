@@ -13,7 +13,6 @@ function RandomPosts() {
     const [userID, setUserID] = useState('');
     const [likedStates, setLikedStates] = useState([]);
     const [bookmarkedStates, setBookmarkedStates] = useState([]);
-    const [isBookmarked, setIsBookmarked] = useState(false);
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);

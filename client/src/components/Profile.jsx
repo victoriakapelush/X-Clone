@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import '../styles/profile.css'
+import '../styles/highlights.css'
 import { useState, useEffect } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
@@ -214,7 +215,8 @@ function Profile() {
                             onClick={() => handleTabChange('likes')} >Likes</Link>
                     </div>
                 </nav>
-                <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    {activeTab === 'posts' && <NewPost />}
+                <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
+                    {activeTab === 'posts' && <NewPost />}
                     {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}

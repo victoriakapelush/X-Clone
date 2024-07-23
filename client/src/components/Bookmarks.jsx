@@ -37,7 +37,6 @@ function Bookmarks() {
 
     useEffect(() => {
         fetchBookmarks();
-        console.log(bookmarks);
     }, [formattedUsername]);
 
     return(
