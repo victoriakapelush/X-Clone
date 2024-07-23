@@ -717,6 +717,12 @@ a:hover, a:visited {
   align-items: center;
 }
 
+.unfollow-button {
+  background-color: var(--black) !important;
+  color: var(--white) !important;
+  border: 1px solid var(--white) !important;
+}
+
 .who-tofollow-btn {
   margin-right: 1rem;
 }

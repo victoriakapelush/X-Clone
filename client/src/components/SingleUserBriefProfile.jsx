@@ -9,6 +9,14 @@ import axios from 'axios';
 function SingleUserBriefProfile({ singleUserData }) {
     const { loggedinUserData, token, loggedinUserId } = useContext(TokenContext);
     const [currentUserId, setCurrentUserId] = useState(loggedinUserId);
+    const [currentUserData, setCurrentUserData] = useState(loggedinUserData);
+    const [otherUserData, setOtherUserData] = useState(singleUserData);
+
+    useEffect(() => {
+        setCurrentUserData(currentUserData);
+        setOtherUserData(otherUserData);
+        console.log(currentUserData)
+    }, [currentUserData, otherUserData]);
 
     const handleFollow = async (otherUserId) => {
         try {
@@ -53,6 +61,24 @@ function SingleUserBriefProfile({ singleUserData }) {
                 updatedFollowingCount = Math.max(currentUser.profile.following - 1, 0); // Ensure following count does not go below 0
             }
 
+            const updatedOtherUser = {
+                ...otherUser,
+                profile: {
+                    ...otherUser.profile,
+                    totalFollowers: updatedFollowersArray,
+                    followers: updatedFollowersCount
+                }
+            };
+
+            const updatedCurrentUser = {
+                ...currentUser,
+                profile: {
+                    ...currentUser.profile,
+                    totalFollowing: updatedFollowingArray,
+                    following: updatedFollowingCount
+                }
+            };
+
             // Send the update request to the server
             await axios.put('http://localhost:3000/api/saveFollowing', 
             { 
@@ -64,12 +90,14 @@ function SingleUserBriefProfile({ singleUserData }) {
                     'Content-Type': 'application/json'
                 }
             });
-
-            // Update local state with the new user data
+            setCurrentUserData(updatedCurrentUser);
+            setOtherUserData(updatedOtherUser);
         } catch (error) {
             console.error('Error updating following status:', error);
         }
     };
+
+    const isFollowing = loggedinUserData?.profile?.totalFollowing.includes(singleUserData._id);
 
     return (
         <div className='brief-profile-container flex-column'>
@@ -84,7 +112,7 @@ function SingleUserBriefProfile({ singleUserData }) {
                     </div>
                 </div>
                 <div className='who-tofollow-btn'>
-                    <button className='radius' onClick={() => handleFollow(singleUserData._id)}>Follow</button>
+                    <button className={`radius ${isFollowing ? 'unfollow-button' : ''}`} onClick={() => handleFollow(singleUserData._id)}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
                 </div>
             </div>
             <span className='brief-profile-bio'>{singleUserData.profile.profileBio}</span>
