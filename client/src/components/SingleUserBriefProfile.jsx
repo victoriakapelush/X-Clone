@@ -7,98 +7,89 @@ import TokenContext from './TokenContext';
 import axios from 'axios';
 
 function SingleUserBriefProfile({ singleUserData }) {
-    const { loggedinUserData, token, loggedinUserId } = useContext(TokenContext);
-    const [currentUserId, setCurrentUserId] = useState(loggedinUserId);
+    const { loggedinUserData, token, formattedUsername } = useContext(TokenContext);
     const [currentUserData, setCurrentUserData] = useState(loggedinUserData);
     const [otherUserData, setOtherUserData] = useState(singleUserData);
-    const [isFollowing, setIsFollowing] = useState(loggedinUserData?.profile?.totalFollowing.includes(singleUserData._id));
+    const [isFollowing, setIsFollowing] = useState(false);
+
+    useEffect(() => {
+        // Check if loggedinUserData and its profile are defined
+        if (loggedinUserData && loggedinUserData.profile && singleUserData) {
+            // Check if the current user is following the single user
+            const followingIndex = loggedinUserData.profile.totalFollowing.indexOf(singleUserData._id);
+            setIsFollowing(followingIndex !== -1);
+        }
+    }, [loggedinUserData, singleUserData]);
 
     const handleFollow = async (otherUserId) => {
         try {
-            // Ensure otherUserId is provided
             if (!otherUserId) {
                 throw new Error('Other user ID not provided');
             }
     
             // Access the other user in the singleUserData object
             const otherUser = singleUserData;
+            console.log(otherUser)
             if (!otherUser || otherUser._id !== otherUserId) {
                 throw new Error('Other user not found or ID mismatch');
             }
     
             // Access the current user data
             const currentUser = loggedinUserData;
+            console.log(currentUser)
             if (!currentUser) {
                 throw new Error('Current user not found');
             }
     
-            // Check if the current user is already following the other user
-            const ifFollowed = currentUser.profile.totalFollowing.indexOf(otherUserId);
-    
-            let updatedFollowingArray = [...currentUser.profile.totalFollowing];
-            let updatedFollowersArray = [...otherUser.profile.totalFollowers];
-            let updatedFollowingCount;
-            let updatedFollowersCount;
-    
-            if (ifFollowed === -1) {
-                // Current user is not following the other user yet
-                updatedFollowersArray.push(currentUserId);
-                updatedFollowersCount = otherUser.profile.followers + 1;
-    
-                updatedFollowingArray.push(otherUserId);
-                updatedFollowingCount = currentUser.profile.following + 1;
-            } else {
-                // Current user is already following the other user
-                const followerIndex = otherUser.profile.totalFollowers.indexOf(currentUserId);
-                if (followerIndex > -1) {
-                    otherUser.profile.totalFollowers.splice(followerIndex, 1);
-                }
-                updatedFollowersCount = Math.max(otherUser.profile.followers - 1, 0); // Ensure followers count does not go below 0
-    
-                const followingIndex = currentUser.profile.totalFollowing.indexOf(otherUserId);
-                if (followingIndex > -1) {
-                    updatedFollowingArray.splice(followingIndex, 1);
-                }
-                updatedFollowingCount = Math.max(currentUser.profile.following - 1, 0); // Ensure following count does not go below 0
-            }
-    
             // Send the update request to the server
-            await axios.put('http://localhost:3000/api/saveFollowing', 
-            { 
-                _id: otherUserId
-            }, 
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`, 
-                    'Content-Type': 'application/json'
+            await axios.put(
+                `http://localhost:3000/api/saveFollowing/${formattedUsername}`,
+                { _id: otherUserId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            });
+            );
     
             // Update local state after successful server update
-            setCurrentUserData({
-                ...currentUser,
-                profile: {
-                    ...currentUser.profile,
-                    totalFollowing: updatedFollowingArray,
-                    following: updatedFollowingCount
-                }
-            });
+            const updatedCurrentUser = { ...currentUser };
+            const updatedOtherUser = { ...otherUser };
     
-            setOtherUserData({
-                ...otherUser,
-                profile: {
-                    ...otherUser.profile,
-                    totalFollowers: updatedFollowersArray,
-                    followers: updatedFollowersCount
-                }
-            });
+            // Update currentUser's following array and count
+            const followingIndex = updatedCurrentUser.profile.totalFollowing.indexOf(otherUserId);
+            if (followingIndex === -1) {
+                updatedCurrentUser.profile.totalFollowing.push(otherUserId);
+            } else {
+                updatedCurrentUser.profile.totalFollowing.splice(followingIndex, 1);
+            }
+            updatedCurrentUser.profile.following = updatedCurrentUser.profile.totalFollowing.length;
+    
+            // Update otherUser's followers array and count
+            const followersIndex = updatedOtherUser.profile.totalFollowers.indexOf(currentUser._id);
+            if (followersIndex === -1) {
+                updatedOtherUser.profile.totalFollowers.push(currentUser._id);
+            } else {
+                updatedOtherUser.profile.totalFollowers.splice(followersIndex, 1);
+            }
+            updatedOtherUser.profile.followers = updatedOtherUser.profile.totalFollowers.length;
+    
+            // Update state
+            setCurrentUserData(updatedCurrentUser);
+            setOtherUserData(updatedOtherUser);
+
+            // Update isFollowing state
+            setIsFollowing(followingIndex === -1);
+
+            console.log(updatedCurrentUser);
+            console.log(updatedOtherUser)
     
         } catch (error) {
             console.error('Error updating following status:', error);
         }
     };
     
-
     return (
         <div className='brief-profile-container flex-column'>
             <div className='brief-profile-box flex-row'>

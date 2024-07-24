@@ -47,7 +47,8 @@ export const TokenProvider = ({ children }) => {
     }, [formattedUsername]);
 
     return (
-        <TokenContext.Provider value={{ formattedUsername, setFormattedUsername, token, loggedinUserId, loggedinUserData, setLoggedinUserData }}>            {children}
+        <TokenContext.Provider value={{ formattedUsername, setFormattedUsername, token, loggedinUserId, loggedinUserData, setLoggedinUserData }}>            
+            {children}
         </TokenContext.Provider>
     );
 };
