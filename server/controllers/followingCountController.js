@@ -1,12 +1,12 @@
 const User = require('../models/User');
 
 const saveFollowingCount = async (req, res) => {
-    const { _id } = req.body;
     const currentUser = req.user.id;
+    const otherUserId = req.body._id;
 
     try {
         const user = await User.findById(currentUser);
-        const otherUser = await User.findById(_id);
+        const otherUser = await User.findById(otherUserId);
 
         if (!user || !otherUser) {
             return res.status(404).send({ message: 'Users not found' });
@@ -17,18 +17,20 @@ const saveFollowingCount = async (req, res) => {
 
         // Check if the user has already followed the user
         const userIndex = otherUser.profile.totalFollowers.indexOf(currentUser);
+        const userIndex2 = user.profile.totalFollowing.indexOf(otherUserId);
 
-        if (userIndex === -1) {
+        if (userIndex === -1 && userIndex2 === -1) {
             // User has not followed the user yet, so add their ID to the followers array and increment followers
             otherUser.profile.totalFollowers.push(currentUser);
             otherUser.profile.followers += 1;
             user.profile.following += 1;
-            user.profile.totalFollowing.push(_id);
+            user.profile.totalFollowing.push(otherUserId);
         } else {
             // User already followed the other one, so remove their ID from the followers array and decrement followers
-            otherUser.profile.totalFollowers.splice(userIndex, 1);
+            otherUser.profile.totalFollowers.splice(userIndex, 1);          
             otherUser.profile.followers = Math.max(otherUser.profile.followers - 1, 0); // Ensure follower does not go below 0
-            user.profile.totalFollowing.splice(_id, 1);
+            
+            user.profile.totalFollowing.splice(userIndex2, 1);           
             user.profile.following = Math.max(user.profile.following - 1, 0); // Ensure follower does not go below 0
         }
 

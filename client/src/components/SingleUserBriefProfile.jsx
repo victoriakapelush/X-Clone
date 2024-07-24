@@ -11,12 +11,7 @@ function SingleUserBriefProfile({ singleUserData }) {
     const [currentUserId, setCurrentUserId] = useState(loggedinUserId);
     const [currentUserData, setCurrentUserData] = useState(loggedinUserData);
     const [otherUserData, setOtherUserData] = useState(singleUserData);
-
-    useEffect(() => {
-        setCurrentUserData(currentUserData);
-        setOtherUserData(otherUserData);
-        console.log(currentUserData)
-    }, [currentUserData, otherUserData]);
+    const [isFollowing, setIsFollowing] = useState(loggedinUserData?.profile?.totalFollowing.includes(singleUserData._id));
 
     const handleFollow = async (otherUserId) => {
         try {
@@ -24,61 +19,49 @@ function SingleUserBriefProfile({ singleUserData }) {
             if (!otherUserId) {
                 throw new Error('Other user ID not provided');
             }
-
+    
             // Access the other user in the singleUserData object
             const otherUser = singleUserData;
             if (!otherUser || otherUser._id !== otherUserId) {
                 throw new Error('Other user not found or ID mismatch');
             }
-
+    
             // Access the current user data
             const currentUser = loggedinUserData;
             if (!currentUser) {
                 throw new Error('Current user not found');
             }
-
+    
             // Check if the current user is already following the other user
             const ifFollowed = currentUser.profile.totalFollowing.indexOf(otherUserId);
-
-            let updatedFollowingArray;
-            let updatedFollowersArray;
+    
+            let updatedFollowingArray = [...currentUser.profile.totalFollowing];
+            let updatedFollowersArray = [...otherUser.profile.totalFollowers];
             let updatedFollowingCount;
             let updatedFollowersCount;
-
+    
             if (ifFollowed === -1) {
                 // Current user is not following the other user yet
-                updatedFollowersArray = [...otherUser.profile.totalFollowers, currentUserId];
+                updatedFollowersArray.push(currentUserId);
                 updatedFollowersCount = otherUser.profile.followers + 1;
-
-                updatedFollowingArray = [...currentUser.profile.totalFollowing, otherUserId];
+    
+                updatedFollowingArray.push(otherUserId);
                 updatedFollowingCount = currentUser.profile.following + 1;
             } else {
                 // Current user is already following the other user
-                updatedFollowersArray = otherUser.profile.totalFollowers.filter(user => user !== currentUserId);
+                const followerIndex = otherUser.profile.totalFollowers.indexOf(currentUserId);
+                if (followerIndex > -1) {
+                    otherUser.profile.totalFollowers.splice(followerIndex, 1);
+                }
                 updatedFollowersCount = Math.max(otherUser.profile.followers - 1, 0); // Ensure followers count does not go below 0
-
-                updatedFollowingArray = currentUser.profile.totalFollowing.filter(user => user !== otherUserId);
+    
+                const followingIndex = currentUser.profile.totalFollowing.indexOf(otherUserId);
+                if (followingIndex > -1) {
+                    updatedFollowingArray.splice(followingIndex, 1);
+                }
                 updatedFollowingCount = Math.max(currentUser.profile.following - 1, 0); // Ensure following count does not go below 0
             }
-
-            const updatedOtherUser = {
-                ...otherUser,
-                profile: {
-                    ...otherUser.profile,
-                    totalFollowers: updatedFollowersArray,
-                    followers: updatedFollowersCount
-                }
-            };
-
-            const updatedCurrentUser = {
-                ...currentUser,
-                profile: {
-                    ...currentUser.profile,
-                    totalFollowing: updatedFollowingArray,
-                    following: updatedFollowingCount
-                }
-            };
-
+    
             // Send the update request to the server
             await axios.put('http://localhost:3000/api/saveFollowing', 
             { 
@@ -90,14 +73,31 @@ function SingleUserBriefProfile({ singleUserData }) {
                     'Content-Type': 'application/json'
                 }
             });
-            setCurrentUserData(updatedCurrentUser);
-            setOtherUserData(updatedOtherUser);
+    
+            // Update local state after successful server update
+            setCurrentUserData({
+                ...currentUser,
+                profile: {
+                    ...currentUser.profile,
+                    totalFollowing: updatedFollowingArray,
+                    following: updatedFollowingCount
+                }
+            });
+    
+            setOtherUserData({
+                ...otherUser,
+                profile: {
+                    ...otherUser.profile,
+                    totalFollowers: updatedFollowersArray,
+                    followers: updatedFollowersCount
+                }
+            });
+    
         } catch (error) {
             console.error('Error updating following status:', error);
         }
     };
-
-    const isFollowing = loggedinUserData?.profile?.totalFollowing.includes(singleUserData._id);
+    
 
     return (
         <div className='brief-profile-container flex-column'>
@@ -112,7 +112,9 @@ function SingleUserBriefProfile({ singleUserData }) {
                     </div>
                 </div>
                 <div className='who-tofollow-btn'>
-                    <button className={`radius ${isFollowing ? 'unfollow-button' : ''}`} onClick={() => handleFollow(singleUserData._id)}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
+                    <button className={`radius ${isFollowing ? 'unfollow-button' : ''}`} onClick={() => handleFollow(singleUserData._id)}>
+                        {isFollowing ? 'Unfollow' : 'Follow'}
+                    </button>
                 </div>
             </div>
             <span className='brief-profile-bio'>{singleUserData.profile.profileBio}</span>
