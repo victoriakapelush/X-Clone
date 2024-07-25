@@ -25,6 +25,7 @@ const saveFollowing = require('./routes/saveFollowing');
 const bookmarks = require('./routes/bookmarks');
 const likes = require('./routes/likes');
 const media = require('./routes/media');
+const trendingTags = require('./routes/trendingTags');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -84,6 +85,7 @@ app.use('/api/saveLikeCount', saveLike);
 app.use('/api/profile/likes', likes);
 app.use('/api/profile/media', media);
 app.use('/api/saveFollowing', saveFollowing);
+app.use('/api/trendingTags', trendingTags);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

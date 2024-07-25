@@ -11,7 +11,8 @@ const PostSchema = new Schema({
     share: { type: Number },
     time: { type: String },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    bookmarks: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    bookmarks: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    tags: { type: [String] }
 });
 
 const Post = mongoose.model('Post', PostSchema);

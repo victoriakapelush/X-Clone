@@ -631,7 +631,6 @@ a:hover, a:visited {
 }
 
 .profile-right {
-  /*max-width: 50%;*/
   flex: 1;
   min-width: 20%;
   margin-top: 1rem;
@@ -643,22 +642,19 @@ a:hover, a:visited {
 }
 
 .whatshappenning-container {
-  min-width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .trending-hashtag-container {
-  width: 100%;
-  padding-bottom: 1rem;
-  padding-left: .3rem;
+  max-width: 100%;
+  padding: .5rem 1rem .5rem 1rem;
   cursor: pointer;
+  gap: .2rem;
 }
 
 .trending-hashtag-container:hover {
   background-color: var(--opacity);
-}
-
-.trending-hashtag-container {
-  gap: .2rem;
 }
 
 .trending-name, .trending-number-posts {
@@ -666,30 +662,42 @@ a:hover, a:visited {
   font-size: .9rem;
 }
 
-.trending-hashtag {
-  font-weight: 600;
+.trendingtag-post-limit {
+  text-overflow: ellipsis; 
+  white-space: nowrap;       
+  overflow: hidden;  
+  font-weight: light;
+  font-size: .9rem;
 }
 
 .premium-subscribe-container {
   border: 1px solid var(--deep-grey);
   border-radius: 20px;
-  padding: 1rem 1rem .5rem 1rem;
+  padding: 1rem 0 .5rem 0;
   min-width: 100%;
+}
+
+.premium-subscribe-container button {
+  margin-left: 1rem;
 }
 
 .premium-header h3 {
   margin: 0;
-  margin-bottom: 1rem;
-  margin-left: .3rem;
+  margin-bottom: .5rem;
+  font-weight: bold;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .premium-paragraph p {
   margin: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .who-tofollow-container {
   width: 100%;
-  margin-bottom: .5rem;
+  padding: .4rem 0 .4rem 0;
 }
 
 .who-tofollow-container:hover {
@@ -703,7 +711,7 @@ a:hover, a:visited {
 }
 
 .who-tofollow-image-box {
-  padding: 0 .3rem 0 0;
+  padding: 0 .5rem 0 .7rem;
 }
 
 .who-tofollow-image-box img, .who-tofollow-image-box div {
