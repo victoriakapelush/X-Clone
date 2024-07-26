@@ -674,7 +674,7 @@ a:hover, a:visited {
   border: 1px solid var(--deep-grey);
   border-radius: 20px;
   padding: 1rem 0 .5rem 0;
-  min-width: 100%;
+  height: fit-content;
 }
 
 .premium-subscribe-container button {
@@ -1084,6 +1084,10 @@ svg {
   }
 
   .nav-links {
+    display: none;
+  }
+
+  .premium-subscribe-container {
     display: none;
   }
 

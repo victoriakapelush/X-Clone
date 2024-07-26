@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import '../styles/explore.css';
+import '../styles/bookmarks.css';
+import '../styles/connectPeople.css';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import TokenContext from './TokenContext';
@@ -46,7 +48,7 @@ function Explore({ user, tag }) {
     return(
         <div className='flex-row profile-page'>
             <HomeNav />
-            <div className='connect-center-container flex-column'>
+            <div className='connect-center-container flex-column explore-page-middle'>
                 <div className='bookmarks-search flex-row explore-search-bottom-line'>
                     <div className='bookmarks-input flex-row' contentEditable="true">
                         <div className='bookmarks-search-svg-container'>
@@ -63,14 +65,16 @@ function Explore({ user, tag }) {
                     <SingleTrendingTag key={index} tag={tag} />
                 ))}            
             </div>
-            <div className='flex-column premium-subscribe-container'>
-            <div className='premium-header'>
-                <h3>Who to follow</h3>
+            <div className='profile-right flex-column'>
+                <div className='flex-column premium-subscribe-container explore-who-to-follow'>
+                <div className='premium-header'>
+                    <h3>Who to follow</h3>
+                </div>
+                {users && users.slice(0, 3).map(user => (
+                    <SingleUser key={user.id} user={user} />
+                ))}
+                </div>
             </div>
-            {users && users.slice(0, 3).map(user => (
-                <SingleUser key={user.id} user={user} />
-            ))}
-        </div>
         </div>
     )
 }

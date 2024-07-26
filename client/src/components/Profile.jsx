@@ -16,10 +16,7 @@ import Highlights from './Highlights'
 import Media from './Media'
 import Likes from './Likes'
 import FullSizeImage from './FullSizeImage'
-import OtherUsersProfiles from './OtherUsersProfiles'
 import back from '../assets/icons/back.png'
-import defaultBackgroundImage from '../assets/images/defaultBackgroundImage.jpg'
-import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 
 function Profile() {
     const [userData, setUserData] = useState({});
@@ -130,14 +127,14 @@ function Profile() {
                 <div className='background-image-holder' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`, 'background-image')}>
                 {isImageOpen && <FullSizeImage onClick={handleCloseImage} imageUrl={imageUrl} imageType={imageType} />}
                     {profileData && profileData.backgroundHeaderImage ? (
-                        <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} alt="Profile Header Background Picture" />
+                        <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} />
                     ) : (
                         <div className='defaul-profile-image-background'></div>
                     )}
                 </div>
                     <div className='profile-photo-container flex-row' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.profilePicture}`, 'profile-picture')}>
                     {profileData && profileData.profilePicture ? (
-                        <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} alt="Profile Picture" />
+                        <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} />
                         ) : (
                         <div className='defaul-profile-image-profile'></div>
                         )}
