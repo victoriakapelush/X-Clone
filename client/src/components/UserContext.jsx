@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
                 return;
             }
             setUserData(response.data.userProfile);
-            setRandomUser(response.data.randomUsers)
+            setRandomUser(response.data.randomUsers);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }

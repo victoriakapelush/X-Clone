@@ -1,188 +1,37 @@
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
-import '../styles/profile.css'
+import '../styles/profile.css';
+import useLike from './UseLikeHook';
+import useBookmark from './UseBookmarksHook';
+import TokenContext from './TokenContext';
+import UserContext from './UserContext';
 
 function RandomPosts() {
-    const token = localStorage.getItem('token');
-    const [formattedUsername, setFormattedUsername] = useState('');
-    const [randomPosts, setRandomPosts] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [userID, setUserID] = useState('');
-    const [likedStates, setLikedStates] = useState([]);
-    const [bookmarkedStates, setBookmarkedStates] = useState([]);
-
-    const toggleText = () => {
-        setIsExpanded(!isExpanded);
-    }
-
-    useEffect(() => {
-      setLikedStates(randomPosts.map(post => post.likes.includes(userID)));
-    }, [randomPosts, userID]);
-
-    const handleLike = async (postId, index) => {
-        try {
-            const postIndex = randomPosts.findIndex(post => post._id === postId);
-            const currentPost = randomPosts[postIndex];
-
-            // Check if the user has already liked the post
-            const userIndex = currentPost.likes.indexOf(userID);
-
-            let updatedLikes;
-            let updatedLikeCount;
-
-            if (userIndex === -1) {
-                // User has not liked the post yet, so add their ID to the likes array and increment likeCount
-                updatedLikes = [...currentPost.likes, userID];
-                updatedLikeCount = currentPost.likeCount + 1;
-            } else {
-                // User already liked the post, so remove their ID from the likes array and decrement likeCount
-                updatedLikes = currentPost.likes.filter(user => user !== userID);
-                updatedLikeCount = Math.max(currentPost.likeCount - 1, 0); // Ensure likeCount does not go below 0
-            }
-
-            await axios.put('http://localhost:3000/api/saveLikeCount', 
-            { 
-                _id: postId
-            }, 
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`, 
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const updatedPosts = randomPosts.map(post =>
-                post._id === postId ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes } : post
-            );
-            setRandomPosts(updatedPosts);
-            setLikedStates(prevStates => prevStates.map((liked, idx) => idx === index ? !liked : liked));
-        } catch (error) {
-            console.error('Error updating like status:', error);
-        }
-    };
-    
-      const handleBookmark = async (postId, index) => {
-        if (!userID) {
-          console.error('User ID is invalid');
-          return;
-        }
-    
-        try {
-          const postIndex = randomPosts.findIndex(post => post._id === postId);
-          const currentPost = randomPosts[postIndex];
-    
-          // Check if the user has already bookmarked the post
-          const userBookmarkIndex = currentPost.user.bookmarks.indexOf(postId);
-          const postBookmarkIndex = currentPost.bookmarks.indexOf(userID);
-
-          let updatedUserBookmarks;
-          let updatedPostBookmarks;
-      
-          if (userBookmarkIndex === -1 && postBookmarkIndex === -1) {
-            // User has not bookmarked the post yet, so add their ID to both bookmarks arrays
-            updatedUserBookmarks = [...currentPost.user.bookmarks, postId];
-            updatedPostBookmarks = [...currentPost.bookmarks, userID];
-          } else {
-            // User already bookmarked the post, so remove their ID from both bookmarks arrays
-            updatedUserBookmarks = currentPost.user.bookmarks.filter(bookmark => bookmark !== postId);
-            updatedPostBookmarks = currentPost.bookmarks.filter(bookmark => bookmark !== userID);
-          } 
-
-          await axios.put(`http://localhost:3000/api/bookmarks/${formattedUsername}`, 
-          { 
-            postId: postId
-          }, 
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, 
-              'Content-Type': 'application/json'
-            }
-          });
-    
-         // Update `randomPosts` atomically
-    const updatedPosts = randomPosts.map(post =>
-        post._id === postId ? { 
-          ...post, 
-          user: { 
-            ...post.user, 
-            bookmarks: updatedUserBookmarks 
-          },
-          bookmarks: updatedPostBookmarks
-        } : post
-      );
-      setRandomPosts(updatedPosts);
+    const [randomPosts, setRandomPosts] = useState([]);
+    const { likedStates, handleLike } = useLike(randomPosts, setRandomPosts);
+    const { bookmarkedStates, handleBookmark, getUserData } = useBookmark(randomPosts, setRandomPosts);
+    const { token, formattedUsername } = useContext(TokenContext);
+    const { fetchUserData, userData } = useContext(UserContext);
   
-      // Update `bookmarkedStates` atomically
-      setBookmarkedStates(prevStates =>
-        prevStates.map((bookmarked, idx) => idx === index ? !bookmarked : bookmarked)
-      );
-    
-        } catch (error) {
-          console.error('Error updating bookmark status:', error);
-        }
-      };
-
-      useEffect(() => {
-        const initialBookmarkedStates = randomPosts.map(post => post.bookmarks.includes(userID));
-        setBookmarkedStates(initialBookmarkedStates);
-        console.log('initial states: ', initialBookmarkedStates)
-      }, [randomPosts, userID]);
-
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                if (token) {
-                    const decoded = jwtDecode(token);
-                    const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
-                    setFormattedUsername(decodedUsername); 
-                    setUserID(decoded.id);
-                }
-            } catch (error) {
-                console.error('Error decoding token:', error);
-            }
-        };
-        fetchUserData(); 
-    }, []); 
-
-    const getUserData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found in local storage.');
-                return;
-            }
-            
-            const response = await axios.get(`http://localhost:3000/api/home/posts/${formattedUsername}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (!response.data.posts) {
-                console.error('Post data not found in response:', response.data);
-                return;
-            }
-            const postsData = response.data.posts.map(post => ({
-                ...post, 
-                likeCount: post.likeCount, 
-                likes: post.likes 
-            }));
-    
-            setRandomPosts(postsData);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
+    const toggleText = () => {
+      setIsExpanded(!isExpanded);
     };
-
+  
     useEffect(() => {
-        if (formattedUsername) {
-            getUserData();
-        }
-    }, [formattedUsername]);  
+      if (formattedUsername) {
+        getUserData();
+      }
+    }, [formattedUsername]);
+  
+    useEffect(() => {
+      if (!userData) {
+        fetchUserData();
+      }
+    }, [userData]);
 
     return (
         <div>
@@ -192,7 +41,6 @@ function RandomPosts() {
                         {post && post.user.profile.profilePicture ? (
                             <img
                             className='profile-pic'
-                            alt="Profile Image"
                             src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
                         />  ) : ( 
                             <div className='defaul-profile-image-post'></div>
@@ -206,7 +54,7 @@ function RandomPosts() {
                         </div>
                     </div>
                     <div className='flex-row post-icons-container'>
-                            <Link to='/home'>
+                            <div>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g className='flex-row'>
@@ -215,7 +63,7 @@ function RandomPosts() {
                                     </svg>
                                     <span className="count">0</span>
                                 </div>
-                            </Link>
+                            </div>
                             <Link to='/home'>
                                 <div className="icon-container color-hover flex-row" id="green-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
@@ -263,7 +111,7 @@ function RandomPosts() {
                     </div>
                 </div>
             ))}
-    </div>
+        </div>
     );
 } 
 

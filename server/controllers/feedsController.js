@@ -10,7 +10,9 @@ const getPostsFromFollowing = async (req, res) => {
             { $match: { user: { $in: followedUserIds } } },
             { $sample: { size: 10 } }
         ]);
-        res.status(200).json(posts);
+        const postIds = posts.map(post => post._id);
+        const populatedPosts = await Post.find({ _id: { $in: postIds } }).populate('user');
+        res.status(200).json(populatedPosts);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

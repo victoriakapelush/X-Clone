@@ -9,34 +9,42 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
+import useLike from './UseLikeHook';
+import useBookmark from './UseBookmarksHook';
 
 function Bookmarks() {
-    const [bookmarks, setBookmarks] = useState([]);
-    const { formattedUsername } = useContext(TokenContext);
     const {randomUser, setRandomUser} = useContext(UserContext);
+    const [randomPosts, setRandomPosts] = useState([]);
+    const { likedStates, handleLike } = useLike(randomPosts, setRandomPosts);
+    const { bookmarkedStates, handleBookmark, getUserData, bookmarks, setBookmarks } = useBookmark(randomPosts, setRandomPosts);
+    const { token, formattedUsername } = useContext(TokenContext);
+    const { fetchUserData, userData } = useContext(UserContext);
+
 
     useEffect(() => {
         document.title = 'Bookmarks / X';
     });
     
-        const fetchBookmarks = async () => {
-            if (!formattedUsername) return;
 
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`http://localhost:3000/api/bookmarks/${formattedUsername}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });                
-                setBookmarks(response.data.bookmarks || []);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
+    const fetchBookmarks = async () => {
+        if (!formattedUsername) return;
+    
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:3000/api/bookmarks/${formattedUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });                
+            setBookmarks(response.data.bookmarks || []);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    
     useEffect(() => {
-        fetchBookmarks();
+      fetchBookmarks();
     }, [formattedUsername]);
 
     return(
@@ -59,7 +67,7 @@ function Bookmarks() {
                         <input placeholder='Search Bookmarks' className='bookmarks-search-text'></input>
                     </div>
                 </div>
-                <SingleBookmark bookmarks={bookmarks}/>
+                <SingleBookmark bookmarks={bookmarks} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike}/>
             </div>
             <HomeExtra randomUser={randomUser}/>
         </div>
