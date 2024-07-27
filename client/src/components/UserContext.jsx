@@ -18,24 +18,20 @@ export const UserProvider = ({ children }) => {
     const { token, formattedUsername } = useContext(TokenContext);
 
     const fetchUserData = async () => {
-
         if (!token) {
             console.error('No token found.');
             return;
         }
-
         try {
             if (!token) {
                 console.error('No token found in local storage.');
                 return;
             }
-
             const response = await axios.get(`http://localhost:3000/home/${formattedUsername}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
             if (!response.data) {
                 console.error('User data not found in response:', response.data);
                 return;

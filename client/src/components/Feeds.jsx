@@ -23,6 +23,10 @@ function Feeds() {
     const toggleText = () => {
         setIsExpanded(!isExpanded);
     }
+
+    useEffect(() => {
+        document.title = 'Feeds / X';
+    });
   
     useEffect(() => {
         if (formattedUsername) {

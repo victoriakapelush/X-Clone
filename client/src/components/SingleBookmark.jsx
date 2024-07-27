@@ -15,8 +15,6 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
         setIsExpanded(!isExpanded);
     }
 
-    console.log(bookmarks)
-
     return (
         <div>
             {bookmarks.length > 0 ? (
@@ -39,7 +37,7 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
                                 </div>
                         </div>
                         <div className='flex-row post-icons-container'>
-                            <div to='/home'>
+                            <div>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g className='flex-row'>
@@ -49,7 +47,7 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
                                     <span className="count">0</span>
                                 </div>
                             </div>
-                            <div to='/home'>
+                            <div>
                                 <div className="icon-container color-hover flex-row" id="green-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g><path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path></g>
@@ -57,7 +55,7 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
                                     <span className="count">0</span>
                                 </div>
                             </div>
-                            <div to='/home'>
+                            <div>
                                 <div className="icon-container color-hover flex-row" id="yellow-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2v7z" transform="rotate(-45 10 12)"></path></g>
@@ -76,7 +74,7 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
                                 </div>
                             </div>  
                             <div className='save-icons flex-row'>
-                                <div to='/home'>
+                                <div>
                                     <div className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>                                        
                                         <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' fill={bookmarkedStates[index] ? "bookmarked" : "not-bookmarked"}>
                                             <g>
@@ -85,7 +83,7 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
                                         </svg>                                    
                                     </div>
                                 </div>
-                                <div to='/home'>
+                                <div>
                                     <div className="icon-container sendpost-icon color-hover" id="send-svg">
                                         <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                             <g><path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path></g>
