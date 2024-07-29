@@ -1,46 +1,22 @@
 /* eslint-disable no-unused-vars */
-
 import '../styles/bookmarks.css';
 import '../styles/connectPeople.css';
 import HomeNav from './HomeNav';
 import HomeExtra from './HomeExtra';
 import SingleBookmark from './SingleBookmark';
-import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import { useEffect, useContext } from 'react';
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
-import useLike from './UseLikeHook';
-import useBookmark from './UseBookmarksHook';
+import DisplayBookmarks from './DisplayBookmarks';
 
 function Bookmarks() {
-    const {randomUser, setRandomUser} = useContext(UserContext);
-    const [randomPosts, setRandomPosts] = useState([]);
-    const { likedStates, handleLike } = useLike(randomPosts, setRandomPosts);
-    const { bookmarkedStates, handleBookmark } = useBookmark(randomPosts, setRandomPosts);
-    const { token, formattedUsername } = useContext(TokenContext);
-    const [bookmarks, setBookmarks] = useState([]);
+    const { randomUser } = useContext(UserContext);
+    const { bookmarkedPosts, bookmarkedStates, handleBookmark, likedStates, handleLike } = DisplayBookmarks();    
+    const { formattedUsername } = useContext(TokenContext);
 
     useEffect(() => {
         document.title = 'Bookmarks / X';
     });
-
-    const fetchBookmarks = async () => {
-        if (!formattedUsername) return;
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:3000/api/bookmarks/${formattedUsername}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setBookmarks(response.data.bookmarks || []);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        fetchBookmarks();
-    }, [formattedUsername]);
 
     return (
         <div className='flex-row profile-page'>
@@ -63,10 +39,10 @@ function Bookmarks() {
                     </div>
                 </div>
                 <SingleBookmark 
-                    bookmarks={bookmarks} 
+                    bookmarkedPosts={bookmarkedPosts} 
                     bookmarkedStates={bookmarkedStates} 
                     handleBookmark={handleBookmark} 
-                    likedStates={likedStates} 
+                    likedStates={likedStates}
                     handleLike={handleLike}
                 />
             </div>

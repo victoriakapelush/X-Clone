@@ -18,6 +18,10 @@ function Explore({ user, tag }) {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+        document.title = 'Explore / X';
+    }, []);
+
+    useEffect(() => {
         const loadTrendingTags = async () => {
             try {
                 const tags = await fetchTrendingTags(formattedUsername, token);

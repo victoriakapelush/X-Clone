@@ -95,4 +95,3 @@ const useBookmark = (randomPosts, setRandomPosts) => {
 };
 
 export default useBookmark;
-

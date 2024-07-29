@@ -8,7 +8,7 @@ import useBookmark from './UseBookmarksHook';
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
 
-function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStates, handleLike }) {
+function SingleBookmark({ bookmarkedPosts, bookmarkedStates, handleBookmark, likedStates, handleLike }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleText = () => {
@@ -17,8 +17,8 @@ function SingleBookmark({ bookmarks, bookmarkedStates, handleBookmark, likedStat
 
     return (
         <div>
-            {bookmarks.length > 0 ? (
-                bookmarks.map((post, index) => (
+            {bookmarkedPosts.length > 0 ? (
+                bookmarkedPosts.map((post, index) => (
                     <div key={index} className='post random-post flex-column'>
                         <div className='flex-row'>
                         {post && post.user.profile.profilePicture ? (
