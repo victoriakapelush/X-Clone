@@ -36,20 +36,15 @@ function OtherUsersProfiles() {
                 const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
                 setFormattedUsername(decodedUsername); 
 
-                const response = await axios.get(`http://localhost:3000/api/profile/${username}`, {
+                const response = await axios.get(`http://localhost:3000/api/profile/otheruser/${username}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                setSingleUser({ ...response.data.singleUserProfile });
-                document.title = `${response.data.singleUserProfile.originalUsername} (@${response.data.singleUserProfile.formattedUsername}) / X`
-                if (response.data.singleUserProfile.profile && response.data.singleUserProfile.profile.posts) {
-                    setSinglePostData(response.data.singleUserProfile.profile.posts);
-                }
-                setRandomUser(response.data.randomUsers);
-                console.log('User data:', response.data.singleUserProfile.profile);
-                console.log('Post data:', response.data.singleUserProfile.post);
+                setSingleUser({ ...response.data.user });
+                document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
+                setSinglePostData(response.data.posts);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -58,7 +53,7 @@ function OtherUsersProfiles() {
 
     useEffect(() => {
         fetchUserData(); 
-    }, []); 
+    }, [username]); 
 
 
     return(
@@ -109,7 +104,7 @@ function OtherUsersProfiles() {
                                         <g><path d="M12 7c-1.93 0-3.5 1.57-3.5 3.5S10.07 14 12 14s3.5-1.57 3.5-3.5S13.93 7 12 7zm0 5c-.827 0-1.5-.673-1.5-1.5S11.173 9 12 9s1.5.673 1.5 1.5S12.827 12 12 12zm0-10c-4.687 0-8.5 3.813-8.5 8.5 0 5.967 7.621 11.116 7.945 11.332l.555.37.555-.37c.324-.216 7.945-5.365 7.945-11.332C20.5 5.813 16.687 2 12 2zm0 17.77c-1.665-1.241-6.5-5.196-6.5-9.27C5.5 6.916 8.416 4 12 4s6.5 2.916 6.5 6.5c0 4.073-4.835 8.028-6.5 9.27z"></path></g>
                                     </svg>
                                     <span>{singleUser.location}</span>
-                                </div>singleUser
+                                </div>
                                 </>
                             )}
                         {singleUser && singleUser.website && (
@@ -167,7 +162,7 @@ function OtherUsersProfiles() {
                     </div>
                 </nav>
                 <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
-                    {activeTab === 'posts' && <NewPost />}
+                    {activeTab === 'posts'}
                     {activeTab === 'replies' && <Replies />}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}
@@ -178,7 +173,6 @@ function OtherUsersProfiles() {
                     <div key={index} className='post flex-row'>
                     <img
                         className='profile-pic'
-                        alt="Profile Image"
                         src={`http://localhost:3000/uploads/${singleUser.profile.profilePicture || 'defaultProfileImage.jpg'}`}
                     />                    
                     <div className='flex-column post-box'>
@@ -186,7 +180,7 @@ function OtherUsersProfiles() {
                             <span className='user-name'>{singleUser.originalUsername}</span> <span className='username-name'>@{singleUser.formattedUsername} · {post.time}</span>
                         </Link>
                         {post.text && <p className='post-text'>{post.text}</p>}
-                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
+                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} />}
                         <div className='flex-row post-icons-container'>
                             <Link to='/home'>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">

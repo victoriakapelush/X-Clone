@@ -198,7 +198,6 @@ const addPost = async (req, res) => {
     }
 };
 
-// Initialize classifier (for initial setup, can be removed later if not needed)
 trainClassifier();
 
 module.exports = { getPost, addPost };
