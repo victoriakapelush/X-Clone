@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
 import { useEffect, useContext, useState } from 'react';
@@ -7,8 +8,8 @@ import '../styles/profile.css'
 import TokenContext from './TokenContext';
 import UseNewPostHook from './UseNewPostHook'
 
-function NewPost() {
-    const { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
+function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost}) {
+    const { userData } = UseNewPostHook();
     const { formattedUsername } = useContext(TokenContext);
     const [isExpanded, setIsExpanded] = useState(false);
 

@@ -15,6 +15,8 @@ import Highlights from './Highlights'
 import Media from './Media'
 import Likes from './Likes'
 import { useState, useEffect } from 'react';
+import TokenContext from './TokenContext';
+import UseNewPostHook from './UseNewPostHook'
 
 function OtherUsersProfiles() {
     const { username } = useParams();
@@ -23,6 +25,7 @@ function OtherUsersProfiles() {
     const [formattedUsername, setFormattedUsername] = useState('');
     const [singlePostData, setSinglePostData] = useState([]);
     const [activeTab, setActiveTab] = useState('posts');
+    const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -162,8 +165,8 @@ function OtherUsersProfiles() {
                     </div>
                 </nav>
                 <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
-                    {activeTab === 'posts'}
-                    {activeTab === 'replies' && <Replies />}
+                    {activeTab === 'posts' && <NewPost postData={postData} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike} getPost={getPost} />}
+                    {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}
                     {activeTab === 'likes' && <Likes />}

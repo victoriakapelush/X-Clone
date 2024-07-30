@@ -17,6 +17,8 @@ import Media from './Media'
 import Likes from './Likes'
 import FullSizeImage from './FullSizeImage'
 import back from '../assets/icons/back.png'
+import TokenContext from './TokenContext';
+import UseNewPostHook from './UseNewPostHook'
 
 function Profile() {
     const [userData, setUserData] = useState({});
@@ -36,6 +38,7 @@ function Profile() {
         profilePicture: null,
         backgroundHeaderImage: null
     });
+    const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
 
     const handleImageClick = (url, type) => {
         setImageUrl(url);
@@ -74,8 +77,6 @@ function Profile() {
                 const decoded = jwtDecode(token);
                 const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
                 setFormattedUsername(decodedUsername); 
-
-                // Fetch user data directly using decodedUsername
                 const response = await axios.get(`http://localhost:3000/profile/${decodedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -213,7 +214,7 @@ function Profile() {
                     </div>
                 </nav>
                 <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
-                    {activeTab === 'posts' && <NewPost />}
+                    {activeTab === 'posts' && <NewPost postData={postData} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike} getPost={getPost} />}
                     {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}

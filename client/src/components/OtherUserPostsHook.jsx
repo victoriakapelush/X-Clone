@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
@@ -11,16 +12,30 @@ const useNewPostHook = () => {
     const [likedStates, setLikedStates] = useState([]);
     const [userID, setUserID] = useState('');
     const { userData } = useContext(UserContext);
+    const [singleUser, setSingleUser] = useState({});
 
-    useEffect(() => {
-        const fetchUserData = async () => {
+    const fetchUserData = async () => {
+        try {
+            const token = localStorage.getItem('token');
             if (token) {
                 const decoded = jwtDecode(token);
-                setUserID(decoded.id);
+                const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
+                setFormattedUsername(decodedUsername); 
+
+                const response = await axios.get(`http://localhost:3000/api/profile/otheruser/${username}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                setSingleUser({ ...response.data.user });
+                document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
+                setSinglePostData(response.data.posts);
             }
-        };
-        fetchUserData();
-    }, [token]);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
 
     useEffect(() => {
         if (postData.length > 0 && userID) {
@@ -31,7 +46,7 @@ const useNewPostHook = () => {
 
     const getPost = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/profile/post/${formattedUsername}`, {
+            const response = await axios.get(`http://localhost:3000/api/profile/post/${username}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -116,10 +131,10 @@ const useNewPostHook = () => {
     };
 
     useEffect(() => {
-        if (formattedUsername && userID) {
+        if (username && userID) {
             getPost();
         }
-    }, [formattedUsername, userID]);
+    }, [username, userID]);
 
     return { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost };
 };
