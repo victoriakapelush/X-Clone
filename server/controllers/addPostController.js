@@ -2,7 +2,7 @@ const natural = require('natural');
 const path = require('path');
 const User = require('../models/User');
 const Post = require('../models/Post');
-const { formatDistanceToNow } = require('date-fns');
+const { format } = require('date-fns');
 
 // Initialize the classifier
 let classifier = new natural.BayesClassifier();
@@ -109,8 +109,6 @@ const getTopThreeHighestValues = (text) => {
     return topThree;
 };
 
-
-// Controller actions
 const getPost = async (req, res) => {
     const currentUser = req.user.id;
     try {
@@ -118,10 +116,7 @@ const getPost = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-    
-        // Find all posts made by the user
-        const posts = await Post.find({ user: currentUser });
-    
+        const posts = await Post.find({ user: currentUser }).sort({ time: -1 }).populate('user');
         res.status(200).json({ posts });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -143,8 +138,8 @@ const addPost = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const postTime = new Date();
-        const formattedTime = formatDistanceToNow(postTime, { addSuffix: true, includeSeconds: true });
+        const postDate = new Date(); 
+        const formattedTime = format(postDate, 'PPpp');
 
         // Load classifier and classify the post
         loadClassifier((classifier) => {
