@@ -4,59 +4,69 @@ import axios from 'axios';
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
 import { jwtDecode } from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
-const useNewPostHook = () => {
+const OtherUserPostsHook = () => {
     const { token, formattedUsername } = useContext(TokenContext);
     const [postData, setPostData] = useState([]);
     const [bookmarkedStates, setBookmarkedStates] = useState([]);
     const [likedStates, setLikedStates] = useState([]);
     const [userID, setUserID] = useState('');
-    const { userData } = useContext(UserContext);
-    const [singleUser, setSingleUser] = useState({});
-
-    const fetchUserData = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const decoded = jwtDecode(token);
-                const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
-                setFormattedUsername(decodedUsername); 
-
-                const response = await axios.get(`http://localhost:3000/api/profile/otheruser/${username}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                setSingleUser({ ...response.data.user });
-                document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
-                setSinglePostData(response.data.posts);
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
-    };
+    const [loggedinUserID, setLoggedinUserID] = useState('');
+    const { username } = useParams();
+    const [userData, setUserData] = useState({});
+    const [randomUser, setRandomUser] = useState(null);
 
     useEffect(() => {
-        if (postData.length > 0 && userID) {
-            const initialBookmarkedStates = postData.map(post => post.bookmarks.includes(userID));
+        const fetchUserData = async () => {
+            try {
+                if (token) {    
+                    const decoded = jwtDecode(token);
+                    setLoggedinUserID(decoded.id);    
+                    const response = await axios.get(`http://localhost:3000/api/profile/otheruser/${username}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setUserData({ ...response.data.user });
+                    setUserID(response.data.user._id);
+                    document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
+
+                    const responseRandomUser = await axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setRandomUser(responseRandomUser.data.randomUsers);
+                    console.log(responseRandomUser)
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, [token, formattedUsername, username]);
+
+    useEffect(() => {
+        if (postData.length > 0 && loggedinUserID) {
+            const initialBookmarkedStates = postData.map(post => post.bookmarks.includes(loggedinUserID));
             setBookmarkedStates(initialBookmarkedStates);
         }
-    }, [postData, userID]);
+    }, [postData, loggedinUserID]);
 
     const getPost = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/profile/post/${username}`, {
+            const response = await axios.get(`http://localhost:3000/api/profile/otheruser/${username}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             const posts = response.data.posts || [];
             setPostData(posts);
 
-            const initialBookmarkedStates = posts.map(post => post.bookmarks.includes(userID));
+            const initialBookmarkedStates = posts.map(post => post.bookmarks.includes(loggedinUserID));
             setBookmarkedStates(initialBookmarkedStates);
 
-            const initialLikedStates = posts.map(post => post.likes.includes(userID));
+            const initialLikedStates = posts.map(post => post.likes.includes(loggedinUserID));
             setLikedStates(initialLikedStates);
         } catch (error) {
             console.error('Error fetching posts:', error);
@@ -71,10 +81,10 @@ const useNewPostHook = () => {
             if (postIndex === -1) return;
 
             const currentPost = postData[postIndex];
-            const isBookmarked = currentPost.bookmarks.includes(userID);
+            const isBookmarked = currentPost.bookmarks.includes(loggedinUserID);
             const updatedBookmarks = isBookmarked
-                ? currentPost.bookmarks.filter(bookmark => bookmark !== userID)
-                : [...currentPost.bookmarks, userID];
+                ? currentPost.bookmarks.filter(bookmark => bookmark !== loggedinUserID)
+                : [...currentPost.bookmarks, loggedinUserID];
 
             await axios.put(`http://localhost:3000/api/bookmarks/${formattedUsername}`, 
             { postId: postId }, 
@@ -100,15 +110,15 @@ const useNewPostHook = () => {
             if (postIndex === -1) return;
 
             const currentPost = postData[postIndex];
-            const userIndex = currentPost.likes.indexOf(userID);
+            const userIndex = currentPost.likes.indexOf(loggedinUserID);
             let updatedLikes;
             let updatedLikeCount;
 
             if (userIndex === -1) {
-                updatedLikes = [...currentPost.likes, userID];
+                updatedLikes = [...currentPost.likes, loggedinUserID];
                 updatedLikeCount = currentPost.likeCount + 1;
             } else {
-                updatedLikes = currentPost.likes.filter(user => user !== userID);
+                updatedLikes = currentPost.likes.filter(user => user !== loggedinUserID);
                 updatedLikeCount = Math.max(currentPost.likeCount - 1, 0);
             }
 
@@ -131,12 +141,13 @@ const useNewPostHook = () => {
     };
 
     useEffect(() => {
-        if (username && userID) {
+        if (formattedUsername && loggedinUserID) {
             getPost();
         }
-    }, [username, userID]);
+    }, [formattedUsername, loggedinUserID]);
 
-    return { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost };
+    return { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost, randomUser };
 };
 
-export default useNewPostHook;
+
+export default OtherUserPostsHook;

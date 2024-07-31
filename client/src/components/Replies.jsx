@@ -2,12 +2,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from 'react-router-dom';
 import '../styles/replies.css';
+import '../styles/profile.css';
 
 function Replies({ randomUser }) {
 
 return (
     <div className='profile-right replies-profile-right flex-column'>
-        <div className='flex-column replies-container'>
+        <div className='flex-column replies-container new-post-random-users'>
             <div className='premium-header replies-header-who-tofollow'>
                 <h3>Who to follow</h3>
             </div>

@@ -5,7 +5,7 @@ import '../styles/highlights.css';
 function Highlights() {
 
 return (
-    <div className='flex-column highlights-container'>
+    <div className='flex-column highlights-container random-users-new-post-top-border'>
         <h1>Highlight on your profile</h1>
         <p>You must be subscribed to Premium to highlight posts on your profile.</p>
         <button>Subscribe to Premium</button>

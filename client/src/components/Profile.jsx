@@ -214,7 +214,7 @@ function Profile() {
                     </div>
                 </nav>
                 <div className={`profile-post ${activeTab === 'media' ? 'extra-media-class' : ''}`}>                    
-                    {activeTab === 'posts' && <NewPost postData={postData} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike} getPost={getPost} />}
+                    {activeTab === 'posts' && <NewPost randomUser={randomUser} postData={postData} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike} getPost={getPost} userData={userData} />}
                     {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
                     {activeTab === 'media' && <Media />}

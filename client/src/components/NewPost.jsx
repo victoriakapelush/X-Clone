@@ -1,22 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
-import { useEffect, useContext, useState } from 'react';
-import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
+import { useState } from 'react';
 import '../styles/profile.css'
-import TokenContext from './TokenContext';
-import UseNewPostHook from './UseNewPostHook'
 
-function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost}) {
-    const { userData } = UseNewPostHook();
-    const { formattedUsername } = useContext(TokenContext);
+function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handleLike, randomUser, userData}) {
     const [isExpanded, setIsExpanded] = useState(false);
-
-
-    useEffect(() => {
-        getPost();
-    }, [formattedUsername]);
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
@@ -24,28 +13,29 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
 
     return (
         <div className='profile-post-new-post'>
-            {postData.map((post, index) => (
-                <div key={index} className='post flex-column'>
-                    <div className='flex-row'>
-                        {userData?.profile?.profilePicture ? (
-                            <img
-                                className='profile-pic'
-                                alt="Profile Image"
-                                src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
-                            />  
-                        ) : ( 
-                            <div className='defaul-profile-image-post'></div>
-                        )}                   
-                        <div className='flex-column post-box'>
-                            <Link to='/profile' className='link-to-profile'>
-                                <span className='user-name'>{userData?.profile?.updatedName} </span> 
-                                <span className='username-name'>@{userData?.formattedUsername} · {post?.time}</span>
-                            </Link>
-                            <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>
-                            {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
+            {postData.length > 0 ? (
+                postData.map((post, index) => (
+                    <div key={index} className='post flex-column'>
+                        <div className='flex-row'>
+                            {userData?.profile?.profilePicture ? (
+                                <img
+                                    className='profile-pic'
+                                    alt="Profile Image"
+                                    src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                                />
+                            ) : (
+                                <div className='defaul-profile-image-post'></div>
+                            )}
+                            <div className='flex-column post-box'>
+                                <Link to='/profile' className='link-to-profile'>
+                                    <span className='user-name'>{userData?.profile?.updatedName} </span>
+                                    <span className='username-name'>@{userData?.formattedUsername} · {post?.time}</span>
+                                </Link>
+                                <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>
+                                {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt={`Post ${index + 1}`} />}
+                            </div>
                         </div>
-                    </div>                    
-                    <div className='flex-row post-icons-container'>
+                        <div className='flex-row post-icons-container'>
                             <div>
                                 <div className="icon-container color-hover flex-row" id="blue-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
@@ -63,33 +53,33 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                     </svg>
                                     <span className="count">0</span>
                                 </div>
-                            </div>                    
+                            </div>
                             <div>
                                 <div className="icon-container color-hover flex-row" id="yellow-svg">
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                         <g><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2v7z" transform="rotate(-45 10 12)"></path></g>
-                                    </svg> 
-                                    <span className="count">5</span>
+                                    </svg>
+                                    <span className="count">0</span>
                                 </div>
-                            </div> 
+                            </div>
                             <div>
                                 <div className={`icon-container color-hover flex-row ${likedStates[index] ? 'liked' : 'not-liked'}`} id="pink-svg" onClick={() => handleLike(post._id, index)}>
                                     <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                                         <g>
                                             <path d="M20.884 13.19c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"></path>
                                         </g>
-                                    </svg>                                    
+                                    </svg>
                                     <span className={`count ${likedStates[index] ? 'liked' : 'not-liked'}`}>{post.likeCount}</span>
                                 </div>
-                            </div>  
+                            </div>
                             <div className='save-icons flex-row'>
                                 <div>
-                                    <div className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>                                        
+                                    <div className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id, index)}>
                                         <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' fill={bookmarkedStates[index] ? "bookmarked" : "not-bookmarked"}>
                                             <g>
                                                 <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
                                             </g>
-                                        </svg>                                    
+                                        </svg>
                                     </div>
                                 </div>
                                 <div>
@@ -101,10 +91,41 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                 </div>
                             </div>
                         </div>
+                    </div>
+                ))
+            ) : (
+                <div className='flex-column replies-container new-post-random-users random-users-new-post-top-border'>
+                    <div className='premium-header replies-header-who-tofollow'>
+                        <h3>Who to follow</h3>
+                    </div>
+                    {randomUser && randomUser.slice(0, 3).map(user => (
+                        <Link key={user.id} to={`/profile/${user.formattedUsername}`}>
+                            <div className='who-tofollow-container replies-who-to-follow-container flex-column'>
+                                <div className='who-tofollow-profile-box flex-row' id='replies-who-to-follow'>
+                                    <div className='who-to-follow-single-user flex-row'>
+                                        <div className='who-tofollow-image-box'>
+                                            {user.profile.profilePicture ? (
+                                                <img src={user.profile.profilePicture} alt={`${user.originalUsername}'s profile`} />
+                                            ) : (
+                                                <div className='no-profile-picture'></div>
+                                            )}
+                                        </div>
+                                        <div className='flex-column who-tofollow-name-box'>
+                                            <span className='who-tofollow-namelink'>{user.originalUsername}</span>
+                                            <span className='who-tofollow-iglink'>@{user.formattedUsername}</span>
+                                        </div>
+                                    </div>
+                                    <div className='who-tofollow-btn'>
+                                        <button className='radius'>Follow</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
                 </div>
-            ))}
-    </div>
+            )}
+        </div>
     );
-} 
+}
 
 export default NewPost;

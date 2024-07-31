@@ -278,4 +278,13 @@ svg {
     background-color: var(--opacity);
 }
 
+.new-post-random-users {
+    max-width: 100%;
+    padding-left: 0 !important;
+}
+
+.random-users-new-post-top-border {
+    border-top: 1px solid var(--deep-grey);
+}
+
 

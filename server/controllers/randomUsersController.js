@@ -2,7 +2,6 @@ const User = require('../models/User');
 
 const getRandomUsers = async (req, res) => {
   const currentUserId = req.user.id;  
-  console.log(currentUserId);
 
     try {
       const users = await User.find({ _id: { $ne: currentUserId } });  
