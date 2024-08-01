@@ -28,6 +28,7 @@ const media = require('./routes/media');
 const trendingTags = require('./routes/trendingTags');
 const feeds = require('./routes/feeds');
 const otherUser = require('./routes/otherUser');
+const giphy = require('./routes/gifs');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -90,6 +91,7 @@ app.use('/api/saveFollowing', saveFollowing);
 app.use('/api/trendingTags', trendingTags);
 app.use('/feeds', feeds);
 app.use('/api/profile/otheruser', otherUser);
+app.use('/api/gifs', giphy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -47,9 +47,14 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                             <span className='username-name'>@{userData?.formattedUsername} · {formattedTime}</span>
                                         </Link>
                                         <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>
-                                        {post.image && <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} />}
+                                        {post.image && (
+                                            <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt="Uploaded" />
+                                        )}
+                                        {post.gif && (
+                                            <img className='post-gif' src={post.gif} alt="Posted GIF" />
+                                        )}                                    
+                                        </div>
                                     </div>
-                                </div>
                                 <div className='flex-row post-icons-container'>
                                     <div>
                                         <div className="icon-container color-hover flex-row" id="blue-svg">

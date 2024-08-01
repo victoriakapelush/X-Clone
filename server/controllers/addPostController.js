@@ -124,7 +124,7 @@ const getPost = async (req, res) => {
 };
 
 const addPost = async (req, res) => {
-    const { text } = req.body;
+    const { text, gif } = req.body;
     const currentUser = req.user.originalUsername;
 
     try {
@@ -152,6 +152,7 @@ const addPost = async (req, res) => {
             const newPost = new Post({
                 text,
                 image: filename,
+                gif,
                 time: formattedTime,
                 reply: 0,
                 repost: 0,
