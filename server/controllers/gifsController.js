@@ -5,7 +5,7 @@ exports.searchGifs = (req, res) => {
   if (!query) {
     return res.status(400).send({ error: 'Query parameter is required' });
   }
-  giphy.search({ q: query, limit: 10 }, (err, response) => {
+  giphy.search({ q: query, limit: 32 }, (err, response) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -15,7 +15,7 @@ exports.searchGifs = (req, res) => {
 
 exports.randomGifs = (req, res) => {
   const { limit } = req.query;
-  const numberOfGifs = limit || 10; 
+  const numberOfGifs = limit || 9; 
 
   const promises = [];
   for (let i = 0; i < numberOfGifs; i++) {

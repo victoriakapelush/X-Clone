@@ -10,9 +10,10 @@ import PopupWindow from './PopupWindow'
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import PostReplacement from './PostReplacement.jsx'
-import OtherUsersProfiles from './OtherUsersProfiles';
 import RandomPosts from './RandomPosts.jsx';
 import GifModal from './GifModal';
+import EmojiPicker from 'emoji-picker-react';
+import { Theme } from 'emoji-picker-react';
 
 function Home() {
     const [userData, setUserData] = useState(null);
@@ -195,22 +196,21 @@ return (
                                  </textarea>
                                  <div className='topost-insert-image' id="topost-insert-image"
                                  style={{
-                              
-                                        display: imageUrl || selectedGif ? 'block' : 'none', // Show if either imageUrl or selectedGif exists
-                                        backgroundImage: imageUrl ? `url(${imageUrl})` : `url(${selectedGif})`, // Use selectedGif if imageUrl is not available
+                                        display: imageUrl || selectedGif ? 'block' : 'none', 
+                                        backgroundImage: imageUrl ? `url(${imageUrl})` : `url(${selectedGif})`, 
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'center',
-                                        height: '200px', // Set a fixed height
-                                        width: '100%', // Set a width                              
+                                        height: '200px', 
+                                        width: '100%',                            
                                 }}>
                                 {selectedGif && (<img 
                                     src={selectedGif} 
                                     alt="Selected GIF" 
                                     style={{
-                                        width: '100%', // Make the GIF fill the container
+                                        width: '100%', 
                                         height: '100%',
-                                        objectFit: 'cover', // Maintain aspect ratio
-                                        borderRadius: '8px' // Optional: rounded corners
+                                        objectFit: 'cover', 
+                                        borderRadius: '8px' 
                                     }}/>
                                 )}
                             </div>
@@ -247,6 +247,7 @@ return (
                                             style={{ display: 'none' }}
                                         />
                                         <button>
+                                        <EmojiPicker theme={Theme.DARK}/>
                                             <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true">
                                                 <g>
                                                     <path d="M6 3V2h2v1h6V2h2v1h1.5C18.88 3 20 4.119 20 5.5v2h-2v-2c0-.276-.22-.5-.5-.5H16v1h-2V5H8v1H6V5H4.5c-.28 0-.5.224-.5.5v12c0 .276.22.5.5.5h3v2h-3C3.12 20 2 18.881 2 17.5v-12C2 4.119 3.12 3 4.5 3H6zm9.5 8c-2.49 0-4.5 2.015-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.015 4.5-4.5-2.01-4.5-4.5-4.5zM9 15.5C9 11.91 11.91 9 15.5 9s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5S9 19.09 9 15.5zm5.5-2.5h2v2.086l1.71 1.707-1.42 1.414-2.29-2.293V13z"></path>
@@ -259,7 +260,7 @@ return (
                                                     <path d="M8 9.5C8 8.119 8.672 7 9.5 7S11 8.119 11 9.5 10.328 12 9.5 12 8 10.881 8 9.5zm6.5 2.5c.828 0 1.5-1.119 1.5-2.5S15.328 7 14.5 7 13 8.119 13 9.5s.672 2.5 1.5 2.5zM12 16c-2.224 0-3.021-2.227-3.051-2.316l-1.897.633c.05.15 1.271 3.684 4.949 3.684s4.898-3.533 4.949-3.684l-1.896-.638c-.033.095-.83 2.322-3.053 2.322zm10.25-4.001c0 5.652-4.598 10.25-10.25 10.25S1.75 17.652 1.75 12 6.348 1.75 12 1.75 22.25 6.348 22.25 12zm-2 0c0-4.549-3.701-8.25-8.25-8.25S3.75 7.451 3.75 12s3.701 8.25 8.25 8.25 8.25-3.701 8.25-8.25z"></path>
                                                 </g>
                                             </svg>
-                                        </button>
+                                        </button>                                        
                                         <button>
                                             <svg className='upload-pic radius' viewBox="0 0 24 24" aria-hidden="true">
                                                 <g>

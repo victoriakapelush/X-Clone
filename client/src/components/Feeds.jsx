@@ -1,24 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
-import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
 import '../styles/profile.css'
 import HomeNav from './HomeNav';
 import HomeExtra from './HomeExtra';
-import TokenContext from './TokenContext';
 import UserContext from './UserContext';
-import useLike from './UseLikeHook';
-import useBookmark from './UseBookmarksHook';
+import UseFeedsHook from './UseFeedsHook';
 
 function Feeds() {
     const {randomUser, setRandomUser} = useContext(UserContext);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [randomPosts, setRandomPosts] = useState([]);
-    const { likedStates, handleLike } = useLike(randomPosts, setRandomPosts);
-    const { bookmarkedStates, handleBookmark, getUserData } = useBookmark(randomPosts, setRandomPosts);
-    const { token, formattedUsername } = useContext(TokenContext);
-    const { fetchUserData, userData } = useContext(UserContext);
+    const { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseFeedsHook();
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
@@ -27,24 +19,12 @@ function Feeds() {
     useEffect(() => {
         document.title = 'Feeds / X';
     });
-  
-    useEffect(() => {
-        if (formattedUsername) {
-          getUserData();
-        }
-      }, [formattedUsername]);
-    
-      useEffect(() => {
-        if (!userData) {
-          fetchUserData();
-        }
-      }, [userData]);
 
     return (
         <div className='flex-row profile-page'>
             <HomeNav />
         <div className='profile-container'>
-            {randomPosts.map((post, index) => (
+            {postData.map((post, index) => (
                 <div key={index} className='post random-post flex-column'>
                     <div className='flex-row'>
                         {post && post.user.profile.profilePicture ? (
