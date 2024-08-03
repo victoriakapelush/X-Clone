@@ -14,6 +14,7 @@ import Replies from './components/Replies.jsx'
 import Bookmarks from './components/Bookmarks.jsx'
 import Explore from './components/Explore.jsx'
 import Feeds from './components/Feeds.jsx'
+import Followers from './components/Followers.jsx'
 import OtherUsersProfiles from './components/OtherUsersProfiles.jsx'
 import ConnectPeople from './components/ConnectPeople.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
   {
     path: "/feeds",
     element: <Feeds />
+  },
+  {
+    path: "/followers",
+    element: <Followers />
   }
 ]);
 

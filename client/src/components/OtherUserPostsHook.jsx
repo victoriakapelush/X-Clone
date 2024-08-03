@@ -29,6 +29,7 @@ const OtherUserPostsHook = () => {
                         }
                     });
                     setUserData({ ...response.data.user });
+                    console.log(userData)
                     setUserID(response.data.user._id);
                     document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
 

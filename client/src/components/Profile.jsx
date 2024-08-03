@@ -44,7 +44,7 @@ function Profile() {
         setImageUrl(url);
         setImageType(type);
         setIsImageOpen(true);
-      };
+    };
     
       const handleCloseImage = () => {
         setIsImageOpen(false);
@@ -125,22 +125,22 @@ function Profile() {
                         {userData && userData.profile && <span>{userData.profile.posts} posts</span>}
                     </div>
                 </header>
-                <div className='background-image-holder' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`, 'background-image')}>
-                {isImageOpen && <FullSizeImage onClick={handleCloseImage} imageUrl={imageUrl} imageType={imageType} />}
+                <div className='background-image-holder' onClick={() => { handleImageClick(`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`, 'background-image') }}>                
+                    {isImageOpen && <FullSizeImage onClick={handleCloseImage} imageUrl={imageUrl} imageType={imageType} />}
                     {profileData && profileData.backgroundHeaderImage ? (
                         <img src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`} />
                     ) : (
                         <div className='defaul-profile-image-background'></div>
                     )}
                 </div>
-                    <div className='profile-photo-container flex-row' onClick={() => handleImageClick(`http://localhost:3000/uploads/${profileData.profilePicture}`, 'profile-picture')}>
+                <div className='profile-photo-container flex-row' onClick={() => { handleImageClick(`http://localhost:3000/uploads/${profileData.profilePicture}`, 'profile-picture') }}>                    
                     {profileData && profileData.profilePicture ? (
                         <img src={`http://localhost:3000/uploads/${profileData.profilePicture}`} />
                         ) : (
                         <div className='defaul-profile-image-profile'></div>
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
-                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup} setIsImageOpen={setIsImageOpen} />}
+                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup} handleCloseImage={handleCloseImage}/>}
                 </div>
                 <div className='flex-column personal-info-section'>
                         {profileData && <span className='profile-user-name'>{profileData.updatedName}</span>}
@@ -226,4 +226,4 @@ function Profile() {
     )
 }
 
-export default Profile
+export default Profile;

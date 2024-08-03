@@ -16,7 +16,7 @@ function Media() {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/api/profile/media/${username}`, {
+        const response = await axios.get(`http://localhost:3000/api/profile/media/${formattedUsername}`, {
           headers: {
             Authorization: `Bearer ${token}` 
           }
@@ -24,6 +24,7 @@ function Media() {
 
         if (response) {
           setMedia(response.data.mediaPosts);
+          console.log(response.data)
         } else {
           console.error('Failed to fetch media:', response.data.message);
         }

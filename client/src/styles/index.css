@@ -57,6 +57,32 @@ body, html {
   border-top-right-radius: 9999px;
 }
 
+.hover-effect {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.hover-effect::after {
+  content: attr(data-username);
+  position: absolute;
+  background-color: var(--deep-grey);
+  color: #fff;
+  padding: 4px 4px 5px 4px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}
+
+.hover-effect:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
 a {
   text-decoration: none;
   color: var(--white);

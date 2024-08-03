@@ -74,7 +74,17 @@ useEffect(() => {
                     <SingleUserBriefProfile key={user.id} singleUserData={user} />
                 ))}            
             </div>
-            <HomeExtra />
+            <div className='profile-right flex-column profile-right-no-display'>
+                <div className='flex-column premium-subscribe-container'>
+                    <div className='premium-header'>
+                        <h3>Subscribe to Premium</h3>
+                    </div>
+                    <div className='premium-paragraph'>
+                        <p>Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
+                    </div>
+                    <button className='new-post-btn radius smaller-size'>Subscribe</button>
+                </div>
+            </div>
         </div>
     )
 }

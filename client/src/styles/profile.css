@@ -65,14 +65,13 @@
     max-height: 200px;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* To ensure the aspect ratio is maintained and the image doesn't overflow */
+    overflow: hidden; 
   }
   
   .background-image-holder img {
-    width: 100%;
+    width: 600px;
     height: auto;
     background-color: var(--opacity);
-    display: block; /* Removes extra space below the image */
   }
 
 .defaul-profile-image-background {
@@ -81,22 +80,13 @@
     height: 200px;
 }
 
-.defaul-profile-image-profile {
-    background-color: var(--opacity);
-    width: 9rem;
-    height: 9rem;
-    bottom: 60%;
-    border-radius: 50%;
-    border: 3px solid var(--white);
-    position: absolute;
-}
-
 .profile-photo-container {
     max-width: 100%;
     height: auto;
     justify-content: space-between;
     margin-left: 1rem;
     position: relative;
+    align-items: center;
 }
 
 .profile-photo-container img {
@@ -107,6 +97,16 @@
     position: absolute;
     top: -5rem;
     background-color: var(--opacity);
+}
+
+.defaul-profile-image-profile {
+    background-color: var(--opacity);
+    width: 9rem;
+    height: 9rem;
+    top: -5rem;
+    border-radius: 50%;
+    border: 3px solid var(--white);
+    position: absolute;
 }
 
 .profile-photo-container img:hover {
@@ -133,11 +133,13 @@ svg {
 }
 
 .subscribe-panel {
-    justify-content: space-between;
-    position: absolute;
-    left: 51%;
+    justify-content: flex-end;
     margin-top: .5rem;
+    margin-right: 1rem;
     gap: .5rem;
+    width: fit-content;
+    align-items: center;
+    margin-left: auto;
 }
 
 .subscribe-panel svg {
@@ -259,7 +261,6 @@ svg {
     width: 100%;
     margin: 0;
     display: block;
-
 }
 
 .edit-profile-btn {

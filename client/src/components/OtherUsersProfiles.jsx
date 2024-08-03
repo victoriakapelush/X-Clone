@@ -14,18 +14,42 @@ import Replies from './Replies'
 import Highlights from './Highlights'
 import Media from './Media'
 import Likes from './Likes'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import TokenContext from './TokenContext';
-import OtherUserPostsHook from './OtherUserPostsHook'
+import OtherUserPostsHook from './OtherUserPostsHook';
+import OtherUserMedia from './OtherUserMedia';
+import OtherUsersLikedPosts from './OtherUsersLikedPosts';
 
 function OtherUsersProfiles() {
     const { username } = useParams();
     const [activeTab, setActiveTab] = useState('posts');
     const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost, userData, randomUser } = OtherUserPostsHook();
+    const { token, formattedUsername } = useContext(TokenContext);
+    const [currentUser, setCurentUser] = useState('');
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
       };
+
+      useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                if (token) {    
+                    const decoded = jwtDecode(token);
+                    const response = await axios.get(`http://localhost:3000/api/profile/${username}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setCurentUser(response.data);
+                    document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, [username, token]);
 
     return(
         <div className='flex-row profile-page'>
@@ -41,28 +65,32 @@ function OtherUsersProfiles() {
                     </div>
                 </header>
                 <div className='background-image-holder'>
-                    {userData && userData.backgroundHeaderImage ? (
-                        <img src={`http://localhost:3000/uploads/${userData.backgroundHeaderImage}`} />
+                    {userData && userData.profile ? (
+                        <img src={`http://localhost:3000/uploads/${userData.profile.backgroundHeaderImage}`} />
                     ) : (
                         <div className='defaul-profile-image-background'></div>
                     )}
                 </div>
                 <div className='profile-photo-container flex-row'>
-                    {userData && userData.profilePicture ? (
-                        <img src={`http://localhost:3000/uploads/${userData.profilePicture}`} />
+                    {userData && userData.profile ? (
+                        <img src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`} />
                         ) : (
                         <div className='defaul-profile-image-profile'></div>
                         )}
-                <div className='flex-row subscribe-panel'>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></svg>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M23 3v14h-2V5H5V3h18zM10 17c1.1 0 2-1.34 2-3s-.9-3-2-3-2 1.34-2 3 .9 3 2 3zM1 7h18v14H1V7zm16 10c-1.1 0-2 .9-2 2h2v-2zm-2-8c0 1.1.9 2 2 2V9h-2zM3 11c1.1 0 2-.9 2-2H3v2zm0 4c2.21 0 4 1.79 4 4h6c0-2.21 1.79-4 4-4v-2c-2.21 0-4-1.79-4-4H7c0 2.21-1.79 4-4 4v2zm0 4h2c0-1.1-.9-2-2-2v2z"></path></g></svg>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M22 5v2h-3v3h-2V7h-3V5h3V2h2v3h3zm-.86 13h-4.241c-.464 2.281-2.482 4-4.899 4s-4.435-1.719-4.899-4H2.87L4 9.05C4.51 5.02 7.93 2 12 2v2C8.94 4 6.36 6.27 5.98 9.3L5.13 16h13.73l-.38-3h2.02l.64 5zm-6.323 0H9.183c.412 1.164 1.51 2 2.817 2s2.405-.836 2.817-2z"></path></g></svg>                    
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M14 6c0 2.21-1.791 4-4 4S6 8.21 6 6s1.791-4 4-4 4 1.79 4 4zm-4 5c-2.352 0-4.373.85-5.863 2.44-1.477 1.58-2.366 3.8-2.632 6.46l-.11 1.1h17.21l-.11-1.1c-.266-2.66-1.155-4.88-2.632-6.46C14.373 11.85 12.352 11 10 11zm12.223-5.89l-2.969 4.46L17.3 8.1l-1.2 1.6 3.646 2.73 4.141-6.21-1.664-1.11z"></path></g></svg>
-                    <button className='subscribe-btn radius'>Subscribe</button>
-                </div>
+                    <div className='flex-row subscribe-panel'>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M23 3v14h-2V5H5V3h18zM10 17c1.1 0 2-1.34 2-3s-.9-3-2-3-2 1.34-2 3 .9 3 2 3zM1 7h18v14H1V7zm16 10c-1.1 0-2 .9-2 2h2v-2zm-2-8c0 1.1.9 2 2 2V9h-2zM3 11c1.1 0 2-.9 2-2H3v2zm0 4c2.21 0 4 1.79 4 4h6c0-2.21 1.79-4 4-4v-2c-2.21 0-4-1.79-4-4H7c0 2.21-1.79 4-4 4v2zm0 4h2c0-1.1-.9-2-2-2v2z"></path></g></svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M22 5v2h-3v3h-2V7h-3V5h3V2h2v3h3zm-.86 13h-4.241c-.464 2.281-2.482 4-4.899 4s-4.435-1.719-4.899-4H2.87L4 9.05C4.51 5.02 7.93 2 12 2v2C8.94 4 6.36 6.27 5.98 9.3L5.13 16h13.73l-.38-3h2.02l.64 5zm-6.323 0H9.183c.412 1.164 1.51 2 2.817 2s2.405-.836 2.817-2z"></path></g></svg>                    
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M14 6c0 2.21-1.791 4-4 4S6 8.21 6 6s1.791-4 4-4 4 1.79 4 4zm-4 5c-2.352 0-4.373.85-5.863 2.44-1.477 1.58-2.366 3.8-2.632 6.46l-.11 1.1h17.21l-.11-1.1c-.266-2.66-1.155-4.88-2.632-6.46C14.373 11.85 12.352 11 10 11zm12.223-5.89l-2.969 4.46L17.3 8.1l-1.2 1.6 3.646 2.73 4.141-6.21-1.664-1.11z"></path></g></svg>
+                        <button className='subscribe-btn radius'>Subscribe</button>
+                    </div>
                 </div>
                 <div className='flex-column personal-info-section'>
-                        {userData && <span className='profile-user-name'>{userData.updatedName}</span>}
+                    {userData && (
+                        <span className='profile-user-name'>
+                            {userData.updatedName ? userData.updatedName : userData.originalUsername}
+                        </span>
+                        )}
                         {userData.formattedUsername && <span className='user-tag'>@{userData.formattedUsername}</span>}
                         {userData && userData.profileBio && (
                             <p className='user-profile-description'>{userData.profileBio}</p>
@@ -136,8 +164,8 @@ function OtherUsersProfiles() {
                     {activeTab === 'posts' && <NewPost randomUser={randomUser} postData={postData} bookmarkedStates={bookmarkedStates} handleBookmark={handleBookmark} likedStates={likedStates} handleLike={handleLike} getPost={getPost} userData={userData} />}
                     {activeTab === 'replies' && <Replies randomUser={randomUser}/>}
                     {activeTab === 'highlights' && <Highlights />}
-                    {activeTab === 'media' && <Media />}
-                    {activeTab === 'likes' && <Likes />}
+                    {activeTab === 'media' && <OtherUserMedia />}
+                    {activeTab === 'likes' && <OtherUsersLikedPosts />}
                 </div>
         </div>
         <div className='profile-right flex-column'>
