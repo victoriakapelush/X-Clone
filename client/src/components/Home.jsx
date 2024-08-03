@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'

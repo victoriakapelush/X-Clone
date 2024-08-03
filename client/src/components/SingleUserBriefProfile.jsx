@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import useFollow from './FollowUnfollowHook';
 
 function SingleUserBriefProfile({ singleUserData }) {
-    const { currentUserData, otherUserData, isFollowing, handleFollow } = useFollow(singleUserData);
+    const { isFollowing, handleFollow } = useFollow(singleUserData);
 
     return (
         <div className='brief-profile-container flex-column'>

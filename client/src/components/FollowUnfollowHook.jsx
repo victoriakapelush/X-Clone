@@ -8,6 +8,34 @@ const useFollow = (initialUser) => {
     const [otherUserData, setOtherUserData] = useState(initialUser);
     const [isFollowing, setIsFollowing] = useState(false);
 
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
+
+    console.log(initialUser)
+
+    const fetchUserData = async () => {
+        try {
+            const responseFollowers = await axios.get(`http://localhost:3000/api/followers/${formattedUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
+            setFollowers(responseFollowers.data.followers);
+            setFollowing(responseFollowers.data.following);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };    
+
+    useEffect(() => {
+        if (formattedUsername && token) {
+            fetchUserData();
+        }
+    }, [formattedUsername, token]);
+
+
     useEffect(() => {
         if (loggedinUserData && loggedinUserData.profile && initialUser) {
             const followingIndex = loggedinUserData.profile.totalFollowing.indexOf(initialUser._id);
@@ -69,7 +97,7 @@ const useFollow = (initialUser) => {
         }
     };
 
-    return { currentUserData, otherUserData, isFollowing, handleFollow };
+    return { currentUserData, otherUserData, isFollowing, handleFollow, followers, following };
 };
 
 export default useFollow;

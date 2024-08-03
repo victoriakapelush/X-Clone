@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import useFollow from './FollowUnfollowHook';
 
 const SingleUser = ({ user }) => {
-    const { currentUserData, otherUserData, isFollowing, handleFollow } = useFollow(user);
+    const { isFollowing, handleFollow } = useFollow(user);
 
     return (
         <div className='who-tofollow-container flex-column'>

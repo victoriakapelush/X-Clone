@@ -177,16 +177,16 @@ function Profile() {
                         </div>
                         <div className='flex-row following-container'>
                             {userData.profile && (
-                                <span className='following-number'>
+                                <Link to='/followers' className='following-number'>
                                     {userData.profile.following ? userData.profile.following : '0'}{' '}
                                     <span className='following-grey'>Following</span>
-                                </span>
+                                </Link>
                             )}
                             {userData && userData.profile && (
-                                <span className='following-number'>
+                                <Link to='/followers' className='following-number'>
                                     {userData.profile.followers ? userData.profile.followers : '0'}{' '} 
                                     <span className='following-grey'>Followers</span>
-                                </span>
+                                </Link>
                             )}
                         </div>
                         <span className='followed-not'>Not followed by anyone you're following</span>

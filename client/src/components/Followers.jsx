@@ -7,7 +7,8 @@ import HomeExtra from './HomeExtra'
 import back from '../assets/icons/back.png'
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
-import SingleUserBriefProfile from './SingleUserBriefProfile';
+import FollowersData from './FollowersData';
+import FollowingData from './FollowingData';
 
 function Followers() {
     const { formattedUsername, token } = useContext(TokenContext);
@@ -15,33 +16,45 @@ function Followers() {
     const { randomUser } = useContext(UserContext);
     const [activeTab, setActiveTab] = useState('followers');
     const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
       };
 
-
-    const fetchUserData = async () => {
+      const fetchUserData = async () => {
         try {
-            if (token) {
-                const response = await axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
+            const [userResponse, followersResponse] = await Promise.all([
+                axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                setUserData({ ...response.data.userProfile });
-                setFollowers(response.data.userProfile.profile.totalFollowers);   
-                console.log(userData)         
-            }
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }),
+                axios.get(`http://localhost:3000/api/followers/${formattedUsername}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }),
+            ]);
+            setUserData(userResponse.data.userProfile);
+            setFollowers(followersResponse.data.followers);
+            setFollowing(followersResponse.data.following);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
 
     useEffect(() => {
-        fetchUserData(); 
-    }, [formattedUsername]); 
+        if (formattedUsername && token) {
+            fetchUserData();
+        }
+    }, [formattedUsername, token]);
+
+    const removeFollowing = (userId) => {
+        setFollowing(following.filter(following => following._id !== userId));
+    };
 
     return (
         <div className='flex-row profile-page'>
@@ -57,12 +70,12 @@ function Followers() {
                     </div>
                 </header>
                 <div className='flex-row mini-header-btns-container'>
-                    <div className={`mini-header-btn ${activeTab === 'foryou' ? 'active' : ''}`}>
+                    <div className={`mini-header-btn ${activeTab === 'followers' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/home" 
-                            className={`for-you-tab ${activeTab === 'foryou' ? 'active' : ''}`} 
-                            onClick={() => handleTabChange('foryou')}
+                            to="/followers" 
+                            className={`for-you-tab ${activeTab === 'followers' ? 'active' : ''}`} 
+                            onClick={() => handleTabChange('followers')}
                         >
                             Followers
                         </Link>
@@ -71,7 +84,7 @@ function Followers() {
                     <div className={`mini-header-btn ${activeTab === 'following' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/home" 
+                            to="/followers" 
                             className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} 
                             onClick={() => handleTabChange('following')}
                         >
@@ -81,7 +94,32 @@ function Followers() {
                     </div>
                 </div>          
                 <div>
-               
+                {activeTab === 'followers' && (
+                        <div className='home-profile-posts'>
+                            {followers.length === 0 ? (
+                                <div className='no-followers-message'>
+                                    <h2>Looking for followers?</h2>
+                                    <p>When someone follows this account, they’ll show up here. Posting and interacting with others helps boost followers.</p>
+                                </div>
+                            ) : (
+                                followers.map(follower => (
+                                    <FollowersData key={follower._id} follower={follower} userData={userData} />
+                                ))
+                            )}
+                        </div>
+                    )}
+                    {activeTab === 'following' && (
+                            following.length === 0 ? (
+                                <div className='no-followers-message'>
+                                    <h2>No following.</h2>
+                                    <p>When you follow someone, they’ll show up here.</p>
+                                </div>
+                            ) : (
+                                    following.map(following => (
+                                        <FollowingData key={following._id} following={following} userData={userData} removeFollowing={removeFollowing} />
+                                    ))
+                            )
+                    )}
                 </div>
             </div>
             <HomeExtra randomUser={randomUser} />
