@@ -36,9 +36,9 @@ function OtherUserMedia() {
 
   return (
     media.length === 0 ? (
-      <div className='flex-column highlights-container'>
+      <div className='flex-column highlights-container media-top-border'>
         <h1>Lights, camera … attachments!</h1>
-        <p>When you post photos or videos, they will show up here.</p>
+        <p>When <span className='username'>@{username}</span> posts photos or videos, they will show up here.</p>
       </div>
     ) : (
       media.map((post, index) => (

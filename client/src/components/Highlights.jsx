@@ -6,8 +6,8 @@ function Highlights() {
 
 return (
     <div className='flex-column highlights-container random-users-new-post-top-border'>
-        <h1>Highlight on your profile</h1>
-        <p>You must be subscribed to Premium to highlight posts on your profile.</p>
+        <h1>Highlight on the profile</h1>
+        <p>You must be subscribed to Premium to highlight or view highlighted posts on the profile.</p>
         <button>Subscribe to Premium</button>
     </div>
 )}

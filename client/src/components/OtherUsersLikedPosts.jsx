@@ -47,7 +47,7 @@ function Likes() {
 return (
     likedPosts.length === 0 ? (
     <div className='flex-column highlights-container random-users-new-post-top-border'>
-          <h1>The user doesn't have any likes yet.</h1>
+          <h1><span className='username'>@{username}</span> doesn't have any likes yet.</h1>
           <p>They'll show up here.</p>
         </div>
       ) : (

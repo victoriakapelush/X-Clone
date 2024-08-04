@@ -83,6 +83,10 @@ body, html {
   visibility: visible;
 }
 
+.username {
+  color: var(--light-grey);
+}
+
 a {
   text-decoration: none;
   color: var(--white);
@@ -792,6 +796,10 @@ a:hover, a:visited {
   max-width: 100%;
   height: auto;
   margin: 0;
+}
+
+.followers-container {
+  height: 100vh;
 }
 
 /* SINGLE POST */

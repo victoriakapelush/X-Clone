@@ -1,7 +1,7 @@
 import '../styles/profile.css'
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import back from '../assets/icons/back.png'
@@ -17,6 +17,15 @@ function Followers() {
     const [activeTab, setActiveTab] = useState('followers');
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        if (tab) {
+            setActiveTab(tab);
+        }
+    }, [location]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -61,7 +70,7 @@ function Followers() {
             <HomeNav />
             <div className='profile-container'>
                 <header className='flex-row'>
-                    <Link to='/home' className='flex-row profile-icon-back'>
+                    <Link to='/profile' className='flex-row profile-icon-back'>
                         <img src={back}/>
                     </Link>
                     <div className='flex-column profile-header-name'>
@@ -73,7 +82,7 @@ function Followers() {
                     <div className={`mini-header-btn ${activeTab === 'followers' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/followers" 
+                            to="/followers?tab=followers" 
                             className={`for-you-tab ${activeTab === 'followers' ? 'active' : ''}`} 
                             onClick={() => handleTabChange('followers')}
                         >
@@ -84,7 +93,7 @@ function Followers() {
                     <div className={`mini-header-btn ${activeTab === 'following' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/followers" 
+                            to="/followers?tab=following" 
                             className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} 
                             onClick={() => handleTabChange('following')}
                         >
@@ -95,7 +104,7 @@ function Followers() {
                 </div>          
                 <div>
                 {activeTab === 'followers' && (
-                        <div className='home-profile-posts'>
+                        <div className='home-profile-posts followers-container'>
                             {followers.length === 0 ? (
                                 <div className='no-followers-message'>
                                     <h2>Looking for followers?</h2>
@@ -109,16 +118,18 @@ function Followers() {
                         </div>
                     )}
                     {activeTab === 'following' && (
-                            following.length === 0 ? (
+                        <div className='home-profile-posts followers-container'>
+                            {following.length === 0 ? (
                                 <div className='no-followers-message'>
                                     <h2>No following.</h2>
                                     <p>When you follow someone, they’ll show up here.</p>
                                 </div>
                             ) : (
-                                    following.map(following => (
-                                        <FollowingData key={following._id} following={following} userData={userData} removeFollowing={removeFollowing} />
-                                    ))
-                            )
+                                following.map(following => (
+                                    <FollowingData key={following._id} following={following} userData={userData} removeFollowing={removeFollowing} />
+                                ))
+                            )}
+                        </div>
                     )}
                 </div>
             </div>

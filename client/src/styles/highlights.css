@@ -1,19 +1,26 @@
 .highlights-container {
-    height: auto;
-    justify-content: center;
+    min-height: 30vh;
+    justify-content: flex-start;
     align-items: center;
     max-width: 100%;
-    padding: 3rem 2rem 4rem 2rem;
+    padding: 2rem 2rem 0 2rem;
+    margin: 0;
 }
 
 .highlights-container h1, .highlights-container p, .highlights-container button {
     margin: 0;
 }
 
+.media-top-border {
+    border-top: 1px solid var(--deep-grey);
+    width: 100%;
+}
+
 .highlights-container h1 {
     padding-top: 1rem;
     font-weight: bold;
     font-size: 2rem;
+    text-align: center;
 }
 
 .highlights-container p {
