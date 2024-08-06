@@ -11,8 +11,6 @@ const useFollow = (initialUser) => {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
 
-    console.log(initialUser)
-
     const fetchUserData = async () => {
         try {
             const responseFollowers = await axios.get(`http://localhost:3000/api/followers/${formattedUsername}`, {

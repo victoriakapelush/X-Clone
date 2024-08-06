@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import HomeNav from './HomeNav'
@@ -26,6 +26,9 @@ function Home() {
     const [showGifModal, setShowGifModal] = useState(false);
     const [selectedGif, setSelectedGif] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const { username } = useParams();
+    const token = localStorage.getItem('token');
+    const [userProfileData, setUserProfileData] = useState(null);
 
   const handleButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -66,7 +69,6 @@ function Home() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 if (token) {
                     const decoded = jwtDecode(token);
                     const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
@@ -148,6 +150,36 @@ const handleSubmit = async (e) => {
 const handleGifSelect = (gifUrl) => {
     setSelectedGif(gifUrl);
 };
+
+const fetchUserProfileData = async () => {
+    if (!token) {
+        console.error('No token found.');
+        return;
+    }
+    try {
+        if (!token) {
+            console.error('No token found in local storage.');
+            return;
+        }
+        const response = await axios.get(`http://localhost:3000/home/${username}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!response.data) {
+            console.error('User data not found in response:', response.data);
+            return;
+        }
+        setUserProfileData(response.data.userProfile);
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+};
+
+useEffect(() => {
+    fetchUserProfileData();
+    console.log(userProfileData)
+}, [username]);
 
 return (
     <div className="flex-row home-container">

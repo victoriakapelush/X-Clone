@@ -6,7 +6,7 @@ import '../styles/highlights.css'
 import { useState, useEffect } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import EditProfilePopup from './EditProfilePopup'
@@ -21,6 +21,7 @@ import TokenContext from './TokenContext';
 import UseNewPostHook from './UseNewPostHook'
 
 function Profile() {
+    const { username } = useParams();
     const [userData, setUserData] = useState({});
     const [activeTab, setActiveTab] = useState('posts');
     const [originalUsername, setOriginalUsername] = useState(null);
@@ -77,7 +78,7 @@ function Profile() {
                 const decoded = jwtDecode(token);
                 const decodedUsername = decoded.originalUsername.toLowerCase().replace(/\s+/g, '');
                 setFormattedUsername(decodedUsername); 
-                const response = await axios.get(`http://localhost:3000/profile/${decodedUsername}`, {
+                const response = await axios.get(`http://localhost:3000/profile/${username}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data'
@@ -102,15 +103,7 @@ function Profile() {
 
     useEffect(() => {
         fetchUserData(); 
-    }, []); 
-    
-    useEffect(() => {
-        if (userData) {
-            console.log('User data:', userData);
-        } else {
-            console.log('User data is not available.');
-        }
-    }, [userData]);
+    }, [username]); 
 
     return (
         <div className='flex-row profile-page'>
@@ -177,13 +170,13 @@ function Profile() {
                         </div>
                         <div className='flex-row following-container'>
                             {userData.profile && (
-                                <Link to='/followers?tab=following' className='following-number'>
+                                <Link to={`/${username}/followers?tab=following`} className='following-number'>
                                     {userData.profile.following ? userData.profile.following : '0'}{' '}
                                     <span className='following-grey'>Following</span>
                                 </Link>
                             )}
                             {userData && userData.profile && (
-                                <Link to='/followers?tab=followers' className='following-number'>
+                                <Link to={`/${username}/followers?tab=followers`} className='following-number'>
                                     {userData.profile.followers ? userData.profile.followers : '0'}{' '} 
                                     <span className='following-grey'>Followers</span>
                                 </Link>

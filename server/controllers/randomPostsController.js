@@ -5,7 +5,6 @@ const getRandomPosts = async (req, res) => {
     const currentUser = req.user.id;
 
     try {
-        // Fetch all posts except those belonging to the logged-in user
         const posts = await Post.find({ user: { $ne: currentUser } }).populate('user');
 
         // Shuffle the posts array

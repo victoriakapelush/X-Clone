@@ -44,9 +44,9 @@ function OtherUsersProfiles() {
                         }
                     });
                     setCurentUser(response.data);
+                    console.log('CURRENT USEER', currentUser)
                     document.title = `${response.data.user.originalUsername} (@${response.data.user.formattedUsername}) / X`;
                     setFollowers(response.data.profile.totalFollowers);
-
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -128,13 +128,13 @@ function OtherUsersProfiles() {
                         </div>
                         <div className='flex-row following-container'>
                             {userData.profile && (
-                                <Link to='/followers?tab=following' className='following-number'>
+                                <Link to={`/${username}/followers?tab=following`} className='following-number'>
                                     {userData.profile.following ? userData.profile.following : '0'}{' '}
                                     <span className='following-grey'>Following</span>
                                 </Link>
                             )}
                             {userData && userData.profile && (
-                                <Link to='/followers?tab=followers' className='following-number'>
+                                <Link to={`/${username}/followers?tab=followers`} className='following-number'>
                                     {userData.profile.followers ? userData.profile.followers : '0'}{' '} 
                                     <span className='following-grey'>Followers</span>
                                 </Link>

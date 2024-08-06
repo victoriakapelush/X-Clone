@@ -16,7 +16,7 @@ function Media() {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/api/profile/media/${formattedUsername}`, {
+        const response = await axios.get(`http://localhost:3000/api/profile/media/${username}`, {
           headers: {
             Authorization: `Bearer ${token}` 
           }
@@ -24,7 +24,6 @@ function Media() {
 
         if (response) {
           setMedia(response.data.mediaPosts);
-          console.log(response.data)
         } else {
           console.error('Failed to fetch media:', response.data.message);
         }
@@ -34,13 +33,13 @@ function Media() {
     };
 
     fetchMedia();
-  }, [formattedUsername]);
+  }, [username]);
 
   return (
     media.length === 0 ? (
       <div className='flex-column highlights-container media-top-border'>
         <h1>Lights, camera … attachments!</h1>
-        <p>When you post photos or videos, they will show up here.</p>
+        <p>All photos and videos will show up here.</p>
       </div>
     ) : (
       media.map((post, index) => (

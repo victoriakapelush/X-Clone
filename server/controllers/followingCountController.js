@@ -60,4 +60,3 @@ const saveFollowingCount = async (req, res) => {
 };
 
 module.exports = { saveFollowingCount };
-

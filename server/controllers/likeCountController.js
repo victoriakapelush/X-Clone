@@ -1,7 +1,7 @@
 const Post = require('../models/Post');
 
 const saveLikeCount = async (req, res) => {
-    const { _id, likes, likeCount } = req.body;
+    const { _id } = req.body;
     const currentUser = req.user.id;
 
     try {

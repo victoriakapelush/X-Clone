@@ -51,11 +51,11 @@ const addUserProfile = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-    const currentUser = req.user.originalUsername;
-    const currentUserId = req.user.id;  
+    const currentUser = req.params.formattedUsername;
+    const currentUserId = req.user.id;
 
     try {
-        const userProfile = await User.findOne({ originalUsername: currentUser });
+        const userProfile = await User.findOne({ formattedUsername: currentUser });
         if (!userProfile) {
             return res.status(404).json({ message: 'User not found' });
         }

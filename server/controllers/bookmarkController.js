@@ -8,7 +8,6 @@ const addBookmark = async (req, res) => {
   const currentUser = req.user.id;
 
   try {
-
     if (!postId) {
       throw new Error('Post ID is required');
     }

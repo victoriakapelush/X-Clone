@@ -3,6 +3,7 @@ import axios from 'axios';
 import TokenContext from './TokenContext';
 import UserContext from './UserContext';
 import { jwtDecode } from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
 const useNewPostHook = () => {
     const { token, formattedUsername } = useContext(TokenContext);
@@ -11,6 +12,7 @@ const useNewPostHook = () => {
     const [likedStates, setLikedStates] = useState([]);
     const [userID, setUserID] = useState('');
     const { userData } = useContext(UserContext);
+    const { username } = useParams();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -31,7 +33,7 @@ const useNewPostHook = () => {
 
     const getPost = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/profile/post/${formattedUsername}`, {
+            const response = await axios.get(`http://localhost:3000/api/profile/post/${username}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -116,10 +118,10 @@ const useNewPostHook = () => {
     };
 
     useEffect(() => {
-        if (formattedUsername && userID) {
+        if (username && userID) {
             getPost();
         }
-    }, [formattedUsername, userID]);
+    }, [username, formattedUsername, userID]);
 
     return { userData, postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost };
 };

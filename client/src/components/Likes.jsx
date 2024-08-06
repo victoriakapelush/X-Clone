@@ -23,8 +23,8 @@ function Likes() {
 return (
     likedPosts.length === 0 ? (
     <div className='flex-column highlights-container random-users-new-post-top-border'>
-          <h1>You don’t have any likes yet</h1>
-          <p>Tap the heart on any post to show it some love. When you do, it’ll show up here.</p>
+          <h1>There are no likes yet</h1>
+          <p>They'll show up here.</p>
         </div>
       ) : (
               likedPosts.map((post, index) => (

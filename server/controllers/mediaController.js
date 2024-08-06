@@ -2,7 +2,6 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 
 const getAllMedia = async (req, res) => {
-  const currentUserId = req.user.id;  
   const username = req.params.formattedUsername;
 
   try {

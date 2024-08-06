@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
 import { jwtDecode } from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
 const DisplayBookmarks = () => {
     const { token, formattedUsername } = useContext(TokenContext);
@@ -9,6 +10,7 @@ const DisplayBookmarks = () => {
     const [bookmarkedStates, setBookmarkedStates] = useState([]);
     const [likedStates, setLikedStates] = useState([]);
     const [userID, setUserID] = useState('');
+    const { username } = useParams(); 
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -25,7 +27,7 @@ const DisplayBookmarks = () => {
             if (!formattedUsername) return;
     
             try {
-                const response = await axios.get(`http://localhost:3000/api/profile/likes/${formattedUsername}`, {
+                const response = await axios.get(`http://localhost:3000/api/profile/likes/${username}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -42,7 +44,7 @@ const DisplayBookmarks = () => {
         };
     
         fetchLikes();
-    }, [formattedUsername, token]);
+    }, [username, token]);
 
     useEffect(() => {
         if (likedPosts.length > 0) {

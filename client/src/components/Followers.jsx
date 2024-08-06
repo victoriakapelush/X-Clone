@@ -1,7 +1,7 @@
 import '../styles/profile.css'
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import back from '../assets/icons/back.png'
@@ -18,6 +18,7 @@ function Followers() {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
     const location = useLocation();
+    const { username } = useParams();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -34,13 +35,13 @@ function Followers() {
       const fetchUserData = async () => {
         try {
             const [userResponse, followersResponse] = await Promise.all([
-                axios.get(`http://localhost:3000/profile/${formattedUsername}`, {
+                axios.get(`http://localhost:3000/profile/${username}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data',
                     },
                 }),
-                axios.get(`http://localhost:3000/api/followers/${formattedUsername}`, {
+                axios.get(`http://localhost:3000/api/followers/${username}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data',
@@ -82,7 +83,7 @@ function Followers() {
                     <div className={`mini-header-btn ${activeTab === 'followers' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/followers?tab=followers" 
+                            to={`/${username}/followers?tab=followers`}
                             className={`for-you-tab ${activeTab === 'followers' ? 'active' : ''}`} 
                             onClick={() => handleTabChange('followers')}
                         >
@@ -93,7 +94,7 @@ function Followers() {
                     <div className={`mini-header-btn ${activeTab === 'following' ? 'active' : ''}`}>
                         <div className='blue-underline flex-column'>
                         <Link 
-                            to="/followers?tab=following" 
+                            to={`/${username}/followers?tab=following`}
                             className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} 
                             onClick={() => handleTabChange('following')}
                         >

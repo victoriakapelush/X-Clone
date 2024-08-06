@@ -20,4 +20,3 @@ const getRandomUsers = async (req, res) => {
   };
   
   module.exports = { getRandomUsers };
-  

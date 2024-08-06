@@ -15,7 +15,6 @@ import Bookmarks from './components/Bookmarks.jsx'
 import Explore from './components/Explore.jsx'
 import Feeds from './components/Feeds.jsx'
 import Followers from './components/Followers.jsx'
-import OtherUsersProfiles from './components/OtherUsersProfiles.jsx'
 import ConnectPeople from './components/ConnectPeople.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
@@ -41,19 +40,15 @@ const router = createBrowserRouter([
     element: <Home />
   },
   {
-    path: "/profile",
-    element: <Profile />
-  },
-  {
     path: "/profile/:username",
-    element: <OtherUsersProfiles />
+    element: <Profile />
   },
   {
     path: "/profile/:username/replies",
     element: <Replies />
   },
   {
-    path: "/profile",
+    path: "/profile/:username",
     element: <EditProfilePopup />
   },
   {
@@ -89,7 +84,7 @@ const router = createBrowserRouter([
     element: <Feeds />
   },
   {
-    path: "/followers",
+    path: "/:username/followers",
     element: <Followers />
   }
 ]);

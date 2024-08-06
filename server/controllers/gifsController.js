@@ -5,7 +5,7 @@ exports.searchGifs = (req, res) => {
   if (!query) {
     return res.status(400).send({ error: 'Query parameter is required' });
   }
-  giphy.search({ q: query, limit: 32 }, (err, response) => {
+  giphy.search({ q: query, limit: 33 }, (err, response) => {
     if (err) {
       return res.status(500).send(err);
     }

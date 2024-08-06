@@ -103,20 +103,17 @@ const getTopThreeHighestValues = (text) => {
             seenValues.add(classification.value);
         }
     }
-
-    console.log('Top Three Highest Values:', topThree);
-
     return topThree;
 };
 
 const getPost = async (req, res) => {
-    const currentUser = req.user.id;
+    const currentUser = req.params.formattedUsername;
     try {
-        const user = await User.findById(currentUser);
+        const user = await User.findOne({ formattedUsername: currentUser});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        const posts = await Post.find({ user: currentUser }).sort({ time: -1 }).populate('user');
+        const posts = await Post.find({ user: user._id }).sort({ time: -1 }).populate('user');
         res.status(200).json({ posts });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

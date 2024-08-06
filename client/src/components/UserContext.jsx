@@ -3,10 +3,13 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import TokenContext from './TokenContext';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 const UserContext = createContext({
     userData: null,
     setUserData: () => {},
+    userProfileData: null,
+    setUserProfileData: () => {},
     fetchUserData: () => {},
     randomUser: null,
     setRandomUser: () => {}
@@ -16,6 +19,7 @@ export const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [randomUser, setRandomUser] = useState(null);
     const { token, formattedUsername } = useContext(TokenContext);
+    const { username } = useParams();
 
     const fetchUserData = async () => {
         if (!token) {
@@ -55,4 +59,3 @@ export const UserProvider = ({ children }) => {
 };
 
 export default UserContext;
-

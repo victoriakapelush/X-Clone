@@ -2,9 +2,8 @@ const User = require('../models/User');
 
 const getProfilePage = async (req, res) => {
     try {
-        const { formattedUsername } = req.params;
-        const userId = req.user.id;
-        const user = await User.findOne({ _id: userId, formattedUsername });
+        const currentUser= req.params.formattedUsername;
+        const user = await User.findOne({ formattedUsername: currentUser });
         if (!user) {
             return res.status(404).json({ message: 'User profile not found '})
         } 
@@ -16,11 +15,12 @@ const getProfilePage = async (req, res) => {
 }
 
 const updateProfilePage = async (req, res) => {
-    const { formattedUsername } = req.params;
+    const currentUser = req.params.formattedUsername;
     const userId = req.user.id;
     const { updatedName, profileBio, location, website } = req.body;
+    
     try {
-        const user = await User.findOne({ _id: userId, formattedUsername });
+        const user = await User.findOne({ _id: userId, formattedUsername: currentUser });
 
         if (!user) {
             return res.status(404).send('User not found');
