@@ -20,13 +20,22 @@ function Likes() {
         setIsExpanded(!isExpanded);
     }
 
+    console.log(likedPosts)
+
 return (
     likedPosts.length === 0 ? (
-    <div className='flex-column highlights-container random-users-new-post-top-border'>
-          <h1>There are no likes yet</h1>
-          <p>They'll show up here.</p>
+        username === formattedUsername ? (        
+        <div className='flex-column highlights-container random-users-new-post-top-border'>
+          <h1>You don’t have any likes yet.</h1>
+          <p>Tap the heart on any post to show it some love. When you do, it’ll show up here.</p>
         </div>
       ) : (
+        <div className='flex-column highlights-container random-users-new-post-top-border'>
+          <h1>@{username} doesn't have any likes yet.</h1>
+          <p>When @{username} likes posts, they'll show up here.</p>
+        </div>
+      )
+    ) : (
               likedPosts.map((post, index) => (
                 <div key={index} className='post random-post flex-column'>
                 <div className='flex-row'>

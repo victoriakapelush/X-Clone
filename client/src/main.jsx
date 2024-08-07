@@ -84,6 +84,10 @@ const router = createBrowserRouter([
     element: <Feeds />
   },
   {
+    path: "/feeds/connect_people",
+    element: <ConnectPeople />
+  },
+  {
     path: "/:username/followers",
     element: <Followers />
   }

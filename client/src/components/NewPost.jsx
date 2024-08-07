@@ -4,16 +4,33 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/profile.css';
 import { format, formatDistanceToNow } from 'date-fns';
+import ReplyPopup from './ReplyPopup'
 
-function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handleLike, randomUser, userData}) {
+function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, handleLike, userData }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showToPost, setShowToPost] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState(null);
+
+    const handleOpenPopup = () => {
+        setShowToPost(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowToPost(false);
+    };
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
     }
 
+    const handlePostClick = (postId) => {
+        setShowToPost(true);
+        setSelectedPostId(postId);
+    }
+
     return (
         <div className='profile-post-new-post'>
+            {showToPost && <ReplyPopup onClose={handleClosePopup} onSave={handleClosePopup} selectedPostId={selectedPostId} postData={postData}/>}
             {postData.length > 0 ? (
                 postData.map((post, index) => {
                     const postTime = post?.time ? new Date(post.time) : null;
@@ -35,7 +52,6 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                     {userData?.profile?.profilePicture ? (
                                         <img
                                             className='profile-pic'
-                                            alt="Profile Image"
                                             src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
                                         />
                                     ) : (
@@ -48,7 +64,7 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                         </Link>
                                         <p className={`post-text ${isExpanded ? 'expanded' : ''}`} onClick={toggleText}>{post.text}</p>
                                         {post.image && (
-                                            <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} alt="Uploaded" />
+                                            <img className='post-image' src={`http://localhost:3000/uploads/${post.image}`} />
                                         )}
                                         {post.gif && (
                                             <img className='post-gif' src={post.gif} alt="Posted GIF" />
@@ -57,7 +73,7 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                                     </div>
                                 <div className='flex-row post-icons-container'>
                                     <div>
-                                        <div className="icon-container color-hover flex-row" id="blue-svg">
+                                        <div className="icon-container color-hover flex-row" id="blue-svg" onClick={handlePostClick}>
                                             <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
                                                 <g className='flex-row'>
                                                     <path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path>
@@ -115,38 +131,12 @@ function NewPost({postData, bookmarkedStates, handleBookmark, likedStates, handl
                         );
                     })
                 ) : (
-                    <div className='flex-column replies-container new-post-random-users random-users-new-post-top-border'>
-                        <div className='premium-header replies-header-who-tofollow'>
-                            <h3>Who to follow</h3>
-                        </div>
-                        {randomUser && randomUser.slice(0, 3).map(user => (
-                            <Link key={user.id} to={`/profile/${user.formattedUsername}`}>
-                                <div className='who-tofollow-container replies-who-to-follow-container flex-column'>
-                                    <div className='who-tofollow-profile-box flex-row' id='replies-who-to-follow'>
-                                        <div className='who-to-follow-single-user flex-row'>
-                                            <div className='who-tofollow-image-box'>
-                                                {user.profile.profilePicture ? (
-                                                    <img src={user.profile.profilePicture} alt={`${user.originalUsername}'s profile`} />
-                                                ) : (
-                                                    <div className='no-profile-picture'></div>
-                                                )}
-                                            </div>
-                                            <div className='flex-column who-tofollow-name-box'>
-                                                <span className='who-tofollow-namelink'>{user.originalUsername}</span>
-                                                <span className='who-tofollow-iglink'>@{user.formattedUsername}</span>
-                                            </div>
-                                        </div>
-                                        <div className='who-tofollow-btn'>
-                                            <button className='radius'>Follow</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
+                <div className='profile-right replies-profile-right flex-column'>
+                    <span className='no-posts-to-display flex-row'>No posts to display yet.</span>
+                </div>
+            )}
             </div>
         );
     }
     
-    export default NewPost;
+export default NewPost;

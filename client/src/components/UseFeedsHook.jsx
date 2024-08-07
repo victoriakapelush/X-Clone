@@ -34,7 +34,6 @@ const UseFeedsHook = () => {
             const response = await axios.get(`http://localhost:3000/feeds/${formattedUsername}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log(response.data)
             const posts = response.data || [];
             setPostData(posts);
 

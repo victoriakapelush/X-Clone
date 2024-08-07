@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import '../styles/connectPeople.css';
 import back from '../assets/icons/back.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
@@ -12,6 +12,7 @@ import SingleUserBriefProfile from './SingleUserBriefProfile'
 function ConnectPeople() {
     const [singleUserData, setSingleUserData] = useState(null);
     const [formattedUsername, setFormattedUsername] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -62,9 +63,9 @@ useEffect(() => {
             <HomeNav />
             <div className='connect-center-container flex-column'>
                 <header className='flex-row'>
-                    <Link to='/home' className='flex-row profile-icon-back'>
+                    <button onClick={() => navigate(-1)} className='flex-row profile-icon-back'>
                         <img src={back}/>
-                    </Link>
+                    </button>
                     <div className='connect-h2'>
                         <h2>Connect</h2>
                     </div>

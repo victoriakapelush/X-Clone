@@ -1,4 +1,5 @@
-import '../styles/profile.css'
+import '../styles/profile.css';
+import '../styles/followers.css';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -107,7 +108,7 @@ function Followers() {
                 {activeTab === 'followers' && (
                         <div className='home-profile-posts followers-container'>
                             {followers.length === 0 ? (
-                                <div className='no-followers-message'>
+                                <div className='no-followers-message flex-column'>
                                     <h2>Looking for followers?</h2>
                                     <p>When someone follows this account, they’ll show up here. Posting and interacting with others helps boost followers.</p>
                                 </div>
@@ -121,9 +122,9 @@ function Followers() {
                     {activeTab === 'following' && (
                         <div className='home-profile-posts followers-container'>
                             {following.length === 0 ? (
-                                <div className='no-followers-message'>
-                                    <h2>No following.</h2>
-                                    <p>When you follow someone, they’ll show up here.</p>
+                                <div className='no-followers-message flex-column'>
+                                    <h2>Be in the know.</h2>
+                                    <p>Following accounts is an easy way to curate your timeline and know what’s happening with the topics and people you’re interested in.</p>
                                 </div>
                             ) : (
                                 following.map(following => (

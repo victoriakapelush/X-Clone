@@ -444,7 +444,6 @@ a:hover, a:visited {
   top: 0;
   flex: 1;
   box-sizing: border-box;
-  z-index: 1000; /* Ensure it stays on top */
 }
 
 .nav-links {
@@ -878,6 +877,14 @@ a:hover, a:visited {
 .no-posts-message p {
   margin: 0;
   font-size: 1.2rem;
+}
+
+.no-posts-to-display {
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--deep-grey);
+  align-items: center;
+  height: 30vh;
 }
 
 .save-icons {

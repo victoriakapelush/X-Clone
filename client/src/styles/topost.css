@@ -48,7 +48,12 @@
     margin-top: 1rem;
   }
 
-  
+  @media only screen and (max-width: 768px) {
+    .topost-black-window {
+      max-width: 27rem;
+      top: 100px;
+  }
+}
   
   
   

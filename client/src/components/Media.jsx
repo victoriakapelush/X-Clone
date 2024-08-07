@@ -33,15 +33,24 @@ function Media() {
     };
 
     fetchMedia();
+    console.log(formattedUsername)
+
   }, [username]);
 
   return (
     media.length === 0 ? (
-      <div className='flex-column highlights-container media-top-border'>
+      username === formattedUsername ? (        
+        <div className='flex-column highlights-container media-top-border'>
         <h1>Lights, camera … attachments!</h1>
-        <p>All photos and videos will show up here.</p>
+        <p>When you post photos or videos, they will show up here.</p>
       </div>
     ) : (
+      <div className='flex-column highlights-container media-top-border'>
+        <h1>Lights, camera … attachments!</h1>
+        <p>When @{username} post photos or videos, they will show up here.</p>
+      </div>
+    )
+  ) : (
       media.map((post, index) => (
           post.image && <img key={index} className='mediapost-image' src={`http://localhost:3000/uploads/${post.image}`} />
 ))))}

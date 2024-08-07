@@ -1,3 +1,4 @@
+import '../styles/reply.css';
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import '../styles/popup.css'
@@ -6,11 +7,12 @@ import '../styles/topost.css'
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
+import NewPost from './NewPost';
 
-function ToPost({ onClose, onSave }) {
+function ReplyPopup({ onClose }) {
     const [userData, setUserData] = useState({});
     const [profile, setProfile] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
@@ -18,6 +20,7 @@ function ToPost({ onClose, onSave }) {
     const [profileImage, setProfileImage] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [post, setPost] = useState([]);
+    const { username } = useParams();
 
     const handleProfileImageChange = (e) => {
         const file = e.target.files[0];
@@ -75,7 +78,6 @@ function ToPost({ onClose, onSave }) {
                 setUserData({ ...response.data.userProfile });
                 setProfile(profiles);
                 setPost(posts);
-                console.log(response.data)
 
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -124,10 +126,13 @@ function ToPost({ onClose, onSave }) {
                         </button>
                     </div>
                 </div>
+                <div>
+                    <NewPost />
+                </div>
                 <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
-                        <Link to='/profile'>
-                                <img className='profile-pic' src={`http://localhost:3000/uploads/${profile.profilePicture}`} />
+                        <Link to={`/profile/${username}`}>                                
+                            <img className='profile-pic' src={`http://localhost:3000/uploads/${profile.profilePicture}`} />
                         </Link>
                         <div className='form-container-new-post'>
                             <form onSubmit={handleSubmit} className='flex-column'>
@@ -201,6 +206,5 @@ function ToPost({ onClose, onSave }) {
         </div>
     );
 }
-    
 
-export default ToPost;
+export default ReplyPopup;

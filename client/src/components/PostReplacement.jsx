@@ -10,7 +10,7 @@ function PostReplacement() {
                 <h1>Welcome to X!</h1>
                 <p>This is the best place to see what’s happening in your world. Find some people and topics to follow now.</p>
                 <Link to='connect_people'>
-                    <button id="post-replace-btn" >Let's go</button>
+                    <button id="post-replace-btn">Let's go</button>
                 </Link>
             </div>
         </div>

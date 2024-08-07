@@ -93,3 +93,12 @@
   .no-profile-picture {
     background-color: var(--opacity);
   }
+
+  .profile-icon-back {
+    background-color: transparent;
+    border: none;
+  }
+
+  .profile-icon-back img {
+    margin: 0;
+  }
