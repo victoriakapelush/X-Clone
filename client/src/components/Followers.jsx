@@ -2,7 +2,7 @@ import '../styles/profile.css';
 import '../styles/followers.css';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import HomeNav from './HomeNav'
 import HomeExtra from './HomeExtra'
 import back from '../assets/icons/back.png'
@@ -20,6 +20,7 @@ function Followers() {
     const [following, setFollowing] = useState([]);
     const location = useLocation();
     const { username } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -72,7 +73,7 @@ function Followers() {
             <HomeNav />
             <div className='profile-container'>
                 <header className='flex-row'>
-                    <Link to='/profile' className='flex-row profile-icon-back'>
+                    <Link onClick={() => navigate(-1)} className='flex-row profile-icon-back'>
                         <img src={back}/>
                     </Link>
                     <div className='flex-column profile-header-name'>

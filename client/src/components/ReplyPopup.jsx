@@ -1,18 +1,14 @@
-import '../styles/reply.css';
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import '../styles/popup.css'
 import '../styles/editProfilePopup.css'
 import '../styles/topost.css'
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
-import NewPost from './NewPost';
 
-function ReplyPopup({ onClose }) {
+function ReplyPopup({ onClose, postId }) {
     const [userData, setUserData] = useState({});
     const [profile, setProfile] = useState({});
     const [formattedUsername, setFormattedUsername] = useState('');
@@ -22,6 +18,8 @@ function ReplyPopup({ onClose }) {
     const [post, setPost] = useState([]);
     const { username } = useParams();
 
+    console.log(postId)
+
     const handleProfileImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -29,7 +27,6 @@ function ReplyPopup({ onClose }) {
             setImageUrl(URL.createObjectURL(file));
         }
         document.getElementById('topost-insert-image').style.display = "block";
-
     };
 
     const handleUploadClick = (e) => {
@@ -107,10 +104,10 @@ function ReplyPopup({ onClose }) {
                 setProfileImage(null); 
                 onClose();
             } else {
-                console.error('Error creating a post:', response);
+                console.error('Error creating a comment:', response);
             }
         } catch (error) {
-            console.error('Error creating a post:', error);
+            console.error('Error creating a comment:', error);
         }
     };
 
@@ -126,8 +123,33 @@ function ReplyPopup({ onClose }) {
                         </button>
                     </div>
                 </div>
-                <div>
-                    <NewPost />
+                <div className='flex-row popup-reply-post'>
+                    <div className='pic-vertical-line-box flex-column'>
+                        <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${postId.user.profile.profilePicture}`} />
+                        <div className='vertical-line-reply'></div>
+                    </div>
+                    <div className='reply-summary-post flex-column'>
+                        <span>{postId.user.profile.updatedName} <span className='reply-replying-to'>@{postId.user.formattedUsername} · {postId.time}</span></span>
+                        {/* Check for text */}
+                        {postId.text && (
+                                <span className='reply-post-text'>{postId.text}</span>
+                            )}
+                        {/* Check for image */}
+                        {postId.image && (
+                                <img
+                                    className='reply-post-text reply-post-image'
+                                    src={`http://localhost:3000/uploads/${postId.image}`}
+                                />
+                        )}
+                        {/* Check for GIF */}
+                        {postId.gif && (
+                                <img
+                                    className='reply-post-text reply-post-gif'
+                                    src={postId.gif}
+                                />
+                        )}                        
+                        <span className='reply-replying-to'>Replying to <span className='replying-to-blue'>@{postId.user.formattedUsername}</span></span>
+                    </div>
                 </div>
                 <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
@@ -137,7 +159,7 @@ function ReplyPopup({ onClose }) {
                         <div className='form-container-new-post'>
                             <form onSubmit={handleSubmit} className='flex-column'>
                                 <textarea className='topost-textarea' 
-                                 placeholder='What is happening?!'
+                                 placeholder='Post your reply'
                                  name='text'
                                  value={text}
                                  onChange={(e) => setText(e.target.value)}
@@ -196,7 +218,7 @@ function ReplyPopup({ onClose }) {
                                             </svg>
                                         </button>                                    
                                     </div>
-                                    <button className='new-post-btn radius smaller-size' type='submit'>Post</button>
+                                    <button className='new-post-btn radius smaller-size' type='submit' onClick={handleSubmit}>Post</button>
                                 </div>
                             </form>
                         </div>

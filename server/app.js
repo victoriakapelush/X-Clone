@@ -30,6 +30,9 @@ const feeds = require('./routes/feeds');
 const otherUser = require('./routes/otherUser');
 const giphy = require('./routes/gifs');
 const followers = require('./routes/followers');
+const postComment = require('./routes/postComment');
+const replyComment = require('./routes/replyComment');
+const replies = require('./routes/replies');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -94,6 +97,9 @@ app.use('/feeds', feeds);
 app.use('/api/profile/otheruser', otherUser);
 app.use('/api/gifs', giphy);
 app.use('/api/followers', followers);
+app.use('/api/post', postComment);
+app.use('/api/reply', replyComment);
+app.use('/api/profile/replies', replies);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

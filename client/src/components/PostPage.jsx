@@ -1,20 +1,23 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
+/* eslint-disable react/prop-types */
 import HomeNav from './HomeNav'
-import HomeExtra from './HomeExtra'
-import PopupWindow from './PopupWindow'
+import '../styles/connectPeople.css';
+import back from '../assets/icons/back.png';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
-import PostReplacement from './PostReplacement.jsx'
-import RandomPosts from './RandomPosts.jsx';
+import PostAndComment from './PostAndComment'
+import { format, formatDistanceToNow } from 'date-fns';
+import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import GifModal from './GifModal';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 
-function Home() {
+
+function PostPage() {
+    const navigate = useNavigate();
+    const { username, postId } = useParams();
+    const [post, setPost] = useState('');
     const [userData, setUserData] = useState(null);
     const [randomUser, setRandomUser] = useState(null);
     const [activeTab, setActiveTab] = useState('following');
@@ -26,7 +29,6 @@ function Home() {
     const [showGifModal, setShowGifModal] = useState(false);
     const [selectedGif, setSelectedGif] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const { username } = useParams();
     const token = localStorage.getItem('token');
     const [userProfileData, setUserProfileData] = useState(null);
 
@@ -180,38 +182,83 @@ useEffect(() => {
     fetchUserProfileData();
 }, [username]);
 
-return (
-    <div className="flex-row home-container">
-        <HomeNav />
-        {showPopup ? (
-            <PopupWindow onClose={handleClosePopup} onSave={handleClosePopup} />
-        ) : (
-            <div className='profile-center'>
-                <div className='flex-row mini-header-btns-container'>
-                    <div className={`mini-header-btn ${activeTab === 'foryou' ? 'active' : ''}`}>
-                        <div className='blue-underline flex-column'>
-                        <Link 
-                            to="/home" 
-                            className={`for-you-tab ${activeTab === 'foryou' ? 'active' : ''}`} 
-                            onClick={() => handleTabChange('foryou')}
-                        >
-                            For you
-                        </Link>
+    useEffect(() => {
+        const getPostWithComments = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found in local storage.');
+                    return;
+                }
+                
+                const response = await axios.get(`http://localhost:3000/api/post/${username}/comment/${postId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+        
+                if (!response.data) {
+                    console.error('User data not found in response:', response.data);
+                    return;
+                }
+        
+                const post = response.data.post;
+                setPost(post);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        getPostWithComments();
+    }, [username, postId]); 
+
+    function formatPostTime(postTime) {
+        if (!postTime) return 'Invalid date';
+    
+        const date = new Date(postTime);
+    
+        if (isNaN(date)) return 'Invalid date';
+    
+        const now = new Date();
+        const isRecent = (now - date) < 24 * 60 * 60 * 1000;
+    
+        return isRecent 
+            ? formatDistanceToNow(date, { addSuffix: false }) 
+            : format(date, 'MMMM d'); 
+    }
+
+    return (
+        <div className="flex-row home-container">
+            <HomeNav />
+            <div className='connect-center-container flex-column'>
+                <header className='flex-row'>
+                    <button onClick={() => navigate(-1)} className='flex-row profile-icon-back'>
+                        <img src={back} alt="Back" />
+                    </button>
+                    <div className='connect-h2'>
+                        <h2>Post</h2>
+                    </div>
+                </header>  
+                <div className='flex-column popup-reply-post'>
+                    <div className='flex-row horizontal-line-replies-section comment-hover'>
+                        <div className='pic-vertical-line-box flex-column'>
+                            {post && post.user.profile && <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`} />}
+                            <div className='vertical-line-reply'></div>
+                        </div>
+                        <div className='reply-summary-post flex-column'>
+                            {post && post.user.profile && 
+                                <span>{post.user.profile.updatedName} 
+                                    <span className='reply-replying-to'>
+                                        @{post.user.formattedUsername} · {formatPostTime(post.time)}
+                                    </span>
+                                </span>
+                            }
+                            {post && <span className='reply-post-text'>{post.text}</span>}
+                            {post && <img className='reply-post-text reply-post-image' src={`http://localhost:3000/uploads/${post.image}`} />}
+                            {post && <img className='reply-post-text reply-post-gif' src={post.gif} />}
+                            {post && <span className='reply-replying-to'>Replying to <span className='replying-to-blue'> @{post.user.formattedUsername}</span></span>}
                         </div>
                     </div>
-                    <div className={`mini-header-btn ${activeTab === 'following' ? 'active' : ''}`}>
-                        <div className='blue-underline flex-column'>
-                        <Link 
-                            to="/home" 
-                            className={`for-you-tab ${activeTab === 'following' ? 'active' : ''}`} 
-                            onClick={() => handleTabChange('following')}
-                        >
-                            Following
-                        </Link>
-                        </div>
-                    </div>
-                </div>          
-                <div className='create-new-post-window'>
+                    <div className='create-new-post-window'>
                     <div className='create-new-post-window-container flex-row'>
                         <Link to='/profile'>
                             {userData && userData.profile.profilePicture ? (
@@ -223,7 +270,7 @@ return (
                         <div className='form-container-new-post'>
                             <form onSubmit={handleSubmit}>
                                 <textarea className='post-textarea' 
-                                    placeholder='What is happening?!'
+                                    placeholder='Post your reply'
                                     name='text'
                                     value={text}
                                     onChange={(e) => setText(e.target.value)}>
@@ -309,21 +356,42 @@ return (
                         </div>
                     </div>
                 </div>
-                {activeTab === 'foryou' && (
-                    <div className='home-profile-posts'>
-                        <RandomPosts />
-                    </div>
-                )}
-                {activeTab === 'following' && (
-                    <div className='home-profile-following-posts'>
-                        <PostReplacement />
-                    </div>
-                )}
+                    {post && post.totalReplies && post.totalReplies.length > 0 ? (
+                        post.totalReplies.map((reply) => (
+                            <div className='flex-row comment-hover horizontal-line-replies-section top-border-horizontal' key={reply._id}>
+                                <div className='pic-vertical-line-box flex-column'>
+                                    <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${reply.user.profile.profilePicture}`} />
+                                </div>
+                                <div className='reply-summary-post flex-column'>
+                                    <span>{reply.user.profile.updatedName} 
+                                        <span className='reply-replying-to'>
+                                            @{reply.user.formattedUsername} · {formatPostTime(reply.time)}
+                                        </span>
+                                    </span>
+                                    {reply.text && <span className='reply-post-text'>{reply.text}</span>}
+                                    {reply.image && <img className='reply-post-text reply-post-image' src={`http://localhost:3000/uploads/${reply.image}`} />}
+                                    {reply.gif && <img className='reply-post-text reply-post-gif' src={reply.gif} />}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No comments as of yet.</p>
+                    )}
+                </div>
             </div>
-        )}
-        {!showPopup && <HomeExtra randomUser={randomUser} />}
-    </div>
-);
+            <div className='profile-right flex-column profile-right-no-display'>
+                <div className='flex-column premium-subscribe-container'>
+                    <div className='premium-header'>
+                        <h3>Subscribe to Premium</h3>
+                    </div>
+                    <div className='premium-paragraph'>
+                        <p>Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
+                    </div>
+                    <button className='new-post-btn radius smaller-size'>Subscribe</button>
+                </div>
+            </div>
+        </div>
+    );
 }
-  
-export default Home;
+
+export default PostPage;

@@ -21,3 +21,20 @@
 .replies-header-who-tofollow {
     padding-top: 1rem;
 }
+
+.horizontal-line-replies-section {
+    border-bottom: 1px solid var(--deep-grey);
+    padding-bottom: 1rem;
+}
+
+.comment-hover:hover {
+    background-color: var(--opacity);
+}
+
+.no-gap-replies {
+    gap: 0 !important;
+}
+
+.top-border-horizontal {
+    border-top: 1px solid var(--deep-grey);
+}

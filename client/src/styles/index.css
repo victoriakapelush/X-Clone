@@ -87,6 +87,55 @@ body, html {
   color: var(--light-grey);
 }
 
+/* COMMENT POPUP */
+
+.no-bottom-margin {
+  margin-bottom: 2px !important;
+  min-width: 3rem;
+  min-height: 3rem;
+}
+
+.vertical-line-reply {
+  border-left: 2px solid var(--deep-grey);
+  height: 100%;
+}
+
+.pic-vertical-line-box {
+  align-items: center;
+}
+
+.popup-reply-post {
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.reply-summary-post {
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  margin-right: 2rem;
+}
+
+.reply-replying-to {
+  color: var(--deep-grey);
+  margin-top: 10px;
+}
+
+.replying-to-blue {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.reply-post-text {
+  margin-top: 5px;
+}
+
+.reply-post-image, .reply-post-gif {
+  max-width: 100%;
+  max-height: auto;
+}
+
 a {
   text-decoration: none;
   color: var(--white);

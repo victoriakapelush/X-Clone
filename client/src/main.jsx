@@ -16,6 +16,7 @@ import Explore from './components/Explore.jsx'
 import Feeds from './components/Feeds.jsx'
 import Followers from './components/Followers.jsx'
 import ConnectPeople from './components/ConnectPeople.jsx'
+import PostPage from './components/PostPage.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import './styles/index.css'
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "/:username/followers",
     element: <Followers />
+  },
+  {
+    path: "/:username/status/:postId",
+    element: <PostPage />
   }
 ]);
 
