@@ -14,7 +14,7 @@ const ReplySchema = new Schema({
     bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     share: { type: Number, default: 0 },
     post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
-    totalReplies: [this], 
+    totalReplies: [{ type: Schema.Types.ObjectId, ref: 'Reply' }]
 });
 
 const Reply = mongoose.model('Reply', ReplySchema);

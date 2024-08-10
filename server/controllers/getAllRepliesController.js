@@ -11,17 +11,46 @@ const getRepliesByUser = async (req, res) => {
         }
 
         const replies = await Reply.find({ user: user._id })
-            .populate('post')
-            .populate('user')
-            .populate({
-                path: 'post',
-                populate: {
+        .populate('post') 
+        .populate('user') 
+        .populate({
+            path: 'post',
+            populate: [
+                {
                     path: 'user', 
                     model: 'User',
                 },
-            })
-            .sort({ time: -1 });
-
+                {
+                    path: 'totalReplies', 
+                    populate: [
+                        { path: 'user', model: 'User' }, 
+                        { path: 'post', model: 'Post' }, 
+                    ],
+                },
+            ],
+        })
+        .populate({
+            path: 'totalReplies', 
+            populate: [
+                {
+                    path: 'user', 
+                    model: 'User',
+                },
+                {
+                    path: 'post',
+                    model: 'Post',
+                },
+                {
+                    path: 'totalReplies', 
+                    populate: {
+                        path: 'user', 
+                        model: 'User',
+                    },
+                },
+            ],
+        })
+        .sort({ time: -1 }); // Sort by time in descending order
+    
         res.status(200).json({ replies });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

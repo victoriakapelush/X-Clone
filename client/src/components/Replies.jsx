@@ -18,14 +18,10 @@ function Replies({ randomUser }) {
 
     function formatPostTime(postTime) {
         if (!postTime) return 'Invalid date';
-    
         const date = new Date(postTime);
-    
         if (isNaN(date)) return 'Invalid date';
-    
         const now = new Date();
         const isRecent = (now - date) < 24 * 60 * 60 * 1000; 
-    
         return isRecent 
             ? formatDistanceToNow(date, { addSuffix: false }) 
             : format(date, 'MMMM d'); 
@@ -41,7 +37,6 @@ function Replies({ randomUser }) {
                   }
                 });
                 setReplies(response.data.replies);
-                console.log('response', response.data)
             } catch (err) {
                 console.error('Error fetching replies: ', err);
             }

@@ -81,8 +81,8 @@ const addCommentToPost = async (req, res) => {
             .populate({
                 path: 'totalReplies',
                 populate: {
-                    path: 'user',
-                    model: 'User',
+                    path: 'reply',
+                    model: 'Reply',
                 },
             });
 

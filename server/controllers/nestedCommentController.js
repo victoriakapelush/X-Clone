@@ -8,11 +8,24 @@ const getComments = async (req, res) => {
 
     try {
         const reply = await Reply.findById(replyId)
-            .populate('user')
-            .populate({
-                path: 'totalReplies.user',
-                model: 'User',
-            });
+        .populate({
+            path: 'post',
+            populate: {
+                path: 'user', 
+                model: 'User'
+            }
+        })        
+        .populate('user') 
+        .populate(
+            {
+                path: 'totalReplies', 
+                populate: [
+                    { path: 'user', model: 'User' }, 
+                    { path: 'post', model: 'Post' }, 
+                ],
+
+    })
+        .sort({ time: -1 }); // Sort by time in descending order
 
         if (!reply) {
             return res.status(404).json({ message: 'Reply not found' });
@@ -65,6 +78,10 @@ const addNestedComment = async (req, res) => {
 
         if (typeof parentReply.reply !== 'number') {
             parentReply.reply = 0;
+        }
+
+        if (!Array.isArray(parentReply.totalReplies)) {
+            parentReply.totalReplies = []; // Ensure totalReplies is initialized as an array
         }
 
         parentReply.totalReplies.push(newReply);

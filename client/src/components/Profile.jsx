@@ -40,6 +40,7 @@ function Profile() {
         backgroundHeaderImage: null
     });
     const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
+    const [lastValidName, setLastValidName] = useState('');
 
     const handleImageClick = (url, type) => {
         setImageUrl(url);
@@ -61,6 +62,7 @@ function Profile() {
 
     const handleClosePopup = (updatedProfileData) => {
         setIsPopupOpen(false);
+        setIsImageOpen(false);
         if (updatedProfileData) {
             setProfileData(updatedProfileData);
             setUserData((prevUserData) => ({
@@ -84,22 +86,35 @@ function Profile() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+    
+                // Set user data
                 setUserData({ ...response.data.userProfile });
-                document.title = `${response.data.userProfile.originalUsername} (@${response.data.userProfile.formattedUsername}) / X`
+                
+                // Update document title
+                document.title = `${response.data.userProfile.originalUsername} (@${response.data.userProfile.formattedUsername}) / X`;
+    
+                // Get profile data
+                const profile = response.data.userProfile.profile;
+    
+                // Set profile-specific data
                 setProfileData({
-                    profileBio: response.data.userProfile.profile.profileBio || '',
-                    location: response.data.userProfile.profile.location || '',
-                    website: response.data.userProfile.profile.website || '',
-                    updatedName: response.data.userProfile.profile.updatedName || '',
-                    profilePicture: response.data.userProfile.profile.profilePicture || '',
-                    backgroundHeaderImage: response.data.userProfile.profile.backgroundHeaderImage || ''
+                    profileBio: profile.profileBio || '',
+                    location: profile.location || '',
+                    website: profile.website || '',
+                    updatedName: profile.updatedName || '', // Initial value
+                    profilePicture: profile.profilePicture || '',
+                    backgroundHeaderImage: profile.backgroundHeaderImage || ''
                 });
+    
+                // Set the last valid name
+                setLastValidName(profile.updatedName || '');
                 setRandomUser(response.data.randomUsers);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
+    
 
     useEffect(() => {
         fetchUserData(); 
@@ -133,7 +148,7 @@ function Profile() {
                         <div className='defaul-profile-image-profile'></div>
                         )}
                     <button onClick={handleOpenPopup} className='edit-profile-btn radius'>Edit profile</button>
-                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup} handleCloseImage={handleCloseImage}/>}
+                    {isPopupOpen && <EditProfilePopup profileData={profileData} setProfileData={setProfileData} onClose={handleClosePopup} onSave={handleClosePopup} />}
                 </div>
                 <div className='flex-column personal-info-section'>
                         {profileData && <span className='profile-user-name'>{profileData.updatedName}</span>}

@@ -152,6 +152,7 @@ const addPost = async (req, res) => {
                 gif,
                 time: formattedTime,
                 reply: 0,
+                totalReplies: [],
                 repost: 0,
                 likeCount: 0,
                 likes: [],

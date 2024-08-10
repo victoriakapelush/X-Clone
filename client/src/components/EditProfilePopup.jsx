@@ -15,6 +15,7 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave, handle
     const [formattedUsername, setFormattedUsername] = useState('');
     const profileImageInputRef = useRef(null);
     const backgroundImageInputRef = useRef(null);
+    const [lastValidName, setLastValidName] = useState(profileData.updatedName);
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('token');
@@ -23,20 +24,36 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave, handle
             setOriginalUsername(decoded.originalUsername);
             setFormattedUsername(decoded.originalUsername.toLowerCase().replace(/\s+/g, ''));
             setProfileData((prevData) => ({
-                ...prevData,
-                updatedName: decoded.originalUsername
+                ...prevData
             }));
         }
     }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setProfileData((prevData) => ({
-            ...prevData,
-            [name]: value.trim()
-        }));
+    
+        if (name === 'updatedName') {
+            if (value.trim()) {
+                setProfileData((prevData) => ({
+                    ...prevData,
+                    [name]: value.trim(),
+                }));
+                setLastValidName(value.trim()); 
+            } else {
+                // If input is empty, keep the last valid name
+                setProfileData((prevData) => ({
+                    ...prevData,
+                    [name]: lastValidName,
+                }));
+            }
+        } else {
+            setProfileData((prevData) => ({
+                ...prevData,
+                [name]: value.trim(),
+            }));
+        }
     };
-
+    
     useEffect(() => {
         if (profileData.profilePicture && typeof profileData.profilePicture === 'string') {
             setImageUrl(`http://localhost:3000/uploads/${profileData.profilePicture}`);
@@ -59,7 +76,6 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave, handle
             }
         };
     }, [profileData.backgroundHeaderImage, backgroundImageUrl]);
-    
 
     const handleProfileImageChange = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -131,7 +147,7 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave, handle
             formData.append('profileBio', profileData.profileBio);
             formData.append('location', profileData.location);
             formData.append('website', profileData.website);
-            formData.append('updatedName', profileData.updatedName);
+            formData.append('updatedName', profileData.updatedName || lastValidName);
             formData.append('profilePicture', profileData.profilePicture);
             formData.append('backgroundHeaderImage', profileData.backgroundHeaderImage);
             const response = await axios.post(`http://localhost:3000/profile/${formattedUsername}`, formData, {
@@ -140,7 +156,6 @@ function EditProfilePopup({ profileData, setProfileData, onClose, onSave, handle
                 'Content-Type': 'multipart/form-data'
             }
         });
-        handleCloseImage();
         onSave(response.data.profile);
         } catch (error) {
             console.error('Error updating profile:', error);

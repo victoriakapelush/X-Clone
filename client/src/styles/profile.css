@@ -156,7 +156,6 @@ svg {
 .personal-info-section {
     top: 38.8%;
     margin-top: 1rem;
-    width: 80%;
     max-width: 100%;
     height: fit-content;
 }
@@ -171,14 +170,13 @@ svg {
 .user-tag {
     padding-left: 1rem;
     color: var(--deep-grey);
-    margin-bottom: 1rem;
 }
 
 .user-profile-description {
     padding-left: 1rem;
-    margin-bottom: .5rem;
+    margin-bottom: 1rem;
     margin-right: 1rem;
-    width: 100%;
+    max-width: 100%;
     text-overflow: unset;
     overflow-wrap: break-word;
 }
@@ -227,7 +225,7 @@ svg {
 }
 
 .profile-nav {
-    margin: 2rem 0rem 0rem 0rem;
+    margin: 1rem 0rem 0rem 0rem;
     justify-content: space-between;
     max-width: 100%;
     height: auto;
