@@ -1,0 +1,51 @@
+.messages-container {
+    border-right: 1px solid var(--borders);
+    border-left: 1px solid var(--borders);
+    max-width: 100%;
+}
+
+.messages-profile-page {
+    height: 100%;
+}
+
+.message-svg {
+    color: rgb(239, 243, 244);
+    padding: 1re 1rem;
+    border-radius: 50%;
+}
+
+.message-svg:hover {
+    background-color: var(--borders);
+}
+
+.messages-container header {
+    max-width: 100%;
+    align-items: center;
+    margin: 1rem 1rem;
+    justify-content: space-between;
+}
+
+h1, h2 {
+    margin: 0;
+}
+
+.messages-container header h2 {
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+.message-welcome {
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+.message-welcome div {
+    color: var(--deep-grey);
+    margin: .5rem 1rem;
+}
+
+.write-message {
+    align-self: center !important;
+}
+

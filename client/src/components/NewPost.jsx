@@ -48,6 +48,7 @@ function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, hand
                     }    
                         return (
                             <div key={index} className='post flex-column'>
+                                <Link to={`/${userData.formattedUsername}/status/${post._id}`} >
                                 <div className='flex-row'>
                                     {userData?.profile?.profilePicture ? (
                                         <img
@@ -71,6 +72,7 @@ function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, hand
                                         )}                                    
                                         </div>
                                     </div>
+                                    </Link>
                                 <div className='flex-row post-icons-container'>
                                     <div>
                                         <div className="icon-container color-hover flex-row" id="blue-svg" onClick={() => handlePostClick(post)}>

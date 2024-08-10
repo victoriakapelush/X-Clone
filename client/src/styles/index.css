@@ -26,6 +26,7 @@
   --blue: rgb(29, 155, 240);
   --deep-grey: rgb(113, 118, 123);
   --opacity: rgba(255, 255, 255, 0.03);
+  --borders: rgb(47, 51, 54);
 }
 
 #root {
@@ -96,7 +97,7 @@ body, html {
 }
 
 .vertical-line-reply {
-  border-left: 2px solid var(--deep-grey);
+  border-left: 2px solid var(--borders);
   height: 100%;
 }
 
@@ -389,7 +390,7 @@ a:hover, a:visited {
   height: 2rem;
   margin-bottom: 1.2rem;
   border-radius: 7px;
-  border: 1px solid var(--deep-grey);
+  border: 1px solid var(--borders);
   font-size: 1rem;
   background-color: transparent;
   padding: .5rem .5rem;
@@ -466,7 +467,7 @@ a:hover, a:visited {
 }
 
 .or-border-line {
-  border-top: 1px solid var(--deep-grey);
+  border-top: 1px solid var(--borders);
   width: 10rem;
   margin-left: 8px;
   margin-right: 8px;
@@ -534,7 +535,7 @@ a:hover, a:visited {
   width: 20rem;
   padding: 1rem 1rem;
   border: 1px solid black;
-  align-self: flex-start;
+  align-self: center;
   text-align: center;
   color: var(--white);
   background-color: var(--blue);
@@ -552,7 +553,7 @@ a:hover, a:visited {
   width: 20rem;
   padding: 1rem 1rem;
   border: 1px solid black;
-  align-self: flex-start;
+  align-self: center;
   text-align: center;
   color: var(--white);
   background-color: transparent;
@@ -568,8 +569,8 @@ a:hover, a:visited {
   max-width: 100%;
   height: 100%;
   margin-right: 1.5rem;
-  border-right: 1px solid var(--deep-grey);
-  border-left: 1px solid var(--deep-grey);
+  border-right: 1px solid var(--borders);
+  border-left: 1px solid var(--borders);
 }
 
 .header-and-mini-header {
@@ -599,7 +600,7 @@ a:hover, a:visited {
 }
 
 .mini-header-btns-container {
-  border-bottom: 1px solid var(--deep-grey);
+  border-bottom: 1px solid var(--borders);
   width: 100%;
 }
 
@@ -656,7 +657,7 @@ a:hover, a:visited {
 }
 
 .button-and-upload-pic {
-  border-top: 1px solid var(--deep-grey);
+  border-top: 1px solid var(--borders);
 }
 
 .form-container-new-post form .post-textarea {
@@ -749,7 +750,7 @@ a:hover, a:visited {
 }
 
 .premium-subscribe-container {
-  border: 1px solid var(--deep-grey);
+  border: 1px solid var(--borders);
   border-radius: 20px;
   padding: 1rem 0 .5rem 0;
   height: fit-content;
@@ -853,7 +854,7 @@ a:hover, a:visited {
 /* SINGLE POST */
 
 .post {
-  border-top: 1px solid var(--deep-grey);
+  border-top: 1px solid var(--borders);
   max-width: 100%;
   height: auto;
 }
@@ -1166,11 +1167,13 @@ svg {
 
   .links-container {
     width: 5rem;
-    padding: 0 1rem 0 1rem;
+    padding: 0 .5rem 0 0;
+    align-items: center;
   }
 
-  .av-links-container {
+  .nav-links-container {
     justify-content: flex-start;
+    padding: .75rem .75rem .75rem .75rem;
   }
 
   .nav-links {
@@ -1182,7 +1185,8 @@ svg {
   }
 
   .new-post-btn, .logout-btn {
-    width: 5rem;
+    width: fit-content;
+    font-size: .8rem;
   }
 
   .logout-btn {

@@ -2,10 +2,10 @@
 /* eslint-disable react/prop-types */
 import '../styles/replies.css';
 import { Link, useParams } from 'react-router-dom';
+import UseNewPostHook from './UseNewPostHook'
 
 function PostAndComment({ reply, formattedTime }) {
-
-    console.log('REPLY', reply)
+    const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
 
     return (
         <div className='flex-column popup-reply-post'>
@@ -17,16 +17,16 @@ function PostAndComment({ reply, formattedTime }) {
                     </div>
                     <div className='reply-summary-post flex-column'>
                         {reply.post && reply.post.user.profile && <span> {reply.post.user.profile.updatedName} <span className='reply-replying-to'> @{reply.post.user.formattedUsername} · {reply.post.time}</span></span>}
-                        {reply.post.text && (
+                        {reply.post && reply.post.text && (
                                 <span className='reply-post-text'>{reply.post.text}</span>
                             )}
-                        {reply.post.image && (
+                        {reply.post && reply.post.image && (
                                 <img
                                     className='reply-post-text reply-post-image'
                                     src={`http://localhost:3000/uploads/${reply.post.image}`}
                                 />
                         )}
-                        {reply.post.gif && (
+                        {reply.post && reply.post.gif && (
                                 <img
                                     className='reply-post-text reply-post-gif'
                                     src={reply.post.gif}
