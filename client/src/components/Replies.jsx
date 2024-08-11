@@ -36,7 +36,8 @@ function Replies({ randomUser }) {
                     Authorization: `Bearer ${token}` 
                   }
                 });
-                setReplies(response.data.replies);
+                setReplies(response.data.posts);
+                console.log(response.data.posts)
             } catch (err) {
                 console.error('Error fetching replies: ', err);
             }

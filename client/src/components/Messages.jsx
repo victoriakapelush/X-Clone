@@ -27,6 +27,11 @@ function Messages() {
                     <button className='new-post-btn radius write-message'>Write a message</button>
                 </main>
             </div>
+            <div className='profile-container messages-container flex-column no-left-border'>
+                <header className='flex-row'>
+                    <h2>Conversations</h2>
+                </header>
+            </div>
         </div>
     )
 }

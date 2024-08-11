@@ -1,8 +1,8 @@
 .profile-container {
     margin: 0;
     margin-right: 2rem;
-    border-right: 1px solid var(--deep-grey);
-    border-left: 1px solid var(--deep-grey);
+    border-right: 1px solid var(--borders);
+    border-left: 1px solid var(--borders);
     width: 80%;
     max-width: 100%;
     height: 100%;
@@ -283,7 +283,7 @@ svg {
 }
 
 .random-users-new-post-top-border {
-    border-top: 1px solid var(--deep-grey);
+    border-top: 1px solid var(--borders);
 }
 
 

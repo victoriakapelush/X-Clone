@@ -35,7 +35,7 @@ function HomeExtra({ randomUser }) {
                 <div className='premium-paragraph'>
                     <p>Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
                 </div>
-                <button className='new-post-btn radius smaller-size'>Subscribe</button>
+                <button className='new-post-btn radius smaller-size premium-button'>Subscribe</button>
             </div>
             <div className='flex-column premium-subscribe-container'>
                 <div className='premium-header'>

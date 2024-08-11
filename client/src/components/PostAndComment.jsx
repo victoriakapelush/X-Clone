@@ -8,37 +8,37 @@ function PostAndComment({ reply, formattedTime }) {
     const { postData, bookmarkedStates, handleBookmark, likedStates, handleLike, getPost } = UseNewPostHook();
 
     return (
-        <div className='flex-column popup-reply-post'>
-            <Link to={`/${reply.post?.user.formattedUsername}/status/${reply.post?._id}`}>            
+        <div className='flex-column popup-reply-post horizontal-line-replies-section'>
+            <Link to={`/${reply.postUser.formattedUsername}/status/${reply._id}`}>            
                 <div className='flex-row comment-hover'>
                     <div className='pic-vertical-line-box flex-column'>
-                        {reply.post && reply.post.user.profile && <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${reply.post.user.profile.profilePicture}`} />}
+                        {reply.postUser && reply.postUser.profile && <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${reply.postUser.profile.profilePicture}`} />}
                         <div className='vertical-line-reply'></div>
                     </div>
                     <div className='reply-summary-post flex-column'>
-                        {reply.post && reply.post.user.profile && <span> {reply.post.user.profile.updatedName} <span className='reply-replying-to'> @{reply.post.user.formattedUsername} · {reply.post.time}</span></span>}
-                        {reply.post && reply.post.text && (
-                                <span className='reply-post-text'>{reply.post.text}</span>
+                        {reply.postUser && reply.postUser.profile && <span> {reply.postUser.profile.updatedName} <span className='reply-replying-to'> @{reply.postUser.formattedUsername} · {reply.time}</span></span>}
+                        {reply && reply.text && (
+                                <span className='reply-post-text'>{reply.text}</span>
                             )}
-                        {reply.post && reply.post.image && (
+                        {reply && reply.image && (
                                 <img
                                     className='reply-post-text reply-post-image'
-                                    src={`http://localhost:3000/uploads/${reply.post.image}`}
+                                    src={`http://localhost:3000/uploads/${reply.image}`}
                                 />
                         )}
-                        {reply.post && reply.post.gif && (
+                        {reply && reply.gif && (
                                 <img
                                     className='reply-post-text reply-post-gif'
-                                    src={reply.post.gif}
+                                    src={reply.gif}
                                 />
                         )}                        
-                        {reply.post && reply.post.user && <span className='reply-replying-to'>Replying to <Link to={`/profile/${reply.post.user.formattedUsername}`} className='replying-to-blue'> @{reply.post.user.formattedUsername}</Link></span>}
+                        {reply && reply.postUser && <span className='reply-replying-to'>Replying to <Link to={`/profile/${reply.postUser.formattedUsername}`} className='replying-to-blue'> @{reply.postUser.formattedUsername}</Link></span>}
                     </div>
                 </div>
             </Link>
-            {reply.post?.totalReplies && reply.post?.totalReplies.map((replyItem) => (
-                <Link key={replyItem._id} to={`/post/${reply.post?.user.formattedUsername}/status/${replyItem._id}`}>
-                    <div className='flex-row horizontal-line-replies-section comment-hover'>
+            {reply && reply.replies.map((replyItem) => (
+                <Link key={replyItem._id} to={`/post/${reply.postUser.formattedUsername}/status/${replyItem._id}`}>
+                    <div className='flex-row comment-hover'>
                     <div className='pic-vertical-line-box flex-column'>
                         <img className='profile-pic no-bottom-margin' src={`http://localhost:3000/uploads/${replyItem.user?.profile?.profilePicture}`} />
                     </div>

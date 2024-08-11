@@ -24,7 +24,6 @@
 
 .horizontal-line-replies-section {
     border-bottom: 1px solid var(--deep-grey);
-    padding-bottom: 1rem;
 }
 
 .comment-hover:hover {

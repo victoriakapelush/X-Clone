@@ -1,7 +1,6 @@
 .messages-container {
-    border-right: 1px solid var(--borders);
-    border-left: 1px solid var(--borders);
     max-width: 100%;
+    margin: 0;
 }
 
 .messages-profile-page {
@@ -49,3 +48,6 @@ h1, h2 {
     align-self: center !important;
 }
 
+.no-left-border {
+    border-left: none;
+}

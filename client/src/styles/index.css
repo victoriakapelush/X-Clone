@@ -549,6 +549,10 @@ a:hover, a:visited {
   color: var(--light-grey);
 }
 
+.premium-button {
+  align-self: flex-start;
+}
+
 .logout-btn {
   width: 20rem;
   padding: 1rem 1rem;
