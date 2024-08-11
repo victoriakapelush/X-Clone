@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const Reply = require('../models/Reply');
 const Post = require('../models/Post');
 
 const getRepliesByUser = async (req, res) => {
@@ -60,6 +59,9 @@ const getRepliesByUser = async (req, res) => {
                 },
             },
             {
+                $sort: { 'replies.time': -1 }, // Sort by the time of the replies
+            },
+            {
                 $group: {
                     _id: '$_id', // Group back by post ID
                     text: { $first: '$text' }, // Include other fields as needed
@@ -95,7 +97,7 @@ const getRepliesByUser = async (req, res) => {
                 },
             },
             {
-                $sort: { time: -1 }, // Sort by time in descending order
+                $sort: { time: -1 }, // Sort by post time in descending order
             },
         ]);
 

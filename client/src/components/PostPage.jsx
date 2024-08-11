@@ -11,7 +11,7 @@ import { format, formatDistanceToNow } from 'date-fns';
 import defaultProfileImage from '../assets/images/defaultProfileImage.jpg'
 import GifModal from './GifModal';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
-import UseNewPostHook from './UseNewPostHook'
+import useBookmarksHook from './UseBookmarksHook';
 
 function PostPage() {
     const navigate = useNavigate();
@@ -30,6 +30,7 @@ function PostPage() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const token = localStorage.getItem('token');
     const [userProfileData, setUserProfileData] = useState(null);
+    const { bookmarkedStates, handleBookmark, getUserData } = useBookmarksHook(post, setPost);
 
   const handleButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -296,8 +297,8 @@ useEffect(() => {
                         </div>
                             <div className='save-icons flex-row'>
                                 <div>
-                                    <div className='icon-container bookmark-icon color-hover' id="save-svg">                                        
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius'>
+                                    <div className={`icon-container bookmark-icon color-hover ${bookmarkedStates[post._id] ? 'bookmarked' : 'not-bookmarked'}`} id="save-svg" onClick={() => handleBookmark(post._id)}>                                        
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" className='radius' fill={bookmarkedStates[post._id] ? "bookmarked" : "not-bookmarked"}>
                                             <g>
                                                 <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
                                             </g>
