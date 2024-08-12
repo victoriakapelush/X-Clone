@@ -204,6 +204,7 @@ useEffect(() => {
                     return;
                 }
                 setPost(response.data.post);
+                console.log(response.data.post)
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }

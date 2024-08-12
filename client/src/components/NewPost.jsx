@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/profile.css';
 import { format, formatDistanceToNow } from 'date-fns';
-import ReplyPopup from './ReplyPopup'
+import ReplyPopup from './ReplyPopup';
+import ProfilePopup from './ProfilePopup';
 
 function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, handleLike, userData }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showToPost, setShowToPost] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState(null);
+    const [showProfilePopup, setShowProfilePopup] = useState(false);
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
     const handleOpenPopup = () => {
         setShowToPost(true);
@@ -28,9 +31,20 @@ function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, hand
         setSelectedPostId(post);
     }
 
+    const handleMouseOver = (e) => {
+        setTooltipPosition({ x: e.clientX, y: e.clientY });
+        setShowProfilePopup(true);
+      };
+    
+      const handleMouseOut = () => {
+        setShowProfilePopup(false);
+      };
+
+
     return (
         <div className='profile-post-new-post'>
             {showToPost && <ReplyPopup onClose={handleClosePopup} onSave={handleClosePopup} selectedPostId={selectedPostId} postData={postData} postId={selectedPostId}/>}
+            {showProfilePopup && <ProfilePopup profileData={userData.profile} position={tooltipPosition} />}
             {Array.isArray(postData) && postData.length > 0 ? (                
                 postData.map((post, index) => {
                     const postTime = post?.time ? new Date(post.time) : null;
@@ -54,12 +68,14 @@ function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, hand
                                         <img
                                             className='profile-pic'
                                             src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                                            onMouseOver={handleMouseOver}
+                                            onMouseOut={handleMouseOut}
                                         />
                                     ) : (
                                         <div className='default-profile-image-post'></div>
                                     )}
                                     <div className='flex-column post-box'>
-                                        <Link className='link-to-profile'>
+                                        <Link className='link-to-profile' onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
                                             <span className='user-name'>{userData?.profile?.updatedName} </span>
                                             <span className='username-name'>@{userData?.formattedUsername} · {formattedTime}</span>
                                         </Link>

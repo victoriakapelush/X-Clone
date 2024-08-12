@@ -37,7 +37,6 @@ function Replies({ randomUser }) {
                   }
                 });
                 setReplies(response.data.posts);
-                console.log(response.data.posts)
             } catch (err) {
                 console.error('Error fetching replies: ', err);
             }
