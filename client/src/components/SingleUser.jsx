@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import useFollow from './FollowUnfollowHook';
+import ProfilePopup from './ProfilePopup';
 
 const SingleUser = ({ user }) => {
     const { isFollowing, handleFollow } = useFollow(user);
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [showProfilePopup, setShowProfilePopup] = useState(false);
 
     return (
         <div className='who-tofollow-container flex-column'>

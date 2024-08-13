@@ -1198,7 +1198,11 @@ svg {
   }
 
   /* PROFILE */
-
-
+  .profile-pic {
+    min-width: 3rem;
+    min-height: 3rem;
+    border-radius: 50%;
+    margin: 10px 10px; 
+  }
 
 }

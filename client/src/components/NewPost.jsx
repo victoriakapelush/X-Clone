@@ -44,7 +44,7 @@ function NewPost({ postData, bookmarkedStates, handleBookmark, likedStates, hand
     return (
         <div className='profile-post-new-post'>
             {showToPost && <ReplyPopup onClose={handleClosePopup} onSave={handleClosePopup} selectedPostId={selectedPostId} postData={postData} postId={selectedPostId}/>}
-            {showProfilePopup && <ProfilePopup profileData={userData.profile} position={tooltipPosition} />}
+            {showProfilePopup && <ProfilePopup userData={userData} position={tooltipPosition} />}
             {Array.isArray(postData) && postData.length > 0 ? (                
                 postData.map((post, index) => {
                     const postTime = post?.time ? new Date(post.time) : null;

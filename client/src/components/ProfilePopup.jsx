@@ -8,6 +8,8 @@ function ProfilePopup({ userData, position }) {
     const tooltipHeight = 80; 
     const tooltipWidth = 200; 
 
+    console.log(userData)
+
     let adjustedY = position.y + 10;
     let adjustedX = position.x + 10;
 
@@ -25,18 +27,17 @@ function ProfilePopup({ userData, position }) {
             top: adjustedY + 'px',
             left: adjustedX + 'px',
             position: 'fixed',
-        
-        }}
-        >
-      <div className="tooltip-content">
-        <img
-          className="tooltip-profile-pic"
-          src={`http://localhost:3000/uploads/${userData?.profile.profilePicture}`}
-          alt="Profile"
-        />
+        }}>
+      <div className="tooltip-content flex-column">
+        <img className="profile-pic tooltip-profile-pic" src={`http://localhost:3000/uploads/${userData?.profile.profilePicture}`}/>
         <div className="tooltip-info">
           <span className="tooltip-name">{userData?.profile.updatedName}</span>
           <span className="tooltip-username">@{userData?.formattedUsername}</span>
+        </div>
+        <span className='tooltip-bio'>{userData?.profile.profileBio}</span>
+        <div className='tooltip-following-info flex-row'>
+          <span className="tooltip-username"><span className='tooltip-following-count'>{userData?.profile.followers || 0}</span> followers</span>
+          <span className="tooltip-username"><span className='tooltip-following-count'>{userData?.profile.following || 0}</span> following</span>
         </div>
       </div>
     </div>

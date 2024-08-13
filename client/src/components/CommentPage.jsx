@@ -155,9 +155,19 @@ function CommentPage() {
         }
     }, [formattedUsername]);
     
+    const getFirstFewWords = (text, wordCount) => {
+        return text.split(' ').slice(0, wordCount).join(' ');
+    };
+
+    console.log(post)
+
+    
     useEffect(() => {
-        document.title = 'Home / X';
-    }, []);
+        if (post && post.text) {
+            const firstWords = getFirstFewWords(post.text, 10);
+            document.title = `${post.user.originalUsername} on X: "${firstWords}" / X`;
+        }
+    }, [post]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
