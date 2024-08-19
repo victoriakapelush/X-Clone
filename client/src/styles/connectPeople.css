@@ -1,111 +1,113 @@
 .connect-h2 h2 {
-    margin: 0;
-    font-weight: bold;
+  margin: 0;
+  font-weight: bold;
 }
 
 .connect-center-container {
-    width: 40rem;
-    border-right: 1px solid var(--deep-grey);
-    border-left: 1px solid var(--deep-grey);
-    margin-right: 3rem;
+  width: 40rem;
+  border-right: 1px solid var(--deep-grey);
+  border-left: 1px solid var(--deep-grey);
+  margin-right: 3rem;
 }
 
 .connect-center-container header {
-    gap: 1rem;
-    align-items: center;
-    border-bottom: 1px solid var(--deep-grey);
-    padding: .3rem .3rem;
+  gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid var(--deep-grey);
+  padding: 0.3rem 0.3rem;
 }
 
 .connect-h2-suggested {
-    padding: 1rem 1rem 1rem 1rem;
-    margin: 0;
+  padding: 1rem 1rem 1rem 1rem;
+  margin: 0;
 }
 
 .brief-profile-container {
-    max-width: 100%;
-    height: auto;
-    padding: .5rem 1rem .5rem 1rem;
+  max-width: 100%;
+  height: auto;
+  padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 .brief-profile-container:hover {
-    background-color: var(--opacity);
+  background-color: var(--opacity);
 }
 
 .brief-profile-box {
-    justify-content: space-between;
-    align-items: center;
-    max-width: 100%;
-    height: auto;
-    width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  height: auto;
+  width: 100%;
 }
 
 .brief-profile-single-user {
-    gap: 1rem;
-    align-items: center;
+  gap: 1rem;
+  align-items: center;
 }
 
-  .who-tofollow-image-box img, .who-tofollow-image-box div {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-  }
+.who-tofollow-image-box img,
+.who-tofollow-image-box div {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
 
-  .brief-profile-bio {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: wrap;
-    padding-left: 5.2rem;
-    margin: 0;
-  }
+.brief-profile-bio {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+  padding-left: 5.2rem;
+  margin: 0;
+}
 
-  .brief-profile-name-box {
-    max-width: 350px;
-    width: 100%;
-    box-sizing: border-box;
-    word-wrap: break-word;
-  }
+.brief-profile-name-box {
+  max-width: 350px;
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
 
-  .who-tofollow-btn {
-    margin-right: 1rem;
-  }
-  
-  .who-tofollow-btn button, .who-tofollow-btn button:hover {
-    background-color: var(--white);
-    color: var(--black);
-    cursor: pointer;
-    padding: .5rem .5rem;
-    font-size: .9rem;
-    font-weight: 600;
-    border: 1px solid transparent;
-  }
-  
-  .who-tofollow-namelink {
-    font-weight: 600;
-  }
-  
-  .who-tofollow-iglink {
-    font-weight: lighter;
-    color: var(--deep-grey);
-  }
-  
-  .no-profile-picture {
-    background-color: var(--opacity);
-  }
+.who-tofollow-btn {
+  margin-right: 1rem;
+}
 
-  .profile-icon-back {
-    background-color: transparent;
-    border: none;
-  }
+.who-tofollow-btn button,
+.who-tofollow-btn button:hover {
+  background-color: var(--white);
+  color: var(--black);
+  cursor: pointer;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
 
-  .profile-icon-back img {
-    margin: 0;
-  }
+.who-tofollow-namelink {
+  font-weight: 600;
+}
 
-  .no-comments-yet {
-    font-size: 1rem;
-    text-align: center;
-    padding-top: 2rem;
-    color: var(--deep-grey);
-  }
+.who-tofollow-iglink {
+  font-weight: lighter;
+  color: var(--deep-grey);
+}
+
+.no-profile-picture {
+  background-color: var(--opacity);
+}
+
+.profile-icon-back {
+  background-color: transparent;
+  border: none;
+}
+
+.profile-icon-back img {
+  margin: 0;
+}
+
+.no-comments-yet {
+  font-size: 1rem;
+  text-align: center;
+  padding-top: 2rem;
+  color: var(--deep-grey);
+}

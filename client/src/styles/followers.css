@@ -1,17 +1,17 @@
 .no-followers-message {
-    justify-content: center;
-    align-items: center;
-    max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
 }
 
 .no-followers-message h2 {
-    font-size: 2.5rem;
-    margin: 2rem 0 0 0;
-    width: 75%;
+  font-size: 2.5rem;
+  margin: 2rem 0 0 0;
+  width: 75%;
 }
 
 .no-followers-message p {
-    font-size: 1rem;
-    color: var(--deep-grey);
-    width: 75%;
+  font-size: 1rem;
+  color: var(--deep-grey);
+  width: 75%;
 }

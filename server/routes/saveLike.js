@@ -1,8 +1,8 @@
-const express = require('express');
-const { saveLikeCount } = require('../controllers/likeCountController');
+const express = require("express");
+const { saveLikeCount } = require("../controllers/likeCountController");
 const router = express.Router();
-const { verifyJWT } = require('../controllers/loginController');
+const { verifyJWT } = require("../controllers/loginController");
 
-router.put('/:formattedUsername', verifyJWT, saveLikeCount);
+router.put("/:formattedUsername", verifyJWT, saveLikeCount);
 
 module.exports = router;

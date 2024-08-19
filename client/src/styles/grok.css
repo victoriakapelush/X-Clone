@@ -1,39 +1,41 @@
 .grok-page-container {
-    height: 100%;
+  height: 100%;
 }
 
 .grok-middle-of-page {
-    border-right: 1px solid var(--deep-grey);
-    border-left: 1px solid var(--deep-grey);
-    margin-right: 2rem;
-    height: 100%;
-    align-items: center;
-    width: 35rem;
+  border-right: 1px solid var(--deep-grey);
+  border-left: 1px solid var(--deep-grey);
+  margin-right: 2rem;
+  height: 100%;
+  align-items: center;
+  width: 35rem;
 }
 
-.grok-middle-of-page h1, .grok-middle-of-page p, .grok-middle-of-page button {
-    margin: 0;
+.grok-middle-of-page h1,
+.grok-middle-of-page p,
+.grok-middle-of-page button {
+  margin: 0;
 }
 
 .grok-middle-of-page h1 {
-    padding-top: 5rem;
-    font-weight: bold;
-    font-size: 2.5rem;
+  padding-top: 5rem;
+  font-weight: bold;
+  font-size: 2.5rem;
 }
 
 .grok-middle-of-page p {
-    padding: 1rem 1rem 1.5rem 1rem;
-    color: var(--deep-grey);
-    font-size: larger;
-    text-align: center;
+  padding: 1rem 1rem 1.5rem 1rem;
+  color: var(--deep-grey);
+  font-size: larger;
+  text-align: center;
 }
 
 .grok-middle-of-page button {
-    padding: .7rem 1rem;
-    border: 1px solid var(--white);
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    color: var(--black);
-    border-radius: 20px;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--white);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--black);
+  border-radius: 20px;
 }

@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getTrendingTags } = require('../controllers/getTrendingTagsController');
-const { verifyJWT } = require('../controllers/loginController');
+const { getTrendingTags } = require("../controllers/getTrendingTagsController");
+const { verifyJWT } = require("../controllers/loginController");
 
-router.get('/:formattedUsername', verifyJWT, getTrendingTags);
+router.get("/:formattedUsername", verifyJWT, getTrendingTags);
 
 module.exports = router;

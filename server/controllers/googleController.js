@@ -1,6 +1,6 @@
-const { OAuth2Client } = require('google-auth-library');
-const User = require('../models/User'); 
-const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require("google-auth-library");
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 const client = new OAuth2Client(process.env.clientID);
 
@@ -23,12 +23,14 @@ const googleAuth = async (req, res) => {
     }
 
     // Generate a JWT
-    const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.json({ success: true, token: jwtToken });
   } catch (error) {
-    console.error('Error verifying Google ID token', error);
-    res.status(400).json({ success: false, message: 'Invalid token' });
+    console.error("Error verifying Google ID token", error);
+    res.status(400).json({ success: false, message: "Invalid token" });
   }
 };
 

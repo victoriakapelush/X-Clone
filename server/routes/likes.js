@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getAllLikes } = require('../controllers/likesController');
-const { verifyJWT } = require('../controllers/loginController');
+const { getAllLikes } = require("../controllers/likesController");
+const { verifyJWT } = require("../controllers/loginController");
 
-router.get('/:formattedUsername', verifyJWT, getAllLikes);
+router.get("/:formattedUsername", verifyJWT, getAllLikes);
 
 module.exports = router;

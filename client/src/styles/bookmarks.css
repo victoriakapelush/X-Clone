@@ -1,73 +1,73 @@
 .bookmarks-header {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 
 .bookmarks-header h2 {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .bookmarks-search {
-    justify-content: center;
-    align-items: center;
-    margin: 1rem 0;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
 }
 
 .bookmarks-input {
-    border-radius: 20px;
-    width: 100%;
-    min-height: 2rem;
-    margin: 0 1rem;
-    background-color: transparent;
-    border: 2px solid var(--deep-grey);
-    outline: none;
-    justify-content: flex-start;
-    align-items: center;
+  border-radius: 20px;
+  width: 100%;
+  min-height: 2rem;
+  margin: 0 1rem;
+  background-color: transparent;
+  border: 2px solid var(--deep-grey);
+  outline: none;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .bookmarks-search-svg-container svg {
-    color: var(--deep-grey);
-    padding-left: 1rem;
-    padding-right: 1rem;
+  color: var(--deep-grey);
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .bookmarks-search-text {
-    color: var(--deep-grey);
-    padding: .5rem 0;
-    font-size: 1rem;
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    color: var(--white);
-    font-size: .9rem;
-    padding-right: 1rem;
+  color: var(--deep-grey);
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-size: 0.9rem;
+  padding-right: 1rem;
 }
 
 .bookmarks-input:focus-within {
-    border-color: rgb(29, 155, 240);
-    box-shadow: rgb(29, 155, 240);
+  border-color: rgb(29, 155, 240);
+  box-shadow: rgb(29, 155, 240);
 }
 
 .bookmarks-no-posts {
-    justify-content: center;
-    align-content: center;
-    width: 22rem;
-    margin: 0 auto;
+  justify-content: center;
+  align-content: center;
+  width: 22rem;
+  margin: 0 auto;
 }
 
-.bookmarks-no-posts h1, .bookmarks-no-posts p {
-    margin: 0;
-    padding-top: 1rem;
-    text-align: left;
+.bookmarks-no-posts h1,
+.bookmarks-no-posts p {
+  margin: 0;
+  padding-top: 1rem;
+  text-align: left;
 }
 
 .bookmarks-no-posts h1 {
-    font-weight: bold;
-    font-size: 2rem;
-    padding-top: 1rem;
+  font-weight: bold;
+  font-size: 2rem;
+  padding-top: 1rem;
 }
 
 .bookmarks-no-posts p {
-    color: var(--deep-grey);
+  color: var(--deep-grey);
 }
-

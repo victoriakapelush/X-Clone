@@ -1,140 +1,145 @@
 .edit-popup-container {
-    background-color: rgba(91, 112, 131, 0.4);    
-    height: 100vh; 
-    width: 100vw;  
-    justify-content: center; 
-    align-items: center; 
-    position: fixed; 
-    top: 0;
-    left: 0;
-    z-index: 1000;
+  background-color: rgba(91, 112, 131, 0.4);
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .edit-black-window {
-    background-color: rgb(0, 0, 0);
-    min-height: 400px;
-    height: 650px;
-    width: 30rem;
-    border-radius: 16px;
-    border: solid black;
-    box-sizing: border-box;
-    justify-content: space-between;
-    position: relative;
-    z-index: 1;
-    overflow: scroll;
+  background-color: rgb(0, 0, 0);
+  min-height: 400px;
+  height: 650px;
+  width: 30rem;
+  border-radius: 16px;
+  border: solid black;
+  box-sizing: border-box;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  overflow: scroll;
 }
 
 .edit-popup-header {
-    justify-content: space-between;
-    align-items: center;
-    padding: .5rem 1rem 0 .2rem;
-    position: relative;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem 0 0.2rem;
+  position: relative;
 }
 
 .edit-popup-close-header button {
-    background-color: var(--black);
-    border-color: transparent;
+  background-color: var(--black);
+  border-color: transparent;
 }
 
 .edit-popup-close-header button:hover {
-    background-color: var(--opacity);
+  background-color: var(--opacity);
 }
 
 .edit-popup-close-header {
-    gap: 2rem;
-    align-items: center;
+  gap: 2rem;
+  align-items: center;
 }
 
 .edit-popup-close-button svg {
-    width: 1.5rem;
-    height: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .edit-popup-close-header span {
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding-bottom: .2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-bottom: 0.2rem;
 }
 
 .edit-popup-save-btn button {
-    background-color: var(--white);
-    color: var(--black);
-    padding: .5rem 1rem;
-    border: 1px solid var(--white);
-    font-size: 1rem;
-    font-weight: bold;
+  background-color: var(--white);
+  color: var(--black);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--white);
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .uploads-container {
-    height: 200px;
-    width: 100%;
-    display: flex;
-    top: 4rem;
-    position: absolute;
-    background-color: var(--deep-grey);
+  height: 200px;
+  width: 100%;
+  display: flex;
+  top: 4rem;
+  position: absolute;
+  background-color: var(--deep-grey);
 }
 
-.uploads-container button, .edit-popup-btn-container {
-    margin: 0 auto;
-    align-self: center;
+.uploads-container button,
+.edit-popup-btn-container {
+  margin: 0 auto;
+  align-self: center;
 }
 
 .edit-popup-photo-upload-frame {
-    border: 3px solid var(--black);
-    border-radius: 50%;
-    justify-content: center;
-    padding: 2rem 2rem;
-    align-self: center;
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    position: absolute;
-    right: 22rem;
-    top: 13rem;
-    background-color: var(--deep-grey);
+  border: 3px solid var(--black);
+  border-radius: 50%;
+  justify-content: center;
+  padding: 2rem 2rem;
+  align-self: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 22rem;
+  top: 13rem;
+  background-color: var(--deep-grey);
 }
 
 .edit-popup-uploader-picture {
-    width: 3rem;
-    height: 3rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 .edit-popup-form {
-    position: absolute;
-    top: 22rem;
-    width: 95%;
-    align-self: center;
-    gap: 1.5rem;
+  position: absolute;
+  top: 22rem;
+  width: 95%;
+  align-self: center;
+  gap: 1.5rem;
 }
 
-.edit-popup-form input:focus, .edit-popup-form textarea:focus {
-    outline: none;
-    border-color: rgb(29, 155, 240);
-  }
+.edit-popup-form input:focus,
+.edit-popup-form textarea:focus {
+  outline: none;
+  border-color: rgb(29, 155, 240);
+}
 
-.edit-popup-form input, .edit-popup-form textarea {
-    background-color: var(--black);
-    border: 1px solid var(--deep-grey);
-    border-radius: 5px;
-    color: var(--deep-grey);
-    font-size: 1.1rem;
-    padding-left: .5rem;
-    padding-right: .5rem;
+.edit-popup-form input,
+.edit-popup-form textarea {
+  background-color: var(--black);
+  border: 1px solid var(--deep-grey);
+  border-radius: 5px;
+  color: var(--deep-grey);
+  font-size: 1.1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .edit-popup-form textarea {
-    padding-top: .5rem;
-    padding-right: .5rem;
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
 }
 
-.edit-popup-name-input, .edit-popup-location-input, .edit-popup-website-input {
-    height: 3rem;
-} 
+.edit-popup-name-input,
+.edit-popup-location-input,
+.edit-popup-website-input {
+  height: 3rem;
+}
 
 .edit-popup-bio-input {
-    height: 6rem;
+  height: 6rem;
 }
 
 .edit-popup-website-input {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }

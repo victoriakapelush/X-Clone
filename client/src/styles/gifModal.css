@@ -1,61 +1,62 @@
 .topost-black-window {
-    overflow: scroll;
-    max-height: 40rem;
+  overflow: scroll;
+  max-height: 40rem;
 }
 
 .gif-list {
-    max-width: 100%;
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, auto);
-    margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, auto);
+  margin: 0 auto;
 }
 
 .gif-item {
-    width: 100%;
-    height: auto;
-    box-sizing: border-box;
-    padding: .1rem .1rem;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  padding: 0.1rem 0.1rem;
 }
 
 .gif-modal-x-search {
-    position: sticky;
+  position: sticky;
 }
 
 .gif-modal-close-btn svg {
-    border-radius: 50%;
-    padding: 1rem 1rem;
-    font-size: 1rem;
-    color: var(--deep-grey);
+  border-radius: 50%;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  color: var(--deep-grey);
 }
 
 .gif-modal-serach-btn {
-    border-radius: 10%;
-    font-size: 1rem;
-    color: var(--deep-grey);
-    width: fit-content;
-    height: fit-content;
-    padding: 1rem 1rem;
+  border-radius: 10%;
+  font-size: 1rem;
+  color: var(--deep-grey);
+  width: fit-content;
+  height: fit-content;
+  padding: 1rem 1rem;
 }
 
-.gif-modal-close-btn svg:hover, .gif-modal-serach-btn:hover {
-    cursor: pointer;
-    background-color: var(--opacity);
+.gif-modal-close-btn svg:hover,
+.gif-modal-serach-btn:hover {
+  cursor: pointer;
+  background-color: var(--opacity);
 }
 
 .gif-modal-serach-bar {
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding-right: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: 1rem;
 }
 
 .gif-modal-x-search {
-    width: 100%;
-    justify-content: space-between;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .gif-modal-width-search {
-    width: 100%;
+  width: 100%;
 }

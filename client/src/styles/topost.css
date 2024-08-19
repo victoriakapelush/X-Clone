@@ -1,60 +1,56 @@
 .flexible-size {
-    height: fit-content;
+  height: fit-content;
 }
 
 .topost-popup-container {
-    background-color: rgba(91, 112, 131, 0.4);    
-    height: 100vh; 
-    width: 100vw;  
-    justify-content: flex-start; 
-    align-items: center; 
-    position: fixed; 
-    top: 0;
-    left: 0;
-    z-index: 1000;
+  background-color: rgba(91, 112, 131, 0.4);
+  height: 100vh;
+  width: 100vw;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .topost-black-window {
-    background-color: rgb(0, 0, 0);
-    width: 40rem;
-    border-radius: 16px;
-    border: solid black;
-    box-sizing: border-box;
-    justify-content: space-between;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    top: 50px;
+  background-color: rgb(0, 0, 0);
+  width: 40rem;
+  border-radius: 16px;
+  border: solid black;
+  box-sizing: border-box;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  top: 50px;
 }
 
-  .topost-textarea {
-    width: 100%;
-    background-color: transparent;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    color: var(--white);
-    font-size: 1.3rem;
-    padding-top: 1.4rem;
-    min-height: 9rem;
-  }
+.topost-textarea {
+  width: 100%;
+  background-color: transparent;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-size: 1.3rem;
+  padding-top: 1.4rem;
+  min-height: 9rem;
+}
 
-  .topost-insert-image {
-    height: 300px;
-    width: 100%;
-    display: flex;
-    top: 4rem;
-    background-color: var(--deep-grey);
-    margin-top: 1rem;
-  }
+.topost-insert-image {
+  height: 300px;
+  width: 100%;
+  display: flex;
+  top: 4rem;
+  background-color: var(--deep-grey);
+  margin-top: 1rem;
+}
 
-  @media only screen and (max-width: 768px) {
-    .topost-black-window {
-      max-width: 27rem;
-      top: 100px;
+@media only screen and (max-width: 768px) {
+  .topost-black-window {
+    max-width: 27rem;
+    top: 100px;
   }
 }
-  
-  
-  
-  

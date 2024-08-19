@@ -1,39 +1,39 @@
 .replies-container {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 
 #replies-who-to-follow {
-    width: 100%;
+  width: 100%;
 }
 
 .replies-profile-right {
-    width: 100%;
-    height: auto;
-    margin-top: 0 !important;
-    border-top: 1px solid var(--deep-grey);
-    padding-bottom: 1rem;
+  width: 100%;
+  height: auto;
+  margin-top: 0 !important;
+  border-top: 1px solid var(--deep-grey);
+  padding-bottom: 1rem;
 }
 
 .replies-who-to-follow-container {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .replies-header-who-tofollow {
-    padding-top: 1rem;
+  padding-top: 1rem;
 }
 
 .horizontal-line-replies-section {
-    border-bottom: 1px solid var(--deep-grey);
+  border-bottom: 1px solid var(--borders);
 }
 
 .comment-hover:hover {
-    background-color: var(--opacity);
+  background-color: var(--opacity);
 }
 
 .no-gap-replies {
-    gap: 0 !important;
+  gap: 0 !important;
 }
 
 .top-border-horizontal {
-    border-top: 1px solid var(--deep-grey);
+  border-top: 1px solid var(--borders);
 }

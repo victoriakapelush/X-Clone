@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 
 @font-face {
-  font-family: 'Grandslang Roman';
-  src: url('../assets/fonts/grandslang-roman.otf') format('opentype');
+  font-family: "Grandslang Roman";
+  src: url("../assets/fonts/grandslang-roman.otf") format("opentype");
 }
 
 @font-face {
-  font-family: 'Segoe UI';
+  font-family: "Segoe UI";
   src: url(../assets/fonts/segoeuithis.ttf);
 }
 
 @font-face {
-  font-family: 'Segoe UI bold';
+  font-family: "Segoe UI bold";
   src: url(../assets/fonts/segoeuithibd.ttf);
 }
 
@@ -21,7 +21,7 @@
   --beige: #f8ddaf;
   --plum: #e5a2f3;
   --blue: #3956f1;
-  --black: rgb(0,0,0);
+  --black: rgb(0, 0, 0);
   --white: rgb(231, 233, 234);
   --blue: rgb(29, 155, 240);
   --deep-grey: rgb(113, 118, 123);
@@ -33,8 +33,9 @@
   height: 100%;
 }
 
-body, html {
-  font-family: 'Segoe UI';
+body,
+html {
+  font-family: "Segoe UI";
   margin: 0;
   height: 100%;
   color: var(--white);
@@ -114,7 +115,7 @@ body, html {
   justify-content: flex-start;
   align-items: flex-start;
   margin-top: 10px;
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
   margin-right: 2rem;
 }
 
@@ -132,7 +133,8 @@ body, html {
   margin-top: 5px;
 }
 
-.reply-post-image, .reply-post-gif {
+.reply-post-image,
+.reply-post-gif {
   max-width: 100%;
   max-height: auto;
 }
@@ -142,7 +144,8 @@ a {
   color: var(--white);
 }
 
-a:hover, a:visited {
+a:hover,
+a:visited {
   text-decoration: none;
 }
 
@@ -170,14 +173,14 @@ a:hover, a:visited {
 .header {
   font-size: 4rem;
   letter-spacing: -1.2px;
-  font-family: 'Segoe UI bold';
+  font-family: "Segoe UI bold";
   padding-bottom: 3rem;
   margin: 0;
 }
 
 .join-today {
   font-size: 2rem;
-  font-family: 'Segoe UI bold';
+  font-family: "Segoe UI bold";
   padding-bottom: 2rem;
   margin: 0;
 }
@@ -200,10 +203,11 @@ a:hover, a:visited {
   height: 20px;
 }
 
-.new-acc-link, .google-btn {
+.new-acc-link,
+.google-btn {
   border-radius: 10px;
   width: 100%;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   margin-top: 1rem;
   text-align: center;
   font-size: 1rem;
@@ -218,7 +222,7 @@ a:hover, a:visited {
   justify-content: center;
   border: none;
   margin: 0;
-  padding: .1rem 0;
+  padding: 0.1rem 0;
   background-color: transparent;
 }
 
@@ -253,7 +257,7 @@ a:hover, a:visited {
 }
 
 .terms-of-service {
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .small-letters {
@@ -275,7 +279,7 @@ a:hover, a:visited {
   border: 1px solid var(--light-grey);
   border-radius: 10px;
   width: 100%;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   text-align: center;
   font-size: 1rem;
   font-weight: bold;
@@ -290,7 +294,7 @@ a:hover, a:visited {
 }
 
 .old-acc-link:hover {
-  background-color: rgba(29,155,240,0.1);
+  background-color: rgba(29, 155, 240, 0.1);
   cursor: pointer;
 }
 
@@ -383,21 +387,23 @@ a:hover, a:visited {
 }
 
 .form p {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
-.form input, .form-login input {
+.form input,
+.form-login input {
   height: 2rem;
   margin-bottom: 1.2rem;
   border-radius: 7px;
   border: 1px solid var(--borders);
   font-size: 1rem;
   background-color: transparent;
-  padding: .5rem .5rem;
+  padding: 0.5rem 0.5rem;
   color: var(--white);
 }
 
-.form input:focus, .form-login input:focus{
+.form input:focus,
+.form-login input:focus {
   outline: none;
   border-color: #007bff;
 }
@@ -405,7 +411,7 @@ a:hover, a:visited {
 .policy {
   font-weight: bold;
   color: var(--blue);
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .contact-support {
@@ -413,7 +419,7 @@ a:hover, a:visited {
   margin: 2rem 0;
   padding-top: 1rem;
   width: 60%;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 /* LOGIN PAGE */
@@ -497,11 +503,11 @@ a:hover, a:visited {
 }
 
 .nav-links {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   font-size: 1.3rem;
   color: var(--white);
   margin: 0;
-} 
+}
 
 .nav-links:active {
   font-weight: bold;
@@ -519,7 +525,7 @@ a:hover, a:visited {
   gap: 1rem;
   align-items: center;
   border: 1px solid transparent;
-  padding: .75rem 1.5rem .75rem .75rem;
+  padding: 0.75rem 1.5rem 0.75rem 0.75rem;
 }
 
 .nav-links-container:hover {
@@ -579,7 +585,7 @@ a:hover, a:visited {
 
 .header-and-mini-header {
   align-content: center;
-  gap: .3rem;
+  gap: 0.3rem;
   border-radius: 50%;
 }
 
@@ -593,7 +599,7 @@ a:hover, a:visited {
 
 #mini-header {
   justify-content: flex-start;
-  padding: .1rem .1rem .1rem .1rem;
+  padding: 0.1rem 0.1rem 0.1rem 0.1rem;
   border: 1px solid transparent;
   width: 3rem;
   height: 3rem;
@@ -667,9 +673,9 @@ a:hover, a:visited {
 .form-container-new-post form .post-textarea {
   width: 100%;
   background-color: transparent;
-  height: 5rem; 
+  height: 5rem;
   box-sizing: border-box;
-  resize: none; 
+  resize: none;
   border: none;
   outline: none;
   color: var(--white);
@@ -704,7 +710,7 @@ a:hover, a:visited {
 
 .new-post-btn.smaller-size {
   width: fit-content;
-  padding: 0.5rem .8rem;
+  padding: 0.5rem 0.8rem;
   font-size: 1rem;
   margin-bottom: 1rem;
 }
@@ -731,32 +737,33 @@ a:hover, a:visited {
 
 .trending-hashtag-container {
   max-width: 100%;
-  padding: .5rem 1rem .5rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   cursor: pointer;
-  gap: .2rem;
+  gap: 0.2rem;
 }
 
 .trending-hashtag-container:hover {
   background-color: var(--opacity);
 }
 
-.trending-name, .trending-number-posts {
+.trending-name,
+.trending-number-posts {
   color: var(--deep-grey);
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .trendingtag-post-limit {
-  text-overflow: ellipsis; 
-  white-space: nowrap;       
-  overflow: hidden;  
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   font-weight: light;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .premium-subscribe-container {
   border: 1px solid var(--borders);
   border-radius: 20px;
-  padding: 1rem 0 .5rem 0;
+  padding: 1rem 0 0.5rem 0;
   height: fit-content;
 }
 
@@ -766,7 +773,7 @@ a:hover, a:visited {
 
 .premium-header h3 {
   margin: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   font-weight: bold;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -780,7 +787,7 @@ a:hover, a:visited {
 
 .who-tofollow-container {
   width: 100%;
-  padding: .4rem 0 .4rem 0;
+  padding: 0.4rem 0 0.4rem 0;
 }
 
 .who-tofollow-container:hover {
@@ -794,10 +801,11 @@ a:hover, a:visited {
 }
 
 .who-tofollow-image-box {
-  padding: 0 .5rem 0 .7rem;
+  padding: 0 0.5rem 0 0.7rem;
 }
 
-.who-tofollow-image-box img, .who-tofollow-image-box div {
+.who-tofollow-image-box img,
+.who-tofollow-image-box div {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -818,18 +826,19 @@ a:hover, a:visited {
   margin-right: 1rem;
 }
 
-.who-tofollow-btn button, .who-tofollow-btn button:hover {
+.who-tofollow-btn button,
+.who-tofollow-btn button:hover {
   background-color: var(--white);
   color: var(--black);
   cursor: pointer;
-  padding: .5rem .5rem;
-  font-size: .9rem;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.9rem;
   font-weight: 600;
   border: 1px solid transparent;
 }
 
 .who-tofollow-name-box {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .who-tofollow-namelink {
@@ -875,7 +884,7 @@ a:hover, a:visited {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  margin: 10px 10px; 
+  margin: 10px 10px;
 }
 
 .defaul-profile-image-post {
@@ -885,11 +894,11 @@ a:hover, a:visited {
   min-height: 3rem;
   border-radius: 50%;
   background-color: var(--opacity);
-  margin: 10px 10px; 
+  margin: 10px 10px;
 }
 
 .post-icons-container {
-  margin-top: .4rem;
+  margin-top: 0.4rem;
   width: 100%;
   justify-content: space-around;
 }
@@ -899,7 +908,7 @@ a:hover, a:visited {
 }
 
 .post-text {
-  margin: 0 0 .5rem 0;
+  margin: 0 0 0.5rem 0;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -908,7 +917,7 @@ a:hover, a:visited {
 
 .post-text {
   display: -webkit-box;
-  -webkit-line-clamp: 10;  /* Number of lines to show */
+  -webkit-line-clamp: 10; /* Number of lines to show */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -918,7 +927,7 @@ a:hover, a:visited {
 }
 
 .post-text.expanded {
-  -webkit-line-clamp: unset; 
+  -webkit-line-clamp: unset;
   overflow: visible;
 }
 
@@ -942,7 +951,7 @@ a:hover, a:visited {
 }
 
 .save-icons {
-  gap: .7rem;
+  gap: 0.7rem;
   align-content: center;
 }
 
@@ -959,16 +968,16 @@ svg {
   user-select: none;
   vertical-align: text-bottom;
   height: 1.25em;
-  fill: currentColor; 
+  fill: currentColor;
   transition: fill 0.2s ease-in-out;
-  padding: .5rem .5rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .count {
-  color: var(--deep-grey); 
+  color: var(--deep-grey);
   margin: 0;
-  font-size: .9rem;
-  padding-left: .1rem;
+  font-size: 0.9rem;
+  padding-left: 0.1rem;
 }
 
 .color-hover {
@@ -1013,7 +1022,8 @@ svg {
   background-color: rgba(23, 191, 99, 0.1);
 }
 
-#send-svg:hover svg, #save-svg:hover svg {
+#send-svg:hover svg,
+#save-svg:hover svg {
   background-color: rgba(29, 155, 240, 0.1);
 }
 
@@ -1042,7 +1052,7 @@ svg {
 }
 
 .icon-container svg path {
-  fill: var(--deep-grey); 
+  fill: var(--deep-grey);
 }
 
 .bookmark-icon:hover svg path {
@@ -1073,7 +1083,7 @@ svg {
   max-width: 500px;
   width: 100%;
   height: auto;
-  margin: 10px 20px 0 0; 
+  margin: 10px 20px 0 0;
   box-sizing: border-box;
   word-wrap: break-word;
 }
@@ -1124,7 +1134,7 @@ svg {
   }
 
   .join-today {
-    font-size: 1.5rem;;
+    font-size: 1.5rem;
   }
 
   /* Signup Page */
@@ -1142,14 +1152,13 @@ svg {
   .form {
     width: 90%;
   }
-
 }
 
 /* MOBILE VERSION */
 
 @media only screen and (max-width: 768px) {
-
-  .home-container, .profile-page {
+  .home-container,
+  .profile-page {
     flex-wrap: nowrap;
   }
 
@@ -1171,13 +1180,13 @@ svg {
 
   .links-container {
     width: 5rem;
-    padding: 0 .5rem 0 0;
+    padding: 0 0.5rem 0 0;
     align-items: center;
   }
 
   .nav-links-container {
     justify-content: flex-start;
-    padding: .75rem .75rem .75rem .75rem;
+    padding: 0.75rem 0.75rem 0.75rem 0.75rem;
   }
 
   .nav-links {
@@ -1188,13 +1197,14 @@ svg {
     display: none;
   }
 
-  .new-post-btn, .logout-btn {
+  .new-post-btn,
+  .logout-btn {
     width: fit-content;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 
   .logout-btn {
-    margin-top: .2rem;
+    margin-top: 0.2rem;
   }
 
   /* PROFILE */
@@ -1202,7 +1212,6 @@ svg {
     min-width: 3rem;
     min-height: 3rem;
     border-radius: 50%;
-    margin: 10px 10px; 
+    margin: 10px 10px;
   }
-
 }
