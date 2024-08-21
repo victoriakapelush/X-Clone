@@ -17,10 +17,6 @@ function Replies({ randomUser }) {
   const { formattedUsername } = useContext(TokenContext);
   const [reply, setReplies] = useState([]);
   const { username } = useParams();
-  const { likedStates, handleLikePost, handleLikeReply } = useLikeSinglePost(
-    reply,
-    setReplies,
-  );
 
   function formatPostTime(postTime) {
     if (!postTime) return "Invalid date";
@@ -70,10 +66,6 @@ function Replies({ randomUser }) {
                 index={index}
                 reply={reply}
                 formattedTime={formattedTime}
-                setReplies={setReplies}
-                likedStates={likedStates}
-                handleLikePost={handleLikePost}
-                handleLikeReply={handleLikeReply}
               />
             </div>
           );

@@ -1,24 +1,20 @@
+const mongoose = require("mongoose");
 const Post = require("../models/Post");
 
 const getTrendingTags = async (req, res) => {
-  const loggedInUserId = req.user.id;
+  const loggedInUserId = new mongoose.Types.ObjectId(req.user.id);
 
   try {
     // Step 1: Aggregate tags from all posts except those by the logged-in user
     const tagsAggregation = await Post.aggregate([
       // Match posts that do not belong to the logged-in user
       { $match: { user: { $ne: loggedInUserId } } },
-      // Unwind tags array to get individual tags
       { $unwind: "$tags" },
-      // Group by tag and count occurrences
       { $group: { _id: "$tags", postCount: { $sum: 1 } } },
-      // Sort by count in descending order
-      { $sort: { count: -1 } },
-      // Limit to top 3 tags
+      { $sort: { postCount: -1 } },
       { $limit: 10 },
     ]);
 
-    // Prepare the list of trending tags
     const trendingTags = tagsAggregation.map((tag) => ({
       tag: tag._id,
       postCount: tag.postCount,
@@ -29,22 +25,29 @@ const getTrendingTags = async (req, res) => {
     const randomPostsPromises = trendingTagsArray.map((tag) => {
       return Post.aggregate([
         // Match posts that contain the current tag and are not by the logged-in user
-        { $match: { tags: tag, user: { $ne: loggedInUserId } } },
-        // Randomly pick one post
+        { $match: { tags: tag, user: { $ne: loggedInUserId } } }, // Ensure posts are not from the logged-in user
         { $sample: { size: 1 } },
       ]);
     });
 
-    // Wait for all random posts queries to complete
     const randomPostsResults = await Promise.all(randomPostsPromises);
 
-    // Prepare the response with one random post for each trending tag
+    // Step 3: Populate the user field in the random posts
+    const populatedRandomPostsPromises = randomPostsResults.map((posts) => {
+      if (posts.length > 0) {
+        return Post.populate(posts, { path: 'user' }); // Populate the user field
+      }
+      return [];
+    });
+
+    const populatedRandomPosts = await Promise.all(populatedRandomPostsPromises);
+
+    // Step 4: Prepare the response
     const response = trendingTags.map((tag, index) => ({
       tag: tag.tag,
-      randomPost:
-        randomPostsResults[index].length > 0
-          ? randomPostsResults[index][0]
-          : null,
+      randomPost: populatedRandomPosts[index].length > 0
+        ? populatedRandomPosts[index][0]
+        : null,
       postCount: tag.postCount,
     }));
 

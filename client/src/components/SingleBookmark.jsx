@@ -7,6 +7,10 @@ import useLike from "./UseLikeHook";
 import useBookmark from "./UseBookmarksHook";
 import TokenContext from "./TokenContext";
 import UserContext from "./UserContext";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import useGenerateLink from './GenerateLink';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SingleBookmark({
   bookmarkedPosts,
@@ -16,6 +20,15 @@ function SingleBookmark({
   handleLike,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { generatePostLink } = useGenerateLink();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (postId, username) => {
+    console.log(`Copied post link: ${postId}, username: ${username}`);
+    setCopied(true);
+    toast.success('Copied to clipboard');
+    setTimeout(() => setCopied(false), 2000);
+  };  
 
   const toggleText = () => {
     setIsExpanded(!isExpanded);
@@ -24,9 +37,11 @@ function SingleBookmark({
   return (
     <div>
       {bookmarkedPosts.length > 0 ? (
-        bookmarkedPosts.map((post, index) => (
+        bookmarkedPosts.map((post, index) => {
+          const postLink = generatePostLink(post._id, post.user.formattedUsername);
+          return (
           <div key={index} className="post random-post flex-column">
-            <div className="flex-row">
+            <Link to={`/${post.user.formattedUsername}/status/${post._id}`} className="flex-row">
               {post && post.user.profile.profilePicture ? (
                 <img
                   className="profile-pic"
@@ -37,7 +52,7 @@ function SingleBookmark({
               )}
               <div className="flex-column post-box">
                 <Link
-                  to={`/profile/${post.user?._id}`}
+                  to={`/profile/${post.user.formattedUsername}`}
                   className="link-to-profile"
                 >
                   <span className="user-name">
@@ -62,7 +77,7 @@ function SingleBookmark({
                   />
                 )}
               </div>
-            </div>
+            </Link>
             <div className="flex-row post-icons-container">
               <div>
                 <div
@@ -163,6 +178,13 @@ function SingleBookmark({
                     </svg>
                   </div>
                 </div>
+                <ToastContainer
+                    position="bottom-center" 
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    closeOnClick
+                  />  
+                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post.user.formattedUsername)}>
                 <div>
                   <div
                     className="icon-container sendpost-icon color-hover"
@@ -179,11 +201,13 @@ function SingleBookmark({
                     </svg>
                   </div>
                 </div>
+                </CopyToClipboard>
               </div>
             </div>
           </div>
-        ))
-      ) : (
+          );
+          })
+          ) : (
         <div className="bookmarks-no-posts flex-column">
           <h1>Save posts for later</h1>
           <p>Bookmark posts to easily find them again in the future.</p>

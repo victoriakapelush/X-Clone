@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
 
 const SingleTrendingTag = ({ tag }) => {
+
   return (
-    <Link to="/explore">
+    <div>
       <div className="trending-hashtag-container trending-tag flex-column">
         <span className="trending-name">#{tag.tag} · trending</span>
         <span className="trending-hashtag trendingtag-post-limit">
@@ -11,7 +11,7 @@ const SingleTrendingTag = ({ tag }) => {
         </span>
         <span className="trending-number-posts">{tag.postCount} posts</span>
       </div>
-    </Link>
+    </div>
   );
 };
 

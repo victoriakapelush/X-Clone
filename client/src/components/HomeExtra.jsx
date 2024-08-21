@@ -16,7 +16,6 @@ function HomeExtra({ randomUser }) {
     const loadTrendingTags = async () => {
       try {
         const tags = await fetchTrendingTags(formattedUsername, token);
-        console.log("Fetched Tags:", tags);
         setTrendingTags(tags);
       } catch (err) {
         console.log(err.message);
@@ -24,7 +23,7 @@ function HomeExtra({ randomUser }) {
     };
 
     loadTrendingTags();
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   return (
     <div className="profile-right flex-column profile-right-no-display">
@@ -48,7 +47,9 @@ function HomeExtra({ randomUser }) {
         </div>
         <div className="whatshappenning-container flex-column">
           {trendingTags.slice(0, 3).map((tag, index) => (
-            <SingleTrendingTag key={index} tag={tag} />
+            <Link key={index} to={`/${tag.randomPost.user.formattedUsername}/status/${tag.randomPost._id}`}>
+              <SingleTrendingTag tag={tag} />
+            </Link>
           ))}
         </div>
       </div>

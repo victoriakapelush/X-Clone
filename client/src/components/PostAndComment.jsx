@@ -9,11 +9,6 @@ import UseLikeHook from "./UseLikeHook";
 function PostAndComment({
   reply,
   formattedTime,
-  likedStates,
-  handleLikePost,
-  handleLikeReply,
-  setReplies,
-  index,
 }) {
   return (
     <div className="flex-column popup-reply-post horizontal-line-replies-section">
@@ -110,9 +105,8 @@ function PostAndComment({
           <div>
             <div>
               <div
-                className={`icon-container color-hover flex-row ${likedStates.repliesLikes[reply._id] ? "liked" : "not-liked"}`}
+                className="icon-container color-hover flex-row"
                 id="pink-svg"
-                onClick={() => handleLikePost(reply._id)}
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                   <g>
@@ -120,7 +114,7 @@ function PostAndComment({
                   </g>
                 </svg>
                 <span
-                  className={`count ${likedStates.repliesLikes[reply._id] ? "liked" : "not-liked"}`}
+                  className="count"
                 >
                   {reply.likeCount}
                 </span>
@@ -256,7 +250,7 @@ function PostAndComment({
                 <div>
                   <div>
                     <div
-                      className={`icon-container color-hover flex-row ${likedStates.likes ? "liked" : "not-liked"}`}
+                      className="icon-container color-hover flex-row"
                       id="pink-svg"
                     >
                       <svg
@@ -269,7 +263,7 @@ function PostAndComment({
                         </g>
                       </svg>
                       <span
-                        className={`count ${likedStates.likes ? "liked" : "not-liked"}`}
+                        className="count"
                       >
                         {replyItem.likeCount}
                       </span>

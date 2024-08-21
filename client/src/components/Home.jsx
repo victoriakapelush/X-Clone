@@ -204,7 +204,7 @@ function Home() {
             >
               <div className="blue-underline flex-column">
                 <Link
-                  to="/home"
+                  to="/home#foryou"
                   className={`for-you-tab ${activeTab === "foryou" ? "active" : ""}`}
                   onClick={() => handleTabChange("foryou")}
                 >
@@ -217,7 +217,7 @@ function Home() {
             >
               <div className="blue-underline flex-column">
                 <Link
-                  to="/home"
+                  to="/home#following"
                   className={`for-you-tab ${activeTab === "following" ? "active" : ""}`}
                   onClick={() => handleTabChange("following")}
                 >

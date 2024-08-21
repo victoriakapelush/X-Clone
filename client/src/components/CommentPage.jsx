@@ -11,6 +11,10 @@ import { format, formatDistanceToNow } from "date-fns";
 import defaultProfileImage from "../assets/images/defaultProfileImage.jpg";
 import GifModal from "./GifModal";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import usePostGenerateLink from './PostPageGenerateLink';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CommentPage() {
   const navigate = useNavigate();
@@ -29,6 +33,16 @@ function CommentPage() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const token = localStorage.getItem("token");
   const [userProfileData, setUserProfileData] = useState(null);
+  const { generatePostLink } = usePostGenerateLink();
+  const [copied, setCopied] = useState(false);
+  const postLink = generatePostLink(post?._id, post?.user?.formattedUsername);
+  console.log(post.reply)
+
+  const handleCopy = (postId, username) => {
+    setCopied(true);
+    toast.success('Copied to clipboard');
+    setTimeout(() => setCopied(false), 2000);
+  };   
 
   useEffect(() => {
     const getPostWithComments = async () => {
@@ -387,22 +401,30 @@ function CommentPage() {
                   </svg>
                 </div>
               </div>
-              <div>
-                <div
-                  className="icon-container sendpost-icon color-hover"
-                  id="send-svg"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    className="radius"
-                  >
-                    <g>
-                      <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
-                    </g>
-                  </svg>
-                </div>
-              </div>
+              <ToastContainer
+                    position="bottom-center" 
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    closeOnClick
+                  />                  
+                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post?.user.formattedUsername)}>
+                  <div>
+                    <div
+                      className="icon-container sendpost-icon color-hover"
+                      id="send-svg"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        className="radius"
+                      >
+                        <g>
+                          <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
+                  </CopyToClipboard>
             </div>
           </div>
           <div className="create-new-post-window">
@@ -671,22 +693,30 @@ function CommentPage() {
                         </svg>
                       </div>
                     </div>
-                    <div>
-                      <div
-                        className="icon-container sendpost-icon color-hover"
-                        id="send-svg"
+                    <ToastContainer
+                    position="bottom-center" 
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    closeOnClick
+                  />                  
+                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post?.user.formattedUsername)}>
+                  <div>
+                    <div
+                      className="icon-container sendpost-icon color-hover"
+                      id="send-svg"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        className="radius"
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                          className="radius"
-                        >
-                          <g>
-                            <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
-                          </g>
-                        </svg>
-                      </div>
+                        <g>
+                          <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
+                        </g>
+                      </svg>
                     </div>
+                  </div>
+                  </CopyToClipboard>
                   </div>
                 </div>
               </div>

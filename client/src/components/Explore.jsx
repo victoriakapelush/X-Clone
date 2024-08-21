@@ -33,13 +33,12 @@ function Explore({ user, tag }) {
     };
 
     loadTrendingTags();
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   useEffect(() => {
     const loadRandomUsers = async () => {
       try {
         const users = await randomUsers(formattedUsername, token);
-        console.log("Fetched Users:", users);
         setUsers(users);
       } catch (err) {
         console.log(err.message);
@@ -47,7 +46,7 @@ function Explore({ user, tag }) {
     };
 
     loadRandomUsers();
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   return (
     <div className="flex-row profile-page">
@@ -69,7 +68,9 @@ function Explore({ user, tag }) {
           </div>
         </div>
         {trendingTags.map((tag, index) => (
-          <SingleTrendingTag key={index} tag={tag} />
+              <Link key={index} to={`/${tag.randomPost.user.formattedUsername}/status/${tag.randomPost._id}`}>
+                <SingleTrendingTag tag={tag} />
+              </Link>
         ))}
       </div>
       <div className="profile-right flex-column">

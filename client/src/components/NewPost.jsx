@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
@@ -6,6 +7,10 @@ import "../styles/profile.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ReplyPopup from "./ReplyPopup";
 import ProfilePopup from "./ProfilePopup";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import useGenerateLink from './GenerateLink';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function NewPost({
   postData,
@@ -20,6 +25,14 @@ function NewPost({
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const { generatePostLink } = useGenerateLink();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (postId, username) => {
+    setCopied(true);
+    toast.success('Copied to clipboard');
+    setTimeout(() => setCopied(false), 2000);
+  };    
 
   const handleOpenPopup = () => {
     setShowToPost(true);
@@ -63,6 +76,7 @@ function NewPost({
       )}
       {Array.isArray(postData) && postData.length > 0 ? (
         postData.map((post, index) => {
+          const postLink = generatePostLink(post._id, post.user.formattedUsername);
           const postTime = post?.time ? new Date(post.time) : null;
           let formattedTime = "";
 
@@ -226,6 +240,13 @@ function NewPost({
                       </svg>
                     </div>
                   </div>
+                  <ToastContainer
+                    position="bottom-center" 
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    closeOnClick
+                  />                  
+                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post.user.formattedUsername)}>
                   <div>
                     <div
                       className="icon-container sendpost-icon color-hover"
@@ -242,6 +263,7 @@ function NewPost({
                       </svg>
                     </div>
                   </div>
+                  </CopyToClipboard>
                 </div>
               </div>
             </div>
