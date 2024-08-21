@@ -11,6 +11,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useRepost from './RepostHook';
 
 function NewPost({
   postData,
@@ -27,6 +28,17 @@ function NewPost({
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
+  const { repostPost, repostedPosts, loading, error } = useRepost();
+  const [reposted, setReposted] = useState(false);
+
+  const handleRepost = async (postId) => {
+    try {
+      await repostPost(postId);
+      setReposted(true);
+    } catch (err) {
+      console.error('Failed to repost:', err);
+    }
+  };
 
   const handleCopy = (postId, username) => {
     setCopied(true);
@@ -102,7 +114,7 @@ function NewPost({
                   </g>
                 </svg>
                 <div className="repost-name">{post.user.formattedUsername} reposted</div></div>}
-              <Link to={`/${userData.formattedUsername}/status/${post._id}`}>
+                <Link to={`/${post.repostedFrom ? post.repostedFrom.formattedUsername : userData.formattedUsername}/status/${post._id}`}>
                 <div className="flex-row">
                   {userData?.profile?.profilePicture ? (
                     <img
@@ -143,7 +155,6 @@ function NewPost({
                       <img
                         className="post-gif"
                         src={post.gif}
-                        alt="Posted GIF"
                       />
                     )}
                   </div>
@@ -168,7 +179,7 @@ function NewPost({
                     <span className="count">{post.reply}</span>
                   </div>
                 </div>
-                <div>
+                <div onClick={() => handleRepost(post._id)} disabled={loading}>
                   <div
                     className="icon-container color-hover flex-row"
                     id="green-svg"

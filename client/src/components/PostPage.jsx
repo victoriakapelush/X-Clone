@@ -274,25 +274,26 @@ function PostPage() {
         <div className="flex-column popup-reply-post">
           <div className="flex-row comment-hover">
             <div className="pic-vertical-line-box flex-column">
-              {post && post.user && post.user.profile && (
-                <img
-                  className="profile-pic no-bottom-margin"
-                  src={`http://localhost:3000/uploads/${post.user?.profile.profilePicture}`}
-                />
-              )}
+            {(post.repostedFrom ? post.repostedFrom.profile : post.user?.profile) && (
+              <img
+                className="profile-pic no-bottom-margin"
+                src={`http://localhost:3000/uploads/${(post.repostedFrom ? post.repostedFrom.profile : post.user.profile).profilePicture}`}
+              />
+            )}
               <div className="vertical-line-reply"></div>
             </div>
             <div className="reply-summary-post flex-column">
-              {post && post.user && post.user.profile && (
-                <span>
-                  {post.user.profile.updatedName}
-                  <span className="reply-replying-to">
-                    {" "}
-                    @{post?.user?.formattedUsername} ·{" "}
-                    {formatPostTime(post.time)}
-                  </span>
+            {(post.repostedFrom ? post.repostedFrom.profile : post.user?.profile) && (
+              <span>
+                {(post.repostedFrom ? post.repostedFrom.profile.updatedName : post.user.profile.updatedName)}
+                <span className="reply-replying-to">
+                  {" "}
+                  @{post.repostedFrom ? post.repostedFrom.user?.formattedUsername : post.user?.formattedUsername} ·{" "}
+                  {formatPostTime(post.time)}
                 </span>
-              )}
+              </span>
+            )}
+
               {post && post.text && (
                 <span className="reply-post-text">{post.text}</span>
               )}
@@ -308,16 +309,16 @@ function PostPage() {
                   src={post.gif}
                 />
               )}
-              {post && (
-                <span className="reply-replying-to">
-                  Replying to{" "}
-                  <Link
-                    to={`/profile/${post?.user?.formattedUsername}`}
-                    className="replying-to-blue"
-                  >
-                    {" "}
-                    @{post?.user?.formattedUsername}
-                  </Link>
+{(post.repostedFrom ? post.repostedFrom : post.user) && (
+  <span className="reply-replying-to">
+    Replying to{" "}
+    <Link
+      to={`/profile/${(post.repostedFrom ? post.repostedFrom.formattedUsername : post.user?.formattedUsername)}`}
+      className="replying-to-blue"
+    >
+      {" "}
+      @{(post.repostedFrom ? post.repostedFrom.formattedUsername : post.user?.formattedUsername)}
+    </Link>
                 </span>
               )}
             </div>

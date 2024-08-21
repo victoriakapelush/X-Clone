@@ -154,7 +154,12 @@ const getPost = async (req, res) => {
     }
     const posts = await Post.find({ user: user._id })
       .sort({ time: -1 })
-      .populate("user");
+      .populate("user")
+      .populate("repostedFrom")
+      .populate({
+        path: 'totalReplies.user', 
+        model: 'User' 
+    });
     res.status(200).json({ posts });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

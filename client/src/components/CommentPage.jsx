@@ -36,7 +36,6 @@ function CommentPage() {
   const { generatePostLink } = usePostGenerateLink();
   const [copied, setCopied] = useState(false);
   const postLink = generatePostLink(post?._id, post?.user?.formattedUsername);
-  console.log(post.reply);
 
   const handleCopy = (postId, username) => {
     setCopied(true);
