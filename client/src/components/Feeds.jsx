@@ -7,10 +7,10 @@ import HomeExtra from "./HomeExtra";
 import UserContext from "./UserContext";
 import UseFeedsHook from "./UseFeedsHook";
 import PostReplacement from "./PostReplacement";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import useGenerateLink from './GenerateLink';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import useGenerateLink from "./GenerateLink";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Feeds() {
   const { randomUser, setRandomUser } = useContext(UserContext);
@@ -29,9 +29,9 @@ function Feeds() {
 
   const handleCopy = (postId, username) => {
     setCopied(true);
-    toast.success('Copied to clipboard');
+    toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
-  };  
+  };
 
   const toggleText = () => {
     setIsExpanded(!isExpanded);
@@ -41,7 +41,7 @@ function Feeds() {
     document.title = "Feeds / X";
   }, []);
 
-  console.log(postData)
+  console.log(postData);
 
   return (
     <div className="flex-row profile-page">
@@ -49,13 +49,16 @@ function Feeds() {
       <div className="profile-container">
         {postData.length > 0 ? (
           postData.map((post, index) => {
-            const postLink = generatePostLink(post._id, post.user.formattedUsername);
+            const postLink = generatePostLink(
+              post._id,
+              post.user.formattedUsername,
+            );
             return (
-              <div
-                key={index}
-                className="post random-post flex-column"
-              >
-                <Link to={`/${post.user.formattedUsername}/status/${post._id}`} className="flex-row">
+              <div key={index} className="post random-post flex-column">
+                <Link
+                  to={`/${post.user.formattedUsername}/status/${post._id}`}
+                  className="flex-row"
+                >
                   {post && post.user.profile.profilePicture ? (
                     <img
                       className="profile-pic"
@@ -195,29 +198,34 @@ function Feeds() {
                       </div>
                     </div>
                     <ToastContainer
-                    position="bottom-center" 
-                    autoClose={1000}
-                    hideProgressBar={false}
-                    closeOnClick
-                  />                  
-                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post.user.formattedUsername)}>
-                  <div>
-                    <div
-                      className="icon-container sendpost-icon color-hover"
-                      id="send-svg"
+                      position="bottom-center"
+                      autoClose={1000}
+                      hideProgressBar={false}
+                      closeOnClick
+                    />
+                    <CopyToClipboard
+                      text={postLink}
+                      onCopy={() =>
+                        handleCopy(post._id, post.user.formattedUsername)
+                      }
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        className="radius"
-                      >
-                        <g>
-                          <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
-                        </g>
-                      </svg>
-                    </div>
-                  </div>
-                  </CopyToClipboard>
+                      <div>
+                        <div
+                          className="icon-container sendpost-icon color-hover"
+                          id="send-svg"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            className="radius"
+                          >
+                            <g>
+                              <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
+                            </g>
+                          </svg>
+                        </div>
+                      </div>
+                    </CopyToClipboard>
                   </div>
                 </div>
               </div>
@@ -229,6 +237,7 @@ function Feeds() {
       </div>
       <HomeExtra randomUser={randomUser} />
     </div>
-  )}
+  );
+}
 
-  export default Feeds;
+export default Feeds;

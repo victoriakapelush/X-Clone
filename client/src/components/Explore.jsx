@@ -68,9 +68,12 @@ function Explore({ user, tag }) {
           </div>
         </div>
         {trendingTags.map((tag, index) => (
-              <Link key={index} to={`/${tag.randomPost.user.formattedUsername}/status/${tag.randomPost._id}`}>
-                <SingleTrendingTag tag={tag} />
-              </Link>
+          <Link
+            key={index}
+            to={`/${tag.randomPost.user.formattedUsername}/status/${tag.randomPost._id}`}
+          >
+            <SingleTrendingTag tag={tag} />
+          </Link>
         ))}
       </div>
       <div className="profile-right flex-column">

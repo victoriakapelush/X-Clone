@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 const SingleTrendingTag = ({ tag }) => {
-
   return (
     <div>
       <div className="trending-hashtag-container trending-tag flex-column">

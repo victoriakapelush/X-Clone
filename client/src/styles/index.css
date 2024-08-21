@@ -876,6 +876,15 @@ a:visited {
   width: 100%;
 }
 
+.repost-line {
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.repost-name {
+  color: var(--deep-grey);
+}
+
 .post:hover {
   background-color: var(--opacity);
 }

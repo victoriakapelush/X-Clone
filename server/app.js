@@ -34,6 +34,7 @@ const followers = require("./routes/followers");
 const postComment = require("./routes/postComment");
 const replyComment = require("./routes/replyComment");
 const replies = require("./routes/replies");
+const repost = require('./routes/repost');
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -107,6 +108,7 @@ app.use("/api/followers", followers);
 app.use("/api/post", postComment);
 app.use("/api/reply", replyComment);
 app.use("/api/profile/replies", replies);
+app.use("/api/repost", repost);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -7,10 +7,10 @@ import "../styles/profile.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ReplyPopup from "./ReplyPopup";
 import ProfilePopup from "./ProfilePopup";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import useGenerateLink from './GenerateLink';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import useGenerateLink from "./GenerateLink";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function NewPost({
   postData,
@@ -30,9 +30,9 @@ function NewPost({
 
   const handleCopy = (postId, username) => {
     setCopied(true);
-    toast.success('Copied to clipboard');
+    toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
-  };    
+  };
 
   const handleOpenPopup = () => {
     setShowToPost(true);
@@ -76,7 +76,10 @@ function NewPost({
       )}
       {Array.isArray(postData) && postData.length > 0 ? (
         postData.map((post, index) => {
-          const postLink = generatePostLink(post._id, post.user.formattedUsername);
+          const postLink = generatePostLink(
+            post._id,
+            post.user.formattedUsername,
+          );
           const postTime = post?.time ? new Date(post.time) : null;
           let formattedTime = "";
 
@@ -92,6 +95,13 @@ function NewPost({
           }
           return (
             <div key={index} className="post flex-column">
+              {post.repostedFrom && <div className="icon-container flex-row repost-line">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <g>
+                    <path d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"></path>
+                  </g>
+                </svg>
+                <div className="repost-name">{post.user.formattedUsername} reposted</div></div>}
               <Link to={`/${userData.formattedUsername}/status/${post._id}`}>
                 <div className="flex-row">
                   {userData?.profile?.profilePicture ? (
@@ -172,7 +182,7 @@ function NewPost({
                         <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                       </g>
                     </svg>
-                    <span className="count">0</span>
+                    <span className="count">{post.repost}</span>
                   </div>
                 </div>
                 <div>
@@ -241,28 +251,33 @@ function NewPost({
                     </div>
                   </div>
                   <ToastContainer
-                    position="bottom-center" 
+                    position="bottom-center"
                     autoClose={1000}
                     hideProgressBar={false}
                     closeOnClick
-                  />                  
-                <CopyToClipboard text={postLink} onCopy={() => handleCopy(post._id, post.user.formattedUsername)}>
-                  <div>
-                    <div
-                      className="icon-container sendpost-icon color-hover"
-                      id="send-svg"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        className="radius"
+                  />
+                  <CopyToClipboard
+                    text={postLink}
+                    onCopy={() =>
+                      handleCopy(post._id, post.user.formattedUsername)
+                    }
+                  >
+                    <div>
+                      <div
+                        className="icon-container sendpost-icon color-hover"
+                        id="send-svg"
                       >
-                        <g>
-                          <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
-                        </g>
-                      </svg>
+                        <svg
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          className="radius"
+                        >
+                          <g>
+                            <path d="M12 2.59l5.7 5.7-1.41 1.42L13 6.41V16h-2V6.41l-3.3 3.3-1.41-1.42L12 2.59zM21 15l-.02 3.51c0 1.38-1.12 2.49-2.5 2.49H5.5C4.11 21 3 19.88 3 18.5V15h2v3.5c0 .28.22.5.5.5h12.98c.28 0 .5-.22.5-.5L19 15h2z"></path>
+                          </g>
+                        </svg>
+                      </div>
                     </div>
-                  </div>
                   </CopyToClipboard>
                 </div>
               </div>

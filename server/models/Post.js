@@ -15,6 +15,8 @@ const PostSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   bookmarks: [{ type: Schema.Types.ObjectId, ref: "User" }],
   tags: { type: [String] },
+  repostedFrom: { type: Schema.Types.ObjectId, ref: "User" },
+  originalPostId: { type: Schema.Types.ObjectId, ref: "Post" }
 });
 
 const Post = mongoose.model("Post", PostSchema);
