@@ -29,7 +29,7 @@ const repost = async (req, res) => {
 
         const repost = new Post({
             text: originalPost.text,
-            image: originalPost.filename,
+            image: originalPost.image,
             gif: originalPost.gif,
             time: originalPost.time,
             reply: originalPost.reply,

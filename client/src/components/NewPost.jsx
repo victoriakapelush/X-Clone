@@ -11,7 +11,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useRepost from './RepostHook';
+import useRepost from "./RepostHook";
 
 function NewPost({
   postData,
@@ -36,7 +36,7 @@ function NewPost({
       await repostPost(postId);
       setReposted(true);
     } catch (err) {
-      console.error('Failed to repost:', err);
+      console.error("Failed to repost:", err);
     }
   };
 
@@ -107,16 +107,35 @@ function NewPost({
           }
           return (
             <div key={index} className="post flex-column">
-              {post.repostedFrom && <div className="icon-container flex-row repost-line">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <g>
-                    <path d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"></path>
-                  </g>
-                </svg>
-                <div className="repost-name">{post.user.formattedUsername} reposted</div></div>}
-                <Link to={`/${post.repostedFrom ? post.repostedFrom.formattedUsername : userData.formattedUsername}/status/${post._id}`}>
+              {post.repostedFrom && (
+                <div className="icon-container flex-row repost-line">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <g>
+                      <path d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"></path>
+                    </g>
+                  </svg>
+                  <div className="repost-name">
+                    {post.user.formattedUsername} reposted
+                  </div>
+                </div>
+              )}
+              <Link
+                to={`/${post.repostedFrom ? post.repostedFrom.formattedUsername : userData.formattedUsername}/status/${post._id}`}
+              >
                 <div className="flex-row">
-                  {userData?.profile?.profilePicture ? (
+                {post.repostedFrom ? (
+                  post.repostedFrom.profile.profilePicture ? (
+                    <img
+                      className="profile-pic"
+                      src={`http://localhost:3000/uploads/${post.repostedFrom.profile.profilePicture}`}
+                      onMouseOver={handleMouseOver}
+                      onMouseOut={handleMouseOut}
+                    />
+                  ) : (
+                    <div className="default-profile-image-post"></div>
+                  )
+                ) : (
+                  userData?.profile?.profilePicture ? (
                     <img
                       className="profile-pic"
                       src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
@@ -125,20 +144,21 @@ function NewPost({
                     />
                   ) : (
                     <div className="default-profile-image-post"></div>
-                  )}
+                  )
+                )}
                   <div className="flex-column post-box">
-                    <Link
-                      className="link-to-profile"
-                      onMouseOver={handleMouseOver}
-                      onMouseOut={handleMouseOut}
-                    >
-                      <span className="user-name">
-                        {userData?.profile?.updatedName}{" "}
-                      </span>
-                      <span className="username-name">
-                        @{userData?.formattedUsername} · {formattedTime}
-                      </span>
-                    </Link>
+                  <Link
+                    className="link-to-profile"
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                  >
+                    <span className="user-name">
+                      {post.repostedFrom ? post.repostedFrom.profile.updatedName : userData?.profile?.updatedName}
+                    </span>
+                    <span className="username-name">{" "}
+                      @{post.repostedFrom ? post.repostedFrom.formattedUsername : userData?.formattedUsername} · {formattedTime}
+                    </span>
+                  </Link>
                     <p
                       className={`post-text ${isExpanded ? "expanded" : ""}`}
                       onClick={toggleText}
@@ -151,12 +171,7 @@ function NewPost({
                         src={`http://localhost:3000/uploads/${post.image}`}
                       />
                     )}
-                    {post.gif && (
-                      <img
-                        className="post-gif"
-                        src={post.gif}
-                      />
-                    )}
+                    {post.gif && <img className="post-gif" src={post.gif} />}
                   </div>
                 </div>
               </Link>

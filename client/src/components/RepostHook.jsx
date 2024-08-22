@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
+import { useState, useContext } from "react";
+import axios from "axios";
 import TokenContext from "./TokenContext";
 
 const useRepost = () => {
@@ -11,13 +11,16 @@ const useRepost = () => {
   const repostPost = async (postId) => {
     setLoading(true);
     try {
-      const response = await axios.post(`http://localhost:3000/api/repost/${formattedUsername}`, { postId },
+      const response = await axios.post(
+        `http://localhost:3000/api/repost/${formattedUsername}`,
+        { postId },
         {
-            headers: {
+          headers: {
             Authorization: `Bearer ${token}`,
           },
-       });
-      setRepostedPosts(prevPosts => [response.data, ...prevPosts]);
+        },
+      );
+      setRepostedPosts((prevPosts) => [response.data, ...prevPosts]);
       return response.data;
     } catch (err) {
       setError(err);
