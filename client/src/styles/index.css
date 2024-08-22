@@ -659,6 +659,7 @@ a:visited {
 .create-new-post-window-container {
   align-items: self-start;
   width: 100%;
+  border-bottom: 1px solid var(--borders);
 }
 
 .form-container-new-post {
@@ -867,9 +868,11 @@ a:visited {
 /* SINGLE POST */
 
 .post {
-  border-top: 1px solid var(--borders);
+  border-bottom: 1px solid var(--borders);
   max-width: 100%;
   height: auto;
+  padding-right: 1rem;
+  box-sizing: border-box;
 }
 
 .random-post {
@@ -1097,9 +1100,9 @@ svg {
   word-wrap: break-word;
 }
 
-.post-image {
+.post-image, .post-gif {
   max-width: 100%;
-  min-width: 10rem;
+  width: 100%;
   height: auto;
 }
 
@@ -1118,6 +1121,27 @@ svg {
 .username-name {
   font-weight: 500;
   color: rgb(107, 107, 107);
+}
+
+.close-btn {
+  margin: 0;
+  padding: 10px 10px;
+  color: var(--deep-grey);
+  cursor: pointer; 
+  background-color: transparent;
+  border: none;
+  align-self: flex-start;
+  margin-top: .5rem;
+}
+
+.close-btn:hover {
+  background-color: var(--opacity);
+}
+
+.pic-text-close-btn, .pic-and-text-post {
+  max-width: 100%;
+  width: 100%;
+  margin-right: 0;
 }
 
 /* MOBILE VERSION */

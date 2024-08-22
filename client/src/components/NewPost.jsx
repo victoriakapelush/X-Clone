@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import "../styles/profile.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ReplyPopup from "./ReplyPopup";
@@ -12,9 +12,14 @@ import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
+import TokenContext from './TokenContext';
+import DeletePostHook from './DeletePostHook';
 
 function NewPost({
   postData,
+  handleDeletePost,
+  postCount,
+  setPostCount,
   bookmarkedStates,
   handleBookmark,
   likedStates,
@@ -30,7 +35,9 @@ function NewPost({
   const [copied, setCopied] = useState(false);
   const { repostPost, repostedPosts, loading, error } = useRepost();
   const [reposted, setReposted] = useState(false);
-
+  const { username } = useParams();
+  const { formattedUsername, token } = useContext(TokenContext);
+  
   const handleRepost = async (postId) => {
     try {
       await repostPost(postId);
@@ -40,7 +47,7 @@ function NewPost({
     }
   };
 
-  const handleCopy = (postId, username) => {
+  const handleCopy = () => {
     setCopied(true);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
@@ -119,10 +126,8 @@ function NewPost({
                   </div>
                 </div>
               )}
-              <Link
-                to={`/${post.repostedFrom ? post.repostedFrom.formattedUsername : userData.formattedUsername}/status/${post._id}`}
-              >
-                <div className="flex-row">
+                <div className="flex-row pic-text-close-btn">
+                  <div className="flex-row pic-and-text-post">
                 {post.repostedFrom ? (
                   post.repostedFrom.profile.profilePicture ? (
                     <img
@@ -146,6 +151,9 @@ function NewPost({
                     <div className="default-profile-image-post"></div>
                   )
                 )}
+              <Link
+                to={`/${post.repostedFrom ? post.repostedFrom.formattedUsername : userData.formattedUsername}/status/${post._id}`}
+              >
                   <div className="flex-column post-box">
                   <Link
                     className="link-to-profile"
@@ -173,8 +181,12 @@ function NewPost({
                     )}
                     {post.gif && <img className="post-gif" src={post.gif} />}
                   </div>
+                  </Link>
+                  </div>
+                  {formattedUsername === username && (
+                    <button onClick={() => {handleDeletePost(post._id)}} className="close-btn radius only-visible">X</button>
+                  )}
                 </div>
-              </Link>
               <div className="flex-row post-icons-container">
                 <div>
                   <div

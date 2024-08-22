@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function PostReplacement() {
   return (
     <div className="flex-row grok-page-container">
-      <div className="flex-column grok-middle-of-page-post-replace border-top">
+      <div className="flex-column grok-middle-of-page-post-replace">
         <h1>Welcome to X!</h1>
         <p>
           This is the best place to see what’s happening in your world. Find

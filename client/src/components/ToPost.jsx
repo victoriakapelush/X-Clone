@@ -137,7 +137,7 @@ function ToPost({ onClose, onSave }) {
           </div>
         </div>
         <div className="create-new-post-window">
-          <div className="create-new-post-window-container flex-row">
+          <div className="create-new-post-window-container no-bottom-border flex-row">
             <Link to="/profile">
               <img
                 className="profile-pic"

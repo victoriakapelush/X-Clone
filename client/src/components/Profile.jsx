@@ -17,8 +17,8 @@ import Media from "./Media";
 import Likes from "./Likes";
 import FullSizeImage from "./FullSizeImage";
 import back from "../assets/icons/back.png";
-import TokenContext from "./TokenContext";
 import UseNewPostHook from "./UseNewPostHook";
+import DeletePostHook from './DeletePostHook';
 
 function Profile() {
   const { username } = useParams();
@@ -48,6 +48,12 @@ function Profile() {
     getPost,
   } = UseNewPostHook();
   const [lastValidName, setLastValidName] = useState("");
+  const { updatedPosts, setUpdatedPosts, postCount, setPostCount, handleDeletePost } = DeletePostHook();
+
+  useEffect(() => {
+    setUpdatedPosts(postData);
+    setPostCount(userData?.profile?.posts);
+  }, [postData, setPostCount, setUpdatedPosts, userData]);
 
   const handleImageClick = (url, type) => {
     setImageUrl(url);
@@ -142,7 +148,7 @@ function Profile() {
           <div className="flex-column profile-header-name">
             {profileData && <h2>{profileData.updatedName}</h2>}
             {userData && userData.profile && (
-              <span>{userData.profile.posts} posts</span>
+              <span>{postCount} posts</span>
             )}
           </div>
         </header>
@@ -327,13 +333,16 @@ function Profile() {
           {activeTab === "posts" && (
             <NewPost
               randomUser={randomUser}
-              postData={postData}
+              postData={updatedPosts}
               bookmarkedStates={bookmarkedStates}
               handleBookmark={handleBookmark}
               likedStates={likedStates}
               handleLike={handleLike}
               getPost={getPost}
               userData={userData}
+              handleDeletePost={handleDeletePost}
+              postCount={postCount}
+              setPostCount={setPostCount}
             />
           )}
           {activeTab === "replies" && <Replies randomUser={randomUser} />}

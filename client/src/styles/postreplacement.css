@@ -6,17 +6,15 @@
 }
 
 .border-top {
-  border-top: 1px solid var(--deep-grey);
+  border-top: 1px solid var(--borders);
 }
 
 .home-profile-following-posts {
   width: 100%;
-  border-left: 1px solid var(--deep-grey);
   margin: 0 !important;
 }
 
 .grok-middle-of-page-post-replace {
-  border-right: 1px solid var(--deep-grey);
   height: 100vh;
   align-items: center;
 }

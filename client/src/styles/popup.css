@@ -100,3 +100,7 @@
 .skip-for-now-btn:hover {
   background-color: var(--opacity);
 }
+
+.no-bottom-border {
+  border-bottom: none;
+}

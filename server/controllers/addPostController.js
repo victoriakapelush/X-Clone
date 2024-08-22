@@ -243,6 +243,35 @@ const addPost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  const { postId } = req.body;
+  const currentUserId = req.user.id;
+
+  try {
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const user = await User.findById(currentUserId);
+
+    // Ensure posts count doesn't go below zero
+    if (user.profile.posts > 0) {
+      user.profile.posts = user.profile.posts - 1;
+    } else {
+      user.profile.posts = 0;
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
 trainClassifier();
 
-module.exports = { getPost, addPost };
+module.exports = { getPost, addPost, deletePost };

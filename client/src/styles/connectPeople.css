@@ -5,15 +5,15 @@
 
 .connect-center-container {
   width: 40rem;
-  border-right: 1px solid var(--deep-grey);
-  border-left: 1px solid var(--deep-grey);
+  border-right: 1px solid var(--borders);
+  border-left: 1px solid var(--borders);
   margin-right: 3rem;
 }
 
 .connect-center-container header {
   gap: 1rem;
   align-items: center;
-  border-bottom: 1px solid var(--deep-grey);
+  border-bottom: 1px solid var(--borders);
   padding: 0.3rem 0.3rem;
 }
 

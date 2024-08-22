@@ -3,8 +3,8 @@
 }
 
 .grok-middle-of-page {
-  border-right: 1px solid var(--deep-grey);
-  border-left: 1px solid var(--deep-grey);
+  border-right: 1px solid var(--borders);
+  border-left: 1px solid var(--borders);
   margin-right: 2rem;
   height: 100%;
   align-items: center;
