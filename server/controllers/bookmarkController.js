@@ -60,6 +60,12 @@ const getBookmark = async (req, res) => {
           model: "User",
         },
       })
+      .populate("repostedFrom")
+      .populate('originalPostId')
+      .populate({
+        path: 'totalReplies.user', 
+        model: 'User' 
+    })
       .exec();
 
     if (!user) {

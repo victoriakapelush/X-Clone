@@ -5,9 +5,14 @@ const getRandomPosts = async (req, res) => {
   const currentUser = req.user.id;
 
   try {
-    const posts = await Post.find({ user: { $ne: currentUser } }).populate(
-      "user",
-    );
+    const posts = await Post.find({ user: { $ne: currentUser } })
+    .populate("user")
+    .populate("repostedFrom")
+    .populate('originalPostId')
+    .populate({
+      path: 'totalReplies.user', 
+      model: 'User' 
+  });
 
     // Shuffle the posts array
     const shuffledPosts = posts.sort(() => Math.random() - 0.5);

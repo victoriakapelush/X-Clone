@@ -17,7 +17,7 @@ const repost = async (req, res) => {
             model: 'User' 
         })
         .populate('bookmarks') 
-        .populate('likes');   
+        .populate('likes');
 
       if (!originalPost) {
           return res.status(404).json({ message: "Post not found" });
@@ -34,28 +34,34 @@ const repost = async (req, res) => {
             time: originalPost.time,
             reply: originalPost.reply,
             totalReplies: originalPost.totalReplies,
-            repost: originalPost.repost,
+            repost: 0,
             likeCount: originalPost.likeCount,
             likes: originalPost.likes,
             share: originalPost.share,
             user: currentUserId,
             tags: originalPost.topTags,
             repostedFrom: originalPost.user,
-            originalPostId: originalPost._id
+            originalPostId: originalPost
           });
 
           const savedPost = await repost.save();
-          originalPost.repost += 1;
-          await originalPost.save();
 
-          res.status(201).json({ 
-            message: "Post reposted successfully", 
+        // Increment the repost count for the original post
+        originalPost.repost += 1;
+        await originalPost.save();
+
+        // Increment the post count in the user's profile
+        user.profile.posts = (user.profile.posts || 0) + 1;
+        await user.save();
+
+        res.status(201).json({
+            message: "Post reposted successfully",
             post: savedPost
         });
-      } catch (error) {
-        console.error("Repost Error:", error); 
+    } catch (error) {
+        console.error("Repost Error:", error);
         res.status(500).json({ message: "An error occurred", error: error.message });
     }
-      };
+};
       
       module.exports = { repost };

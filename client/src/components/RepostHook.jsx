@@ -1,6 +1,8 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import TokenContext from "./TokenContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useRepost = () => {
   const [loading, setLoading] = useState(false);
@@ -21,6 +23,7 @@ const useRepost = () => {
         },
       );
       setRepostedPosts((prevPosts) => [response.data, ...prevPosts]);
+      toast.success("Reposted");
       return response.data;
     } catch (err) {
       setError(err);

@@ -10,6 +10,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useRepost from "./RepostHook";
 
 function RandomPosts() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -23,6 +24,9 @@ function RandomPosts() {
   const { fetchUserData, userData } = useContext(UserContext);
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
+  const { repostPost, repostedPosts, loading, error } = useRepost();
+  const [reposted, setReposted] = useState(false);
+
 
   const handleCopy = (postId, username) => {
     console.log(`Copied post link: ${postId}, username: ${username}`);
@@ -46,6 +50,15 @@ function RandomPosts() {
       fetchUserData();
     }
   }, [userData]);
+
+  const handleRepost = async (postId) => {
+    try {
+      await repostPost(postId);
+      setReposted(true);
+    } catch (err) {
+      console.error("Failed to repost:", err);
+    }
+  };
 
   return (
     <div>
@@ -114,7 +127,13 @@ function RandomPosts() {
                   <span className="count">{post.reply}</span>
                 </div>
               </div>
-              <div>
+              <div onClick={() => handleRepost(post._id)} disabled={loading}>
+              <ToastContainer
+                    position="bottom-center"
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    closeOnClick
+                  />
                 <div
                   className="icon-container color-hover flex-row"
                   id="green-svg"

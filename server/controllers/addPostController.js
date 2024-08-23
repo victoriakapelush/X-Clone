@@ -156,6 +156,7 @@ const getPost = async (req, res) => {
       .sort({ time: -1 })
       .populate("user")
       .populate("repostedFrom")
+      .populate('originalPostId')
       .populate({
         path: 'totalReplies.user', 
         model: 'User' 
