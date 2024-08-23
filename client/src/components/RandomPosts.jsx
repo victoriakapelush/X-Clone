@@ -62,6 +62,17 @@ function RandomPosts() {
 
   return (
     <div>
+                      <ToastContainer
+                    position="bottom-center"
+                    autoClose={1000}  // This will close the toast after 1 second
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover={false}
+                  />
       {randomPosts.map((post, index) => {
         const postLink = generatePostLink(
           post._id,
@@ -128,12 +139,6 @@ function RandomPosts() {
                 </div>
               </div>
               <div onClick={() => handleRepost(post._id)} disabled={loading}>
-              <ToastContainer
-                    position="bottom-center"
-                    autoClose={1000}
-                    hideProgressBar={false}
-                    closeOnClick
-                  />
                 <div
                   className="icon-container color-hover flex-row"
                   id="green-svg"
@@ -215,12 +220,6 @@ function RandomPosts() {
                     </svg>
                   </div>
                 </div>
-                <ToastContainer
-                  position="bottom-center"
-                  autoClose={1000}
-                  hideProgressBar={false}
-                  closeOnClick
-                />
                 <CopyToClipboard
                   text={postLink}
                   onCopy={() =>

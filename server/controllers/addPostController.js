@@ -255,6 +255,20 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    // Handle the repost scenario
+    if (deletedPost.originalPostId) {
+      const originalPost = await Post.findById(deletedPost.originalPostId._id);
+
+      if (originalPost) {
+        if (originalPost.repost > 0) {
+          originalPost.repost -= 1;
+        } else {
+          originalPost.repost = 0;
+        }
+        await originalPost.save();
+      }
+    }
+
     const user = await User.findById(currentUserId);
 
     // Ensure posts count doesn't go below zero

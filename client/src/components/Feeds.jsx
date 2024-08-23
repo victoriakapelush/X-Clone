@@ -11,6 +11,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useRepost from "./RepostHook";
 
 function Feeds() {
   const { randomUser, setRandomUser } = useContext(UserContext);
@@ -26,11 +27,22 @@ function Feeds() {
   } = UseFeedsHook();
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
+  const { repostPost, repostedPosts, loading, error } = useRepost();
+  const [reposted, setReposted] = useState(false);
 
-  const handleCopy = (postId, username) => {
+  const handleCopy = () => {
     setCopied(true);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleRepost = async (postId) => {
+    try {
+      await repostPost(postId);
+      setReposted(true);
+    } catch (err) {
+      console.error("Failed to repost:", err);
+    }
   };
 
   const toggleText = () => {
@@ -45,6 +57,17 @@ function Feeds() {
 
   return (
     <div className="flex-row profile-page">
+                          <ToastContainer
+                    position="bottom-center"
+                    autoClose={1000}  // This will close the toast after 1 second
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover={false}
+                  />
       <HomeNav />
       <div className="profile-container">
         {postData.length > 0 ? (
@@ -115,7 +138,7 @@ function Feeds() {
                       <span className="count">0</span>
                     </div>
                   </div>
-                  <div>
+                  <div onClick={() => handleRepost(post._id)} disabled={loading}>
                     <div
                       className="icon-container color-hover flex-row"
                       id="green-svg"
@@ -129,7 +152,7 @@ function Feeds() {
                           <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                         </g>
                       </svg>
-                      <span className="count">0</span>
+                      <span className="count">{post.repost}</span>
                     </div>
                   </div>
                   <div>
@@ -197,12 +220,6 @@ function Feeds() {
                         </svg>
                       </div>
                     </div>
-                    <ToastContainer
-                      position="bottom-center"
-                      autoClose={1000}
-                      hideProgressBar={false}
-                      closeOnClick
-                    />
                     <CopyToClipboard
                       text={postLink}
                       onCopy={() =>

@@ -94,48 +94,76 @@ const useNewPostHook = () => {
     }
   };
 
-  const handleLike = async (postId, index) => {
+  const handleLike = async (postId) => {
     try {
-      const postIndex = postData.findIndex((post) => post._id === postId);
-      if (postIndex === -1) return;
-
-      const currentPost = postData[postIndex];
-      const userIndex = currentPost.likes.indexOf(userID);
-      let updatedLikes;
-      let updatedLikeCount;
-
-      if (userIndex === -1) {
-        updatedLikes = [...currentPost.likes, userID];
-        updatedLikeCount = currentPost.likeCount + 1;
-      } else {
-        updatedLikes = currentPost.likes.filter((user) => user !== userID);
-        updatedLikeCount = Math.max(currentPost.likeCount - 1, 0);
+      // Find the current post
+      const currentPost = postData.find((post) => post._id === postId);
+      if (!currentPost) return;
+  
+      // Determine if the post has been liked
+      const hasLiked = currentPost.likes.includes(userID);
+  
+      // Prepare the updated data
+      const updatedLikes = hasLiked
+        ? currentPost.likes.filter((user) => user !== userID)
+        : [...currentPost.likes, userID];
+      const updatedLikeCount = hasLiked
+        ? Math.max(currentPost.likeCount - 1, 0)
+        : currentPost.likeCount + 1;
+  
+      // Prepare payloads
+      const updatePayload = { _id: postId };
+      const originalUpdatePayload = currentPost.originalPostId
+        ? { _id: currentPost.originalPostId._id }
+        : null;
+  
+      // Update the original post if this is a repost
+      if (originalUpdatePayload) {
+        await axios.put(
+          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          originalUpdatePayload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
       }
-
+  
+      // Update the current post
       await axios.put(
         `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
-        { _id: postId },
+        updatePayload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        },
+        }
       );
-
-      const updatedPosts = postData.map((post) =>
-        post._id === postId
-          ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes }
-          : post,
+  
+      // Update the local state immediately
+      console.log("Before update:", postData);
+      setPostData((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId
+            ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes }
+            : post
+        )
       );
-      setPostData(updatedPosts);
+      console.log("After update:", postData);
+  
       setLikedStates((prevStates) =>
-        prevStates.map((liked, idx) => (idx === index ? !liked : liked)),
+        prevStates.map((state, idx) =>
+          postData[idx]._id === postId ? !state : state
+        )
       );
     } catch (error) {
       console.error("Error updating like status:", error);
     }
   };
+  
 
   useEffect(() => {
     if (username && userID) {
@@ -146,6 +174,7 @@ const useNewPostHook = () => {
   return {
     userData,
     postData,
+    setPostData,
     bookmarkedStates,
     handleBookmark,
     likedStates,
