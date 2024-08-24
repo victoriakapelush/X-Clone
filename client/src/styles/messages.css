@@ -40,6 +40,10 @@ h2 {
   margin-top: 3rem;
 }
 
+.message-welcome h1 {
+  margin: 0 1rem;
+}
+
 .message-welcome div {
   color: var(--deep-grey);
   margin: 0.5rem 1rem;
@@ -51,4 +55,48 @@ h2 {
 
 .no-left-border {
   border-left: none;
+}
+
+/* POPUP NEW MESSAGE WINDOW */
+
+.message-popup-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem 1rem;
+  justify-content: flex-start;
+}
+
+.message-window-header {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.svg-btn-message-popup {
+  background-color: transparent;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+}
+
+.svg-btn-message-popup:hover {
+  background-color: var(--borders);
+}
+
+.h2-svg-message-popup {
+  align-items: center;
+  gap: 3rem;
+}
+
+.next-btn-message-popup {
+  background-color: var(--deep-grey);
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 0.7rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-weight: bold;
+}
+
+.create-group-container {
+  background-color: transparent;
 }

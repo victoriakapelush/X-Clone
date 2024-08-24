@@ -67,14 +67,23 @@ const addCommentToPost = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    if (typeof post.reply !== "number") {
-      post.reply = 0;
+    // Check if the post is a repost
+    let originalPost;
+    if (post.originalPostId) {
+      originalPost = await Post.findById(post.originalPostId._id);
     }
 
     post.totalReplies.push(newReply);
     post.reply = (post.reply || 0) + 1;
     await post.save();
     await newReply.save();
+
+    // If the post is a repost, update the reply count on the original post
+    if (originalPost) {
+      originalPost.reply = (originalPost.reply || 0) + 1;
+      originalPost.totalReplies.push(newReply._id);
+      await originalPost.save();
+    }
 
     const populatedReply = await Reply.findById(newReply._id)
       .populate("user")

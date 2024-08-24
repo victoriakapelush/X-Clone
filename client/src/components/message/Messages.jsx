@@ -1,9 +1,16 @@
-import "../styles/profile.css";
-import "../styles/messages.css";
-import HomeNav from "./HomeNav";
-import { useEffect } from "react";
+import "../../styles/profile.css";
+import "../../styles/messages.css";
+import HomeNav from "../HomeNav";
+import { useEffect, useState } from "react";
+import WriteMessageBtn from "./WriteMessageBtn";
 
 function Messages() {
+  const [showWriteMessage, setShowWriteMessage] = useState(false);
+
+  const handleWriteMessageClick = () => {
+    setShowWriteMessage(true);
+  };
+
   useEffect(() => {
     document.title = "Messages / X";
   }, []);
@@ -26,7 +33,10 @@ function Messages() {
             Drop a line, share posts and more with private conversations between
             you and others on X.
           </div>
-          <button className="new-post-btn radius write-message">
+          <button
+            className="new-post-btn radius write-message"
+            onClick={handleWriteMessageClick}
+          >
             Write a message
           </button>
         </main>
@@ -35,6 +45,7 @@ function Messages() {
         <header className="flex-row">
           <h2>Conversations</h2>
         </header>
+        {showWriteMessage && <WriteMessageBtn />}
       </div>
     </div>
   );

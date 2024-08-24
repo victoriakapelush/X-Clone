@@ -18,7 +18,7 @@ import Followers from "./components/Followers.jsx";
 import ConnectPeople from "./components/ConnectPeople.jsx";
 import PostPage from "./components/PostPage.jsx";
 import CommentPage from "./components/CommentPage.jsx";
-import Messages from "./components/Messages.jsx";
+import Messages from "./components/message/Messages.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./styles/index.css";
