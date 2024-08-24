@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 const useRepost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [repostedPosts, setRepostedPosts] = useState([]);
   const { token, formattedUsername } = useContext(TokenContext);
 
   const repostPost = async (postId) => {
@@ -22,9 +21,10 @@ const useRepost = () => {
           },
         },
       );
-      setRepostedPosts((prevPosts) => [response.data, ...prevPosts]);
+
       toast.success("Reposted");
-      return response.data;
+      setLoading(false);
+      return response.data.post;
     } catch (err) {
       setError(err);
       setLoading(false);
@@ -34,7 +34,6 @@ const useRepost = () => {
 
   return {
     repostPost,
-    repostedPosts,
     loading,
     error,
   };

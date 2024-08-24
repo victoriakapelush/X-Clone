@@ -27,7 +27,6 @@ function RandomPosts() {
   const { repostPost, repostedPosts, loading, error } = useRepost();
   const [reposted, setReposted] = useState(false);
 
-
   const handleCopy = (postId, username) => {
     console.log(`Copied post link: ${postId}, username: ${username}`);
     setCopied(true);
@@ -62,17 +61,17 @@ function RandomPosts() {
 
   return (
     <div>
-                      <ToastContainer
-                    position="bottom-center"
-                    autoClose={1000}  // This will close the toast after 1 second
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover={false}
-                  />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000} // This will close the toast after 1 second
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
       {randomPosts.map((post, index) => {
         const postLink = generatePostLink(
           post._id,

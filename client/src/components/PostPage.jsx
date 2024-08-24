@@ -594,7 +594,7 @@ function PostPage() {
                 <Link
                   to={`/post/${reply.user.formattedUsername}/status/${reply._id}`}
                 >
-                  <div className="flex-row top-border-horizontal">
+                  <div className="flex-row ">
                     <div className="pic-vertical-line-box flex-column">
                       <img
                         className="profile-pic no-bottom-margin"
@@ -773,7 +773,7 @@ function PostPage() {
               of ads revenue.
             </p>
           </div>
-          <button className="new-post-btn radius smaller-size">
+          <button className="new-post-btn radius smaller-size premium-button">
             Subscribe
           </button>
         </div>

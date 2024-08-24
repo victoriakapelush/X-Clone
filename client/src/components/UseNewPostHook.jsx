@@ -94,76 +94,122 @@ const useNewPostHook = () => {
     }
   };
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, index) => {
     try {
-      // Find the current post
-      const currentPost = postData.find((post) => post._id === postId);
-      if (!currentPost) return;
-  
-      // Determine if the post has been liked
-      const hasLiked = currentPost.likes.includes(userID);
-  
-      // Prepare the updated data
-      const updatedLikes = hasLiked
-        ? currentPost.likes.filter((user) => user !== userID)
-        : [...currentPost.likes, userID];
-      const updatedLikeCount = hasLiked
-        ? Math.max(currentPost.likeCount - 1, 0)
-        : currentPost.likeCount + 1;
-  
-      // Prepare payloads
-      const updatePayload = { _id: postId };
-      const originalUpdatePayload = currentPost.originalPostId
-        ? { _id: currentPost.originalPostId._id }
-        : null;
-  
-      // Update the original post if this is a repost
-      if (originalUpdatePayload) {
+      let updatedPosts;
+      let updatedLikedStates;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const targetPostId = postData.originalPostId || postId;
+
+      if (Array.isArray(postData)) {
+        const postIndex = postData.findIndex(
+          (post) => post._id === targetPostId,
+        );
+        if (postIndex === -1) return;
+
+        const currentPost = postData[postIndex];
+        const hasLiked = currentPost.likes.includes(userID);
+
+        // Print before like state
+        console.log("Before like:", {
+          postId: targetPostId,
+          post: currentPost,
+          hasLiked,
+          likeCount: currentPost.likeCount,
+          likes: currentPost.likes,
+        });
+
+        const updatedLikes = hasLiked
+          ? currentPost.likes.filter((id) => id !== userID)
+          : [...currentPost.likes, userID];
+
+        const updatedLikeCount = hasLiked
+          ? Math.max(currentPost.likeCount - 1, 0)
+          : currentPost.likeCount + 1;
+
+        // Update the like in the backend
         await axios.put(
           `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
-          originalUpdatePayload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
+          { _id: targetPostId },
+          config,
         );
-      }
-  
-      // Update the current post
-      await axios.put(
-        `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
-        updatePayload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+
+        updatedPosts = [...postData];
+        updatedPosts[postIndex] = {
+          ...currentPost,
+          likes: updatedLikes,
+          likeCount: updatedLikeCount,
+        };
+
+        setPostData(updatedPosts);
+
+        if (index !== null) {
+          updatedLikedStates = [...likedStates];
+          updatedLikedStates[index] = !hasLiked;
+          setLikedStates(updatedLikedStates);
         }
-      );
-  
-      // Update the local state immediately
-      console.log("Before update:", postData);
-      setPostData((prevPosts) =>
-        prevPosts.map((post) =>
-          post._id === postId
-            ? { ...post, likeCount: updatedLikeCount, likes: updatedLikes }
-            : post
-        )
-      );
-      console.log("After update:", postData);
-  
-      setLikedStates((prevStates) =>
-        prevStates.map((state, idx) =>
-          postData[idx]._id === postId ? !state : state
-        )
-      );
+
+        // Print after like state
+        console.log("After like:", {
+          postId: targetPostId,
+          updatedPost: updatedPosts[postIndex],
+          likeCount: updatedPosts[postIndex].likeCount,
+          likes: updatedPosts[postIndex].likes,
+        });
+      } else if (postData && postData._id === targetPostId) {
+        const hasLiked = postData.likes.includes(userID);
+
+        // Print before like state
+        console.log("Before like:", {
+          postId: targetPostId,
+          post: postData,
+          hasLiked,
+          likeCount: postData.likeCount,
+          likes: postData.likes,
+        });
+
+        const updatedLikes = hasLiked
+          ? postData.likes.filter((id) => id !== userID)
+          : [...postData.likes, userID];
+
+        const updatedLikeCount = hasLiked
+          ? Math.max(postData.likeCount - 1, 0)
+          : postData.likeCount + 1;
+
+        await axios.put(
+          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          { _id: targetPostId },
+          config,
+        );
+
+        const updatedPost = {
+          ...postData,
+          likes: updatedLikes,
+          likeCount: updatedLikeCount,
+        };
+
+        setPostData(updatedPost);
+        setLikedStates(!hasLiked);
+
+        // Print after like state
+        console.log("After like:", {
+          postId: targetPostId,
+          updatedPost,
+          likeCount: updatedPost.likeCount,
+          likes: updatedPost.likes,
+        });
+      }
     } catch (error) {
       console.error("Error updating like status:", error);
     }
   };
-  
 
   useEffect(() => {
     if (username && userID) {

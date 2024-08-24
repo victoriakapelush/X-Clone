@@ -4,21 +4,41 @@ import "../styles/popup.css";
 import "../styles/editProfilePopup.css";
 import "../styles/topost.css";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import TokenContext from "./TokenContext";
+import GifModal from "./GifModal";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
-function ReplyPopup({ onClose, postId }) {
+function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
   const [userData, setUserData] = useState({});
   const [profile, setProfile] = useState({});
   const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
+  const [gif, setGif] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [post, setPost] = useState([]);
   const { username } = useParams();
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
+  const { token } = useContext(TokenContext);
+  const [showGifModal, setShowGifModal] = useState(false);
+  const [selectedGif, setSelectedGif] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  console.log(postId);
+  const handleButtonClick = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  const onEmojiClick = (emojiObject) => {
+    setText((prevText) => prevText + emojiObject.emoji);
+  };
+
+  const handleGifSelect = (gifUrl) => {
+    setSelectedGif(gifUrl);
+  };
 
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,13 +111,13 @@ function ReplyPopup({ onClose, postId }) {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem("token");
       const formData = new FormData();
       formData.append("text", text);
       formData.append("image", profileImage);
+      formData.append("gif", gif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
+        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId._id}`,
         formData,
         {
           headers: {
@@ -109,7 +129,10 @@ function ReplyPopup({ onClose, postId }) {
       if (response.status >= 200 && response.status < 300) {
         setText("");
         setImageUrl("");
-        setProfileImage(null);
+        setGif("");
+        if (onUpdateReplyCount) {
+          onUpdateReplyCount(postId._id);
+        }
         onClose();
       } else {
         console.error("Error creating a comment:", response);
@@ -121,7 +144,7 @@ function ReplyPopup({ onClose, postId }) {
 
   return (
     <div className="topost-popup-container flex-column">
-      <div className="topost-black-window flexible-size flex-column">
+      <div className="topost-black-window flexible-size flex-column no-borders">
         <div className="edit-popup-header flex-row">
           <div className="edit-popup-close-header flex-row">
             <button
@@ -151,18 +174,15 @@ function ReplyPopup({ onClose, postId }) {
                 @{postId.user.formattedUsername} · {postId.time}
               </span>
             </span>
-            {/* Check for text */}
             {postId.text && (
               <span className="reply-post-text">{postId.text}</span>
             )}
-            {/* Check for image */}
             {postId.image && (
               <img
                 className="reply-post-text reply-post-image"
                 src={`http://localhost:3000/uploads/${postId.image}`}
               />
             )}
-            {/* Check for GIF */}
             {postId.gif && (
               <img
                 className="reply-post-text reply-post-gif"
@@ -198,15 +218,36 @@ function ReplyPopup({ onClose, postId }) {
                   className="topost-insert-image"
                   id="topost-insert-image"
                   style={{
-                    display: "none",
-                    backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
+                    display: imageUrl || selectedGif ? "block" : "none",
+                    backgroundImage: imageUrl
+                      ? `url(${imageUrl})`
+                      : `url(${selectedGif})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
+                    height: "200px",
+                    width: "100%",
                   }}
-                ></div>
+                >
+                  {selectedGif && (
+                    <img
+                      src={selectedGif}
+                      alt="Selected GIF"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
+                </div>
                 <div className="flex-row button-and-upload-pic">
                   <div className="upload-pic-container">
-                    <button onClick={handleUploadClick}>
+                    <button
+                      onClick={handleUploadClick}
+                      className="hover-effect"
+                      data-username="Media"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"
@@ -220,11 +261,14 @@ function ReplyPopup({ onClose, postId }) {
                     <input
                       type="file"
                       id="image"
-                      value={post.image}
                       onChange={handleProfileImageChange}
                       style={{ display: "none" }}
                     />
-                    <button>
+                    <button
+                      onClick={() => setShowGifModal(true)}
+                      className="hover-effect"
+                      data-username="GIF"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"
@@ -235,18 +279,21 @@ function ReplyPopup({ onClose, postId }) {
                         </g>
                       </svg>
                     </button>
-                    <button>
-                      <svg
-                        className="upload-pic radius"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <g>
-                          <path d="M6 3V2h2v1h6V2h2v1h1.5C18.88 3 20 4.119 20 5.5v2h-2v-2c0-.276-.22-.5-.5-.5H16v1h-2V5H8v1H6V5H4.5c-.28 0-.5.224-.5.5v12c0 .276.22.5.5.5h3v2h-3C3.12 20 2 18.881 2 17.5v-12C2 4.119 3.12 3 4.5 3H6zm9.5 8c-2.49 0-4.5 2.015-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.015 4.5-4.5-2.01-4.5-4.5-4.5zM9 15.5C9 11.91 11.91 9 15.5 9s6.5 2.91 6.5 6.5-2.91 6.5-6.5 6.5S9 19.09 9 15.5zm5.5-2.5h2v2.086l1.71 1.707-1.42 1.414-2.29-2.293V13z"></path>
-                        </g>
-                      </svg>
-                    </button>
-                    <button>
+                    <GifModal
+                      isOpen={showGifModal}
+                      onClose={() => setShowGifModal(false)}
+                      onSelect={handleGifSelect}
+                    />
+                    <input
+                      id="gif"
+                      onChange={handleProfileImageChange}
+                      style={{ display: "none" }}
+                    />
+                    <button
+                      onClick={handleButtonClick}
+                      className="hover-effect"
+                      data-username="Emoji"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"
@@ -257,27 +304,22 @@ function ReplyPopup({ onClose, postId }) {
                         </g>
                       </svg>
                     </button>
-                    <button>
-                      <svg
-                        className="upload-pic radius"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <g>
-                          <path d="M6 5c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zM2 7c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12V6h10v2zM6 15c-1.1 0-2 .895-2 2s.9 2 2 2 2-.895 2-2-.9-2-2-2zm-4 2c0-2.209 1.79-4 4-4s4 1.791 4 4-1.79 4-4 4-4-1.791-4-4zm20 1H12v-2h10v2zM7 7c0 .552-.45 1-1 1s-1-.448-1-1 .45-1 1-1 1 .448 1 1z"></path>
-                        </g>
-                      </svg>
-                    </button>
                   </div>
                   <button
                     className="new-post-btn radius smaller-size"
                     type="submit"
-                    onClick={handleSubmit}
                   >
                     Post
                   </button>
                 </div>
               </form>
+              {showEmojiPicker && (
+                <EmojiPicker
+                  theme={Theme.DARK}
+                  style={{ position: "absolute" }}
+                  onEmojiClick={onEmojiClick}
+                />
+              )}
             </div>
           </div>
         </div>

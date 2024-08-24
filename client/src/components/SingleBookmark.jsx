@@ -13,7 +13,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
 
-
 function SingleBookmark({
   bookmarkedPosts,
   bookmarkedStates,
@@ -49,17 +48,17 @@ function SingleBookmark({
 
   return (
     <div>
-                        <ToastContainer
-                    position="bottom-center"
-                    autoClose={1000}  // This will close the toast after 1 second
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick={false}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover={false}
-                  />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000} // This will close the toast after 1 second
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
       {bookmarkedPosts.length > 0 ? (
         bookmarkedPosts.map((post, index) => {
           const postLink = generatePostLink(

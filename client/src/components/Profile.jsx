@@ -18,7 +18,7 @@ import Likes from "./Likes";
 import FullSizeImage from "./FullSizeImage";
 import back from "../assets/icons/back.png";
 import UseNewPostHook from "./UseNewPostHook";
-import DeletePostHook from './DeletePostHook';
+import DeletePostHook from "./DeletePostHook";
 
 function Profile() {
   const { username } = useParams();
@@ -41,6 +41,7 @@ function Profile() {
   });
   const {
     postData,
+    setPostData,
     bookmarkedStates,
     handleBookmark,
     likedStates,
@@ -48,7 +49,13 @@ function Profile() {
     getPost,
   } = UseNewPostHook();
   const [lastValidName, setLastValidName] = useState("");
-  const { updatedPosts, setUpdatedPosts, postCount, setPostCount, handleDeletePost } = DeletePostHook();
+  const {
+    updatedPosts,
+    setUpdatedPosts,
+    postCount,
+    setPostCount,
+    handleDeletePost,
+  } = DeletePostHook();
 
   useEffect(() => {
     setUpdatedPosts(postData);
@@ -147,9 +154,7 @@ function Profile() {
           </Link>
           <div className="flex-column profile-header-name">
             {profileData && <h2>{profileData.updatedName}</h2>}
-            {userData && userData.profile && (
-              <span>{postCount} posts</span>
-            )}
+            {userData && userData.profile && <span>{postCount} posts</span>}
           </div>
         </header>
         <div
@@ -334,6 +339,7 @@ function Profile() {
             <NewPost
               randomUser={randomUser}
               postData={updatedPosts}
+              setPostData={setPostData}
               bookmarkedStates={bookmarkedStates}
               handleBookmark={handleBookmark}
               likedStates={likedStates}

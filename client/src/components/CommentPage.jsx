@@ -748,7 +748,7 @@ function CommentPage() {
               of ads revenue.
             </p>
           </div>
-          <button className="new-post-btn radius smaller-size">
+          <button className="new-post-btn radius smaller-size premium-button">
             Subscribe
           </button>
         </div>

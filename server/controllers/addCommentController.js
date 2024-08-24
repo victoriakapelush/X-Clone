@@ -79,7 +79,6 @@ const addCommentToPost = async (req, res) => {
     const populatedReply = await Reply.findById(newReply._id)
       .populate("user")
       .populate("post")
-      .populate("repostedFrom")
       .populate({
         path: "totalReplies",
         populate: {

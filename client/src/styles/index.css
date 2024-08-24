@@ -116,7 +116,13 @@ html {
   align-items: flex-start;
   margin-top: 10px;
   margin-bottom: 0.8rem;
-  margin-right: 2rem;
+  max-width: 100%;
+  margin-right: 1rem;
+  height: auto;
+  box-sizing: border-box;
+  word-wrap: break-word; /* Break long words onto the next line */
+  overflow: hidden; /* Hide any overflow */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
 }
 
 .reply-replying-to {
@@ -131,6 +137,11 @@ html {
 
 .reply-post-text {
   margin-top: 5px;
+  max-width: 100% !important;
+  width: 100%;
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .reply-post-image,
@@ -232,6 +243,16 @@ a:visited {
 
 .no-top-margin {
   margin-top: 0;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.reply-post-text {
+  display: block;
+  word-break: break-word; /* Break long words onto the next line */
+  white-space: normal; /* Ensure text wraps onto the next line */
 }
 
 .new-acc-link:hover {
@@ -919,7 +940,8 @@ a:visited {
   width: 1.5rem;
 }
 
-.post-text {
+.post-text,
+.reply-post-text {
   margin: 0 0 0.5rem 0;
   display: block;
   overflow: hidden;
@@ -927,7 +949,8 @@ a:visited {
   white-space: wrap;
 }
 
-.post-text {
+.post-text,
+.reply-post-text {
   display: -webkit-box;
   -webkit-line-clamp: 10; /* Number of lines to show */
   -webkit-box-orient: vertical;
@@ -1100,7 +1123,8 @@ svg {
   word-wrap: break-word;
 }
 
-.post-image, .post-gif {
+.post-image,
+.post-gif {
   max-width: 100%;
   width: 100%;
   height: auto;
@@ -1127,18 +1151,19 @@ svg {
   margin: 0;
   padding: 10px 10px;
   color: var(--deep-grey);
-  cursor: pointer; 
+  cursor: pointer;
   background-color: transparent;
   border: none;
   align-self: flex-start;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .close-btn:hover {
   background-color: var(--opacity);
 }
 
-.pic-text-close-btn, .pic-and-text-post {
+.pic-text-close-btn,
+.pic-and-text-post {
   max-width: 100%;
   width: 100%;
   margin-right: 0;

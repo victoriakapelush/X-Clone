@@ -57,17 +57,17 @@ function Feeds() {
 
   return (
     <div className="flex-row profile-page">
-                          <ToastContainer
-                    position="bottom-center"
-                    autoClose={1000}  // This will close the toast after 1 second
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover={false}
-                  />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000} // This will close the toast after 1 second
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
       <HomeNav />
       <div className="profile-container">
         {postData.length > 0 ? (
@@ -138,7 +138,10 @@ function Feeds() {
                       <span className="count">0</span>
                     </div>
                   </div>
-                  <div onClick={() => handleRepost(post._id)} disabled={loading}>
+                  <div
+                    onClick={() => handleRepost(post._id)}
+                    disabled={loading}
+                  >
                     <div
                       className="icon-container color-hover flex-row"
                       id="green-svg"
