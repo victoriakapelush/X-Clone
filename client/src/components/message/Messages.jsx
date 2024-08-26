@@ -11,6 +11,10 @@ function Messages() {
     setShowWriteMessage(true);
   };
 
+  const closeWriteMessage = () => {
+    setShowWriteMessage(false);
+  };
+
   useEffect(() => {
     document.title = "Messages / X";
   }, []);
@@ -45,7 +49,7 @@ function Messages() {
         <header className="flex-row">
           <h2>Conversations</h2>
         </header>
-        {showWriteMessage && <WriteMessageBtn />}
+        {showWriteMessage && <WriteMessageBtn handleWriteMessageClick={handleWriteMessageClick} closeWriteMessage={closeWriteMessage} showWriteMessage={showWriteMessage} setShowWriteMessage={setShowWriteMessage} />}
       </div>
     </div>
   );

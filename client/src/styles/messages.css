@@ -62,13 +62,17 @@ h2 {
 .message-popup-container {
   width: 100%;
   max-width: 600px;
-  padding: 1rem 1rem;
+  margin: 1rem 1rem;
   justify-content: flex-start;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .message-window-header {
   justify-content: space-between;
   align-items: center;
+  padding-left: 1rem;
+  padding-top: 1rem;
 }
 
 .svg-btn-message-popup {
@@ -85,6 +89,7 @@ h2 {
 .h2-svg-message-popup {
   align-items: center;
   gap: 3rem;
+  margin-bottom: 1rem;
 }
 
 .next-btn-message-popup {
@@ -95,8 +100,66 @@ h2 {
   padding: 0.5rem 1rem;
   border: none;
   font-weight: bold;
+  margin-right: 1rem;
 }
 
 .create-group-container {
   background-color: transparent;
+}
+
+.search-message-popup {
+  align-items: center;
+  border-bottom: 1px solid var(--borders);
+  max-width: 100%;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.search-message-popup input {
+  background-color: transparent;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  border: none;
+  color: var(--white);
+  max-width: 100%;
+  width: 100%;
+}
+
+.search-ppl-msg-input:focus {
+  outline: none;
+}
+
+.search-svg-message-popup {
+  fill: var(--white);
+  transition: fill 0.3s ease;
+}
+
+.search-message-popup:focus-within .search-svg-message-popup {
+  fill: var(--blue);
+}
+
+.create-group-container {
+  align-items: center;
+  padding: .5rem 0 .5rem 1rem;
+  border-bottom: 1px solid var(--borders);
+}
+
+.create-group-container span svg {
+  border: 1px solid var(--borders);
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.create-group-container:hover {
+  background-color: var(--opacity);
+  cursor: pointer;
+}
+
+.cre-grp-add-ppl span {
+  color: var(--deep-grey);
+  font-size: 14px;
+}
+
+.cre-grp-add-ppl {
+  align-items: flex-start;
 }
