@@ -105,7 +105,7 @@ const router = createBrowserRouter([
   {
     path: "/messages",
     element: <Messages />,
-  },
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

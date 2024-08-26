@@ -1,24 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function CreateGroupPopup() {
-    const history = useHistory();
-
-  const handleButtonClick = () => {
-    // Close the message popup    
-    // Navigate to the previous page
-    history.goBack();
-  };
+function CreateGroupPopup({ closeWriteMessage }) {
+    const navigate = useNavigate();
 
   return (
     <div className="popup-container flex-row">
       <div className="black-window flex-column message-popup-container">
         <div className="message-window-header flex-row">
           <div className="flex-row h2-svg-message-popup">
-            <button className="svg-btn-message-popup" onClick={handleButtonClick}>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path></g></svg>
+            <button className="svg-btn-message-popup" onClick={closeWriteMessage}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <g>
+                  <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
+                </g>
+              </svg>
             </button>
             <div className="flex-column cre-grp-add-ppl">
                 <h2>Create a group</h2>

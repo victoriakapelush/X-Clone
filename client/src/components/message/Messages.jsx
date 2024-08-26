@@ -9,14 +9,19 @@ function Messages() {
 
   const handleWriteMessageClick = () => {
     setShowWriteMessage(true);
+    window.location.hash = "new_message";
   };
 
   const closeWriteMessage = () => {
     setShowWriteMessage(false);
+    window.location.hash = "";
   };
 
   useEffect(() => {
     document.title = "Messages / X";
+    if (window.location.hash === "#new_message") {
+      setShowWriteMessage(true);
+    }
   }, []);
 
   return (
