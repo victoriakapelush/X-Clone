@@ -34,7 +34,8 @@ const useSearchUsers = () => {
     loading,
     handleSearch,
     handleChange,
-    setQuery
+    setQuery,
+    setResults
   };
 };
 

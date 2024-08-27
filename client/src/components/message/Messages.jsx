@@ -3,9 +3,14 @@ import "../../styles/messages.css";
 import HomeNav from "../HomeNav";
 import { useEffect, useState } from "react";
 import WriteMessageBtn from "./WriteMessageBtn";
+import { useLocation } from 'react-router-dom';
 
 function Messages() {
   const [showWriteMessage, setShowWriteMessage] = useState(false);
+  const location = useLocation();
+  const selectedUser = location.state?.user;
+
+  console.log(selectedUser)
 
   const handleWriteMessageClick = () => {
     setShowWriteMessage(true);
@@ -22,6 +27,9 @@ function Messages() {
     if (window.location.hash === "#new_message") {
       setShowWriteMessage(true);
     }
+    if (selectedUser) {
+      document.title = `@${selectedUser.formattedUsername} / X`;
+    }
   }, []);
 
   return (
@@ -30,12 +38,23 @@ function Messages() {
       <div className="profile-container messages-container flex-column">
         <header className="flex-row">
           <h2>Messages</h2>
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="message-svg">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="message-svg" onClick={handleWriteMessageClick}>
             <g>
               <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5V12h-2v-1.537l-8 3.635-8-3.635V18.5c0 .276.224.5.5.5H13v2H4.498c-1.381 0-2.5-1.119-2.5-2.5v-13zm2 2.766l8 3.635 8-3.635V5.5c0-.276-.224-.5-.5-.5h-15c-.276 0-.5.224-.5.5v2.766zM19 18v-3h2v3h3v2h-3v3h-2v-3h-3v-2h3z"></path>
             </g>
           </svg>
         </header>
+        {selectedUser ? (
+          <main className="message-user-info flex-column">
+                <div key={selectedUser._id} className="flex-row dropdown-user-msg-popup selected-user-convo">
+                  <img src={`http://localhost:3000/uploads/${selectedUser.profile.profilePicture}`} className="user-search-image-dropdown"/>
+                  <div className="flex-column">
+                    <span>{selectedUser.originalUsername}</span>
+                    <span className="grey-color">@{selectedUser.formattedUsername}</span>
+                  </div>
+                </div>
+          </main>
+        ) : (
         <main className="message-welcome flex-column">
           <h1>Welcome to your inbox!</h1>
           <div>
@@ -49,8 +68,9 @@ function Messages() {
             Write a message
           </button>
         </main>
-      </div>
-      <div className="profile-container messages-container flex-column no-left-border">
+        )}      
+        </div>
+      <div className="profile-container messages-container conversation-container flex-column no-left-border">
         <header className="flex-row">
           <h2>Conversations</h2>
         </header>
