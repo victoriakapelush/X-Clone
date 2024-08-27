@@ -1,9 +1,7 @@
-import Messages from './Messages';
+import Messages from "./Messages";
 
 function Conversation() {
-    return (
-        <Messages />
-    )
+  return <Messages />;
 }
 
 export default Conversation;

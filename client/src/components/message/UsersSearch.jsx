@@ -1,9 +1,9 @@
-import { useContext, useState, useCallback } from 'react';
-import axios from 'axios';
-import TokenContext from '../TokenContext';
+import { useContext, useState, useCallback } from "react";
+import axios from "axios";
+import TokenContext from "../TokenContext";
 
 const useSearchUsers = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const { token } = useContext(TokenContext);
@@ -11,14 +11,17 @@ const useSearchUsers = () => {
   const handleSearch = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:3000/api/users/search`, {
-        params: { q: query },
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      console.log('API Response:', response.data);
+      const response = await axios.get(
+        `http://localhost:3000/api/users/search`,
+        {
+          params: { q: query },
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      console.log("API Response:", response.data);
       setResults(response.data);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
@@ -35,7 +38,7 @@ const useSearchUsers = () => {
     handleSearch,
     handleChange,
     setQuery,
-    setResults
+    setResults,
   };
 };
 

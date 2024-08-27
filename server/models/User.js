@@ -10,6 +10,8 @@ const UserSchema = new Schema({
   password: { type: String },
   profile: ProfileSchema,
   bookmarks: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
+  conversations: [{ type: Schema.Types.ObjectId, ref: "Conversation" }]
 });
 
 module.exports = mongoose.model("User", UserSchema);
