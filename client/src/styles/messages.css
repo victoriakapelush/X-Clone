@@ -14,6 +14,10 @@
   height: 100%;
 }
 
+.message-user-info {
+  border-bottom: 1px solid var(--borders);
+}
+
 .message-svg {
   color: rgb(239, 243, 244);
   padding: 1re 1rem;
@@ -319,4 +323,9 @@ h2 {
 
 .selected-user-header-convo {
   justify-content: flex-start !important;
+}
+
+.display-msg {
+  color: var(--white);
+  font-size: 0.9rem;
 }

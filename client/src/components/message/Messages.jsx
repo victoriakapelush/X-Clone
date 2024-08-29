@@ -1,14 +1,18 @@
 import "../../styles/profile.css";
 import "../../styles/messages.css";
 import HomeNav from "../HomeNav";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import WriteMessageBtn from "./WriteMessageBtn";
 import { useLocation } from "react-router-dom";
+import TokenContext from "../TokenContext";
+import axios from "axios";
 
 function Messages() {
   const [showWriteMessage, setShowWriteMessage] = useState(false);
   const location = useLocation();
   const selectedUser = location.state?.user;
+  const { formattedUsername, token } = useContext(TokenContext);
+  const [convos, setConvos] = useState([]);
 
   const handleWriteMessageClick = () => {
     setShowWriteMessage(true);
@@ -30,6 +34,25 @@ function Messages() {
     }
   }, [selectedUser]);
 
+  useEffect(() => {
+    const fetchConvos = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/messages/current_conversations/${formattedUsername}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        console.log("API Response:", response.data);
+        setConvos(response.data);
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
+
+    fetchConvos();
+  }, [formattedUsername, token]);
+
   return (
     <div className="flex-row profile-page messages-profile-page">
       <HomeNav />
@@ -47,24 +70,33 @@ function Messages() {
             </g>
           </svg>
         </header>
-        {selectedUser ? (
-          <main className="message-user-info flex-column">
-            <div
-              key={selectedUser._id}
-              className="flex-row dropdown-user-msg-popup selected-user-convo"
-            >
-              <img
-                src={`http://localhost:3000/uploads/${selectedUser.profile.profilePicture}`}
-                className="user-search-image-dropdown"
-              />
-              <div className="flex-column">
-                <span>{selectedUser.originalUsername}</span>
-                <span className="grey-color">
-                  @{selectedUser.formattedUsername}
-                </span>
-              </div>
-            </div>
-          </main>
+        {convos.length > 0 ? (
+          convos.map((convo) => (
+            <main key={convo._id} className="message-user-info flex-column">
+              {convo.receivers.map((receiver) => (
+                <div
+                  key={receiver._id}
+                  className="flex-row dropdown-user-msg-popup selected-user-convo"
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${receiver?.profile?.profilePicture}`}
+                    className="user-search-image-dropdown"
+                  />
+                  <div className="flex-column">
+                    <span>{receiver?.originalUsername}</span>
+                    <span className="grey-color">
+                      @{receiver?.formattedUsername}
+                    </span>
+                    <div className="display-msg">
+                      {convo?.messages?.length > 0
+                        ? convo.messages[convo.messages.length - 1].text
+                        : "No messages yet"}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </main>
+          ))
         ) : (
           <main className="message-welcome flex-column">
             <h1>Welcome to your inbox!</h1>
