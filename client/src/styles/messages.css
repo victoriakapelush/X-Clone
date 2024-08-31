@@ -1,13 +1,13 @@
 .messages-container {
-  max-width: 100%;
   margin: 0;
   box-sizing: border-box;
+  width: 30rem;
 }
 
 .conversation-container {
-  width: 120rem;
-  justify-content: space-between;
+  max-width: 120rem;
   box-sizing: border-box;
+  position: relative;
 }
 
 .messages-profile-page {
@@ -31,7 +31,7 @@
 .messages-container header {
   max-width: 100%;
   align-items: center;
-  margin: 1rem 1rem;
+  padding: 1rem 1rem;
   justify-content: space-between;
 }
 
@@ -202,6 +202,9 @@ h2 {
   padding-bottom: 0.5rem;
   align-items: center;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .grey-color {
@@ -249,6 +252,8 @@ h2 {
 .selected-user-convo {
   background-color: rgb(32, 35, 39);
   border-right: 1px solid var(--blue);
+  align-items: start;
+  justify-content: flex-start;
 }
 
 .styled-textarea {
@@ -261,6 +266,8 @@ h2 {
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 0.5rem;
+  bottom: 0;
+  position: absolute;
 }
 
 .msg-svg-media,
@@ -323,9 +330,25 @@ h2 {
 
 .selected-user-header-convo {
   justify-content: flex-start !important;
+  border-bottom: 1px solid var(--borders);
+}
+
+.selected-user-header-convo:hover {
+  background-color: var(--opacity);
 }
 
 .display-msg {
   color: var(--white);
   font-size: 0.9rem;
+  word-wrap: "break-word";
+  white-space: "normal";
+  overflow: "hidden";
+  text-overflow: "ellipsis";
+}
+
+.display-time-msg {
+  color: var(--white);
+  font-size: 0.7rem;
+  font-style: italic;
+  align-self: flex-end;
 }

@@ -106,6 +106,10 @@ const router = createBrowserRouter([
     path: "/messages",
     element: <Messages />,
   },
+  {
+    path: "/messages/:convoId",
+    element: <Messages />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

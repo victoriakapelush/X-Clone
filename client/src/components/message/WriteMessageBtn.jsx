@@ -1,11 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import CreateGroupPopup from "./CreateGroupPopup";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import useSearchUsers from "./UsersSearch";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import TokenContext from "../TokenContext";
+import { useHandleShowConversation } from "./useHandleShowConversation";
 
 function WriteMessageBtn({ closeWriteMessage }) {
+  const { formattedUsername, token } = useContext(TokenContext);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const {
     query,
@@ -19,11 +23,10 @@ function WriteMessageBtn({ closeWriteMessage }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showConversation, setShowConversation] = useState(false);
   const navigate = useNavigate();
-
-  const handleShowConversation = () => {
-    navigate("/messages", { state: { user: selectedUser } });
-    closeWriteMessage();
-  };
+  const { handleShowConversation } = useHandleShowConversation(
+    selectedUser,
+    closeWriteMessage,
+  );
 
   const onChange = (e) => {
     handleChange(e);

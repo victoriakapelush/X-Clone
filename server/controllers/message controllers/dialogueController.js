@@ -3,59 +3,93 @@ const Conversation = require('../../models/Conversation');
 const User = require('../../models/User');
 const { format } = require("date-fns");
 
-const sendMessage = async (req, res) => {
-    try {
-        const { receiver, text, image, gif } = req.body;
-        const sender = req.user.id;
+const createConversation = async (req, res) => {
+  try {
+    const { receiver } = req.body;
+    const currentUser = req.user.id;
 
-        const postDate = new Date();
-        const formattedTime = format(postDate, "PPpp");
+    const postDate = new Date();
+    const formattedTime = format(postDate, "PPpp");
 
-        // Find or create a conversation
-        let conversation = await Conversation.findOne({
-            sender,
-            receivers: { $in: [receiver] } // Check if receiver is in the receivers array
-        });
+    // Check if a conversation already exists between the current user and receiver
+    let conversation = await Conversation.findOne({
+      participants: { $all: [currentUser, receiver] }
+    });
 
-        if (!conversation) {
-            conversation = new Conversation({
-                sender,
-                receivers: [receiver],
-                messages: [],
-            });
-            await conversation.save();    
-        }
-
-        // Create a new message
-        const message = new Message({
-            sender,
-            receiver,
-            text,
-            image,
-            gif,
-            conversation: conversation._id,
-            time: formattedTime,
-        });
-
-        await message.save();
-
-        // Add message to conversation
-        await Conversation.findByIdAndUpdate(conversation._id, {
-            $push: { messages: message._id }
-        });
-
-        // Update User Model
-        await User.findByIdAndUpdate(sender, {
-            $push: { messages: message._id, conversations: conversation._id }
-        });
-        await User.findByIdAndUpdate(receiver, {
-            $push: { messages: message._id, conversations: conversation._id }
-        });
-
-        res.status(201).json(message);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    // If a conversation already exists, return an error or the existing conversation
+    if (conversation) {
+      return res.status(400).json({ message: "Conversation already exists." });
     }
+
+    // Create a new conversation
+    conversation = new Conversation({
+      participants: [currentUser, receiver],
+      messages: [],
+      updatedAt: formattedTime,
+    });
+
+    await conversation.save();
+
+    // Add the conversation to both participants' User models
+    await User.findByIdAndUpdate(currentUser, {
+      $push: { conversations: conversation._id }
+    });
+    await User.findByIdAndUpdate(receiver, {
+      $push: { conversations: conversation._id }
+    });
+
+    res.status(201).json(conversation);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const addMessageToConversation = async (req, res) => {
+  try {
+    const { text, image, gif } = req.body;
+    const currentUser = req.user.id;
+    const {conversationId} = req.params;
+
+    const postDate = new Date();
+    const formattedTime = format(postDate, "PPpp");
+
+    // Find the conversation by its ID
+    const conversation = await Conversation.findById(conversationId);
+
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found." });
+    }
+
+    // Create a new message
+    const message = new Message({
+      participants: conversation.participants,
+      text,
+      image,
+      gif,
+      conversation: conversation._id,
+      time: formattedTime,
+      sentBy: currentUser
+    });
+
+    await message.save();
+
+    // Add the new message to the conversation
+    await Conversation.findByIdAndUpdate(conversation._id, {
+      $push: { messages: message._id },
+      $set: { lastMessage: message._id, updatedAt: formattedTime }
+    });
+
+    // Update the User models for all participants
+    for (const participant of conversation.participants) {
+      await User.findByIdAndUpdate(participant, {
+        $push: { messages: message._id }
+      });
+    }
+
+    res.status(201).json(message);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 
@@ -64,19 +98,15 @@ const getMessages = async (req, res) => {
     try {
       const { conversationId } = req.params;
   
-      const messages = await Message.find({ conversation: conversationId })
-        .populate('sender')  
-        .populate('receiver') 
+      const messages = await Message.findById({ conversation: conversationId })
+        .populate('participants')  
         .populate({
-            path: 'conversation',
+            path: 'messages',
             populate: [
-              { path: 'participants' },
-              { 
-                path: 'messages',
-              }
+              { path: 'participants' }
             ]
-          })        
-          .exec();
+          })
+          .populate('sentBy')
   
       res.status(200).json(messages);
     } catch (error) {
@@ -85,6 +115,7 @@ const getMessages = async (req, res) => {
   };
 
 module.exports = {
-  sendMessage,
+  addMessageToConversation,
+  createConversation,
   getMessages
 };

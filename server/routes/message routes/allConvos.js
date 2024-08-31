@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { sendMessage, getMessages } = require('../../controllers/message controllers/dialogueController');
+const { addMessageToConversation, createConversation, getMessages } = require('../../controllers/message controllers/dialogueController');
 const { verifyJWT } = require("../../controllers/loginController");
 
 // Route to send a message
-router.post('/send', verifyJWT, sendMessage);
-
+router.post('/send', verifyJWT, createConversation);
+router.put('/:conversationId', verifyJWT, addMessageToConversation)
 // Route to get messages for a conversation
 router.get('/:conversationId', verifyJWT, getMessages);
 

@@ -6,7 +6,7 @@ import "../styles/highlights.css";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import HomeNav from "./HomeNav";
 import HomeExtra from "./HomeExtra";
 import EditProfilePopup from "./EditProfilePopup";
@@ -22,6 +22,7 @@ import DeletePostHook from "./DeletePostHook";
 
 function Profile() {
   const { username } = useParams();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({});
   const [activeTab, setActiveTab] = useState("posts");
   const [originalUsername, setOriginalUsername] = useState(null);
@@ -111,7 +112,6 @@ function Profile() {
             },
           },
         );
-
         // Set user data
         setUserData({ ...response.data.userProfile });
 
@@ -149,7 +149,10 @@ function Profile() {
       <HomeNav />
       <div className="profile-container">
         <header className="flex-row">
-          <Link to="/home" className="flex-row profile-icon-back">
+          <Link
+            onClick={() => navigate(-1)}
+            className="flex-row profile-icon-back"
+          >
             <img src={back} />
           </Link>
           <div className="flex-column profile-header-name">

@@ -1,18 +1,73 @@
+/* eslint-disable no-unused-vars */
 import "../../styles/profile.css";
 import "../../styles/messages.css";
 import HomeNav from "../HomeNav";
 import { useEffect, useState, useContext } from "react";
 import WriteMessageBtn from "./WriteMessageBtn";
-import { useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TokenContext from "../TokenContext";
+import UserContext from "../UserContext";
 import axios from "axios";
+import { format, formatDistanceToNow } from "date-fns";
+import { useHandleShowConversation } from "./useHandleShowConversation";
 
 function Messages() {
   const [showWriteMessage, setShowWriteMessage] = useState(false);
-  const location = useLocation();
-  const selectedUser = location.state?.user;
   const { formattedUsername, token } = useContext(TokenContext);
   const [convos, setConvos] = useState([]);
+  const [selectedConvo, setSelectedConvo] = useState(null);
+  const [messageText, setMessageText] = useState("");
+  const [image, setImage] = useState(null);
+  const [gif, setGif] = useState(null);
+  const { userData } = useContext(UserContext);
+  const [receiverId, setReceiverId] = useState(null);
+
+  console.log(selectedConvo);
+
+  const sendMessage = async () => {
+    try {
+      const messageData = {
+        receiver: receiverId,
+        text: messageText,
+        image,
+        gif,
+        participants: userData._id,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const convoId = selectedConvo._id;
+      const response = await axios.put(
+        `http://localhost:3000/api/messages/conversation/${convoId}`,
+        messageData,
+        config,
+      );
+
+      console.log("Message sent successfully:", response.data);
+
+      setMessageText("");
+      setImage(null);
+      setGif(null);
+
+      setSelectedConvo((prevConvo) => ({
+        ...prevConvo,
+        messages: [...prevConvo.messages, response.data],
+      }));
+
+      setConvos((prevConvos) =>
+        prevConvos.map((convo) =>
+          convo._id === selectedConvo._id
+            ? { ...convo, messages: [...convo.messages, response.data] }
+            : convo,
+        ),
+      );
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
 
   const handleWriteMessageClick = () => {
     setShowWriteMessage(true);
@@ -25,14 +80,19 @@ function Messages() {
   };
 
   useEffect(() => {
-    document.title = "Messages / X";
-    if (window.location.hash === "#new_message") {
+    if (selectedConvo) {
+      const receiverNames = selectedConvo.participants
+        .map((receiver) => receiver.formattedUsername)
+        .join(", ");
+
+      document.title = `@${receiverNames} / X`;
+    } else if (window.location.hash === "#new_message") {
+      document.title = "New Message / X";
       setShowWriteMessage(true);
+    } else {
+      document.title = "Messages / X";
     }
-    if (selectedUser) {
-      document.title = `@${selectedUser.formattedUsername} / X`;
-    }
-  }, [selectedUser]);
+  }, [selectedConvo]);
 
   useEffect(() => {
     const fetchConvos = async () => {
@@ -53,6 +113,15 @@ function Messages() {
     fetchConvos();
   }, [formattedUsername, token]);
 
+  const handleConvoClick = (convoId) => {
+    const convo = convos.find((c) => c._id === convoId);
+    setSelectedConvo(convo);
+    const participantIds = convo.participants.map((user) => user._id);
+    const currentUserId = userData._id;
+    const receiverId = participantIds.find((id) => id !== currentUserId);
+    setReceiverId(receiverId);
+  };
+
   return (
     <div className="flex-row profile-page messages-profile-page">
       <HomeNav />
@@ -71,32 +140,65 @@ function Messages() {
           </svg>
         </header>
         {convos.length > 0 ? (
-          convos.map((convo) => (
-            <main key={convo._id} className="message-user-info flex-column">
-              {convo.receivers.map((receiver) => (
-                <div
-                  key={receiver._id}
-                  className="flex-row dropdown-user-msg-popup selected-user-convo"
-                >
-                  <img
-                    src={`http://localhost:3000/uploads/${receiver?.profile?.profilePicture}`}
-                    className="user-search-image-dropdown"
-                  />
-                  <div className="flex-column">
-                    <span>{receiver?.originalUsername}</span>
-                    <span className="grey-color">
-                      @{receiver?.formattedUsername}
-                    </span>
-                    <div className="display-msg">
-                      {convo?.messages?.length > 0
-                        ? convo.messages[convo.messages.length - 1].text
-                        : "No messages yet"}
+          convos.map((convo) => {
+            const lastMessage = convo?.messages?.[convo.messages.length - 1];
+            const messageTime = lastMessage?.time
+              ? new Date(lastMessage.time)
+              : null;
+            let formattedTime = "";
+
+            if (convo.messages.length > 0) {
+              // Only set formattedTime if there are messages
+              if (messageTime && !isNaN(messageTime)) {
+                const now = new Date();
+                const isRecent = now - messageTime < 24 * 60 * 60 * 1000;
+
+                formattedTime = isRecent
+                  ? formatDistanceToNow(messageTime, { addSuffix: true })
+                  : format(messageTime, "MMMM d");
+              } else {
+                formattedTime = "Invalid date";
+              }
+            }
+
+            return (
+              <main
+                key={convo._id}
+                onClick={() => handleConvoClick(convo._id)}
+                className="message-user-info flex-column"
+              >
+                {convo.participants
+                  .filter((participant) => participant._id !== userData?._id)
+                  .map((participant) => (
+                    <div
+                      key={participant._id}
+                      className="flex-row dropdown-user-msg-popup selected-user-convo"
+                    >
+                      <img
+                        src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                        className="user-search-image-dropdown"
+                      />
+                      <div className="flex-column">
+                        <div className="flex-row msg-un-img-holder">
+                          <span>
+                            {participant?.originalUsername}&nbsp;&nbsp;
+                          </span>
+                          <span className="grey-color">
+                            @{participant?.formattedUsername}&nbsp;&nbsp;
+                          </span>
+                          <span> · {formattedTime}</span>
+                        </div>
+                        <div className="display-msg">
+                          {convo?.messages?.length > 0
+                            ? lastMessage.text
+                            : "No messages yet"}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </main>
-          ))
+                  ))}
+              </main>
+            );
+          })
         ) : (
           <main className="message-welcome flex-column">
             <h1>Welcome to your inbox!</h1>
@@ -113,7 +215,7 @@ function Messages() {
           </main>
         )}
       </div>
-      {!selectedUser ? (
+      {!selectedConvo ? (
         <div className="profile-container messages-container conversation-container flex-column no-left-border">
           <header className="flex-row">
             <h2>Conversations</h2>
@@ -121,15 +223,75 @@ function Messages() {
         </div>
       ) : (
         <div className="profile-container messages-container conversation-container flex-column no-left-border">
-          <header className="flex-row selected-user-header-convo">
-            <img
-              src={`http://localhost:3000/uploads/${selectedUser.profile.profilePicture}`}
-              className="user-search-image-dropdown"
-            />
-            <h2>{selectedUser.originalUsername}</h2>
-          </header>
+          {selectedConvo.participants
+            .filter((participant) => participant._id !== userData?._id)
+            .map((participant, idx) => (
+              <Link to={`/profile/${participant?.formattedUsername}`} key={idx}>
+                <header className="flex-row selected-user-header-convo">
+                  <img
+                    src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                    className="user-search-image-dropdown"
+                  />
+                  <h2>{participant.originalUsername}</h2>
+                </header>
+              </Link>
+            ))}
           <div>
-            <div className="msg-top-brdr"></div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                overflowY: "auto",
+                padding: "10px",
+                height: "600px",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+              }}
+            >
+              {selectedConvo &&
+                selectedConvo.messages &&
+                selectedConvo?.messages?.map((message, idx) => {
+                  // Convert and format the message time
+                  const messageTime = message?.time
+                    ? new Date(message.time)
+                    : null;
+                  let formattedTime = "";
+                  const isSender = message?.sentBy?.includes(userData._id);
+
+                  if (messageTime && !isNaN(messageTime)) {
+                    const now = new Date();
+                    const isRecent = now - messageTime < 24 * 60 * 60 * 1000; // Check if the message is within the last 24 hours
+
+                    formattedTime = isRecent
+                      ? formatDistanceToNow(messageTime, { addSuffix: true })
+                      : format(messageTime, "MMMM d");
+                  } else {
+                    formattedTime = "Invalid date";
+                  }
+
+                  return (
+                    <div
+                      className="flex-column"
+                      key={idx}
+                      style={{
+                        backgroundColor: isSender
+                          ? "rgb(29, 155, 240)"
+                          : "rgb(113, 118, 123)",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "10px",
+                        marginBottom: "5px",
+                        alignSelf: isSender ? "flex-end" : "flex-start",
+                        maxWidth: "60%",
+                      }}
+                    >
+                      {message.text}
+                      <span className="display-time-msg">{formattedTime}</span>
+                    </div>
+                  );
+                })}
+            </div>
             <div className="styled-textarea">
               <div className="msg-svg-container flex-row">
                 <button className="hover-effect" data-username="Media">
@@ -170,12 +332,14 @@ function Messages() {
                 placeholder="Start a new message"
                 className="growing-textarea"
                 rows="1"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
                 onInput={(e) => {
                   e.target.style.height = "auto"; // Reset height to auto
                   e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on scrollHeight
                 }}
               ></textarea>
-              <button className="send-pers-msg radius">
+              <button onClick={sendMessage} className="send-pers-msg radius">
                 <svg className="radius" viewBox="0 0 24 24" aria-hidden="true">
                   <g>
                     <path d="M2.504 21.866l.526-2.108C3.04 19.719 4 15.823 4 12s-.96-7.719-.97-7.757l-.527-2.109L22.236 12 2.504 21.866zM5.981 13c-.072 1.962-.34 3.833-.583 5.183L17.764 12 5.398 5.818c.242 1.349.51 3.221.583 5.183H10v2H5.981z"></path>

@@ -1,8 +1,10 @@
 const User = require("../models/User");
 
 const getProfilePage = async (req, res) => {
+  const currentUser = req.params.formattedUsername;
+  console.log(currentUser);
+
   try {
-    const currentUser = req.params.formattedUsername;
     const user = await User.findOne({ formattedUsername: currentUser });
     if (!user) {
       return res.status(404).json({ message: "User profile not found " });
