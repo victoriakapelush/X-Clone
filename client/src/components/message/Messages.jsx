@@ -9,7 +9,6 @@ import TokenContext from "../TokenContext";
 import UserContext from "../UserContext";
 import axios from "axios";
 import { format, formatDistanceToNow } from "date-fns";
-import { useHandleShowConversation } from "./useHandleShowConversation";
 
 function Messages() {
   const [showWriteMessage, setShowWriteMessage] = useState(false);
@@ -21,8 +20,6 @@ function Messages() {
   const [gif, setGif] = useState(null);
   const { userData } = useContext(UserContext);
   const [receiverId, setReceiverId] = useState(null);
-
-  console.log(selectedConvo);
 
   const sendMessage = async () => {
     try {
@@ -161,41 +158,89 @@ function Messages() {
               }
             }
 
+            <div className="participants-list">
+              {convo.participants
+                .filter((participant) => participant._id !== userData?._id)
+                .map((participant, idx, arr) => (
+                  <span key={participant._id} className="participant-info">
+                    <img
+                      src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                      className="user-search-image-dropdown"
+                      alt={participant.originalUsername}
+                    />
+                    <span className="participant-username">
+                      {participant?.originalUsername}
+                    </span>
+                    {idx < arr.length - 1 && ", "}
+                  </span>
+                ))}
+            </div>;
+
             return (
               <main
                 key={convo._id}
                 onClick={() => handleConvoClick(convo._id)}
                 className="message-user-info flex-column"
               >
-                {convo.participants
-                  .filter((participant) => participant._id !== userData?._id)
-                  .map((participant) => (
-                    <div
-                      key={participant._id}
-                      className="flex-row dropdown-user-msg-popup selected-user-convo"
-                    >
-                      <img
-                        src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
-                        className="user-search-image-dropdown"
-                      />
-                      <div className="flex-column">
-                        <div className="flex-row msg-un-img-holder">
-                          <span>
-                            {participant?.originalUsername}&nbsp;&nbsp;
-                          </span>
-                          <span className="grey-color">
-                            @{participant?.formattedUsername}&nbsp;&nbsp;
-                          </span>
-                          <span> · {formattedTime}</span>
-                        </div>
-                        <div className="display-msg">
-                          {convo?.messages?.length > 0
-                            ? lastMessage.text
-                            : "No messages yet"}
+                {convo.participants.filter(
+                  (participant) => participant._id !== userData?._id,
+                ).length === 1 ? (
+                  convo.participants
+                    .filter((participant) => participant._id !== userData?._id)
+                    .map((participant, idx, arr) => (
+                      <div
+                        key={participant._id}
+                        className="flex-row dropdown-user-msg-popup selected-user-convo"
+                      >
+                        <img
+                          src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                          className="user-search-image-dropdown"
+                        />
+                        <div className="flex-column">
+                          <div className="flex-row msg-un-img-holder">
+                            <span>
+                              {participant?.originalUsername}&nbsp;&nbsp;
+                            </span>
+                            <span className="grey-color">
+                              @{participant?.formattedUsername}&nbsp;&nbsp;
+                            </span>
+                            <span> · {formattedTime}</span>
+                          </div>
+                          <div className="display-msg">
+                            {convo?.messages?.length > 0
+                              ? lastMessage.text
+                              : "No messages yet"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                ) : (
+                  // Case: More than two participants
+                  <div className="more-than-two-participants flex-row dropdown-user-msg-popup selected-user-convo">
+                    {convo.participants
+                      .filter(
+                        (participant) => participant._id !== userData?._id,
+                      )
+                      .map((participant, idx) => (
+                        <div
+                          key={participant._id}
+                          className="participant-summary flex-column"
+                        >
+                          <img
+                            src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                            className="user-search-image-dropdown"
+                          />
+                          <div className="flex-column">
+                            <div className="flex-row msg-un-img-holder">
+                              <span className="grey-color">
+                                @{participant?.formattedUsername}&nbsp;&nbsp;
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
               </main>
             );
           })
@@ -223,19 +268,36 @@ function Messages() {
         </div>
       ) : (
         <div className="profile-container messages-container conversation-container flex-column no-left-border">
-          {selectedConvo.participants
-            .filter((participant) => participant._id !== userData?._id)
-            .map((participant, idx) => (
-              <Link to={`/profile/${participant?.formattedUsername}`} key={idx}>
-                <header className="flex-row selected-user-header-convo">
-                  <img
-                    src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
-                    className="user-search-image-dropdown"
-                  />
-                  <h2>{participant.originalUsername}</h2>
-                </header>
-              </Link>
-            ))}
+          <div className="flex-row selected-user-header-convo bottom-line-msg-header extra-margin-masg-header">
+            {selectedConvo.participants
+              .filter((participant) => participant._id !== userData?._id)
+              .map((participant, idx, arr) => (
+                <span key={participant._id}>
+                  <Link to={`/profile/${participant?.formattedUsername}`}>
+                    {arr.length > 1 ? (
+                      <div className="participant-summary flex-column">
+                        <img
+                          src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                          className="user-search-image-dropdown"
+                        />
+                        <span className="grey-color">
+                          @{participant.formattedUsername}
+                        </span>
+                      </div>
+                    ) : (
+                      <header className="flex-row selected-user-header-convo hover-eff-msg">
+                        <img
+                          src={`http://localhost:3000/uploads/${participant?.profile?.profilePicture}`}
+                          className="user-search-image-dropdown"
+                        />
+                        <h2>{participant.originalUsername}</h2>
+                      </header>
+                    )}
+                  </Link>
+                  {idx < arr.length - 1 && " "}
+                </span>
+              ))}
+          </div>
           <div>
             <div
               style={{
@@ -257,8 +319,7 @@ function Messages() {
                     ? new Date(message.time)
                     : null;
                   let formattedTime = "";
-                  const isSender = message?.sentBy?.includes(userData._id);
-
+                  const isSender = message?.sentBy._id === userData._id;
                   if (messageTime && !isNaN(messageTime)) {
                     const now = new Date();
                     const isRecent = now - messageTime < 24 * 60 * 60 * 1000; // Check if the message is within the last 24 hours
@@ -269,25 +330,45 @@ function Messages() {
                   } else {
                     formattedTime = "Invalid date";
                   }
-
                   return (
                     <div
-                      className="flex-column"
                       key={idx}
                       style={{
-                        backgroundColor: isSender
-                          ? "rgb(29, 155, 240)"
-                          : "rgb(113, 118, 123)",
-                        color: "white",
-                        padding: "10px",
-                        borderRadius: "10px",
+                        display: "flex",
+                        flexDirection: isSender ? "row-reverse" : "row",
+                        alignItems: "center",
                         marginBottom: "5px",
-                        alignSelf: isSender ? "flex-end" : "flex-start",
-                        maxWidth: "60%",
                       }}
                     >
-                      {message.text}
-                      <span className="display-time-msg">{formattedTime}</span>
+                      {!isSender && (
+                        <img
+                          src={`http://localhost:3000/uploads/${message?.sentBy?.profile?.profilePicture}`}
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            marginRight: "10px",
+                          }}
+                        />
+                      )}
+                      <div
+                        className="flex-column"
+                        style={{
+                          backgroundColor: isSender
+                            ? "rgb(29, 155, 240)"
+                            : "rgb(113, 118, 123)",
+                          color: "white",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          maxWidth: "60%",
+                          alignSelf: isSender ? "flex-end" : "flex-start",
+                        }}
+                      >
+                        {message.text}
+                        <span className="display-time-msg">
+                          {formattedTime}
+                        </span>
+                      </div>
                     </div>
                   );
                 })}

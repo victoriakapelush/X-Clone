@@ -24,7 +24,7 @@ function WriteMessageBtn({ closeWriteMessage }) {
   const [showConversation, setShowConversation] = useState(false);
   const navigate = useNavigate();
   const { handleShowConversation } = useHandleShowConversation(
-    selectedUser,
+    [selectedUser],
     closeWriteMessage,
   );
 
@@ -156,7 +156,10 @@ function WriteMessageBtn({ closeWriteMessage }) {
           </div>
         )}
         {showCreateGroup && (
-          <CreateGroupPopup closeWriteMessage={closeWriteMessage} />
+          <CreateGroupPopup
+            closeWriteMessage={closeWriteMessage}
+            selectedUser={selectedUser}
+          />
         )}
       </div>
     </div>

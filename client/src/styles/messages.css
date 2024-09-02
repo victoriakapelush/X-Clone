@@ -330,11 +330,15 @@ h2 {
 
 .selected-user-header-convo {
   justify-content: flex-start !important;
-  border-bottom: 1px solid var(--borders);
+  flex-wrap: wrap;
 }
 
-.selected-user-header-convo:hover {
+.bottom-line-msg-header:hover {
   background-color: var(--opacity);
+}
+
+.bottom-line-msg-header {
+  border-bottom: 1px solid var(--borders);
 }
 
 .display-msg {
@@ -351,4 +355,17 @@ h2 {
   font-size: 0.7rem;
   font-style: italic;
   align-self: flex-end;
+}
+
+.more-than-two-participants {
+  flex-wrap: wrap;
+}
+
+.participant-summary {
+  align-items: center;
+  padding: 0 0.6rem;
+}
+
+.extra-margin-masg-header {
+  padding: 1rem 0 1rem 0;
 }

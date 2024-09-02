@@ -15,11 +15,13 @@ import premium from "../assets/icons/premium.png";
 import { useNavigate } from "react-router-dom";
 import ToPost from "./ToPost";
 import TokenContext from "./TokenContext";
+import UserContext from "./UserContext";
 
 function HomeNav() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
   const { formattedUsername } = useContext(TokenContext);
+  const { setUserData } = useContext(UserContext);
 
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
@@ -34,6 +36,7 @@ function HomeNav() {
     try {
       localStorage.removeItem("token");
       navigate("/");
+      setUserData(null);
     } catch (error) {
       console.error("Logout error:", error);
     }

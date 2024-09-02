@@ -9,7 +9,8 @@ const getConversations = async (req, res) => {
       .populate({
         path: 'messages',
         populate: [
-          { path: 'participants' }
+          { path: 'participants' },
+          { path: 'sentBy' }
         ]
       })  
   

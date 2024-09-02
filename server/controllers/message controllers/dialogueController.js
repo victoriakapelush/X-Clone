@@ -5,15 +5,25 @@ const { format } = require("date-fns");
 
 const createConversation = async (req, res) => {
   try {
-    const { receiver } = req.body;
+    const { participants } = req.body; // Expecting `participants` to be an array of user IDs
     const currentUser = req.user.id;
+
+    // Ensure the current user is included in the participants list
+    if (!participants.includes(currentUser)) {
+      participants.push(currentUser);
+    }
+
+    // Validate that there are at least two participants
+    if (participants.length < 2) {
+      return res.status(400).json({ message: "At least two participants are required." });
+    }
 
     const postDate = new Date();
     const formattedTime = format(postDate, "PPpp");
 
-    // Check if a conversation already exists between the current user and receiver
+    // Check if a conversation already exists with the exact same participants
     let conversation = await Conversation.findOne({
-      participants: { $all: [currentUser, receiver] }
+      participants: { $all: participants, $size: participants.length }
     });
 
     // If a conversation already exists, return an error or the existing conversation
@@ -23,26 +33,28 @@ const createConversation = async (req, res) => {
 
     // Create a new conversation
     conversation = new Conversation({
-      participants: [currentUser, receiver],
+      participants,
       messages: [],
       updatedAt: formattedTime,
     });
 
     await conversation.save();
 
-    // Add the conversation to both participants' User models
-    await User.findByIdAndUpdate(currentUser, {
-      $push: { conversations: conversation._id }
-    });
-    await User.findByIdAndUpdate(receiver, {
-      $push: { conversations: conversation._id }
-    });
+    // Add the conversation to each participant's User model
+    await Promise.all(
+      participants.map((participantId) =>
+        User.findByIdAndUpdate(participantId, {
+          $push: { conversations: conversation._id }
+        })
+      )
+    );
 
     res.status(201).json(conversation);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const addMessageToConversation = async (req, res) => {
   try {
@@ -98,15 +110,16 @@ const getMessages = async (req, res) => {
     try {
       const { conversationId } = req.params;
   
-      const messages = await Message.findById({ conversation: conversationId })
+      const messages = await Message.find({ conversation: conversationId })
         .populate('participants')  
+        .populate[{ path: 'sentBy' }]
         .populate({
             path: 'messages',
             populate: [
               { path: 'participants' }
             ]
           })
-          .populate('sentBy')
+          .execPopulate();
   
       res.status(200).json(messages);
     } catch (error) {

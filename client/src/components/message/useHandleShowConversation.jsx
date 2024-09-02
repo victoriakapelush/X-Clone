@@ -1,55 +1,35 @@
-// useHandleShowConversation.js
+/* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import TokenContext from "../TokenContext";
 
-export function useHandleShowConversation(selectedUser, closeWriteMessage) {
+export function useHandleShowConversation(selectedUsers, closeWriteMessage) {
   const { formattedUsername, token } = useContext(TokenContext);
   const navigate = useNavigate();
 
   const handleShowConversation = async () => {
-    if (!selectedUser) {
-      console.log("No user selected.");
+    if (selectedUsers.length === 0) {
+      console.log("No users selected.");
       return;
     }
 
     try {
-      // Fetch existing conversations for the current user
-      const response = await axios.get(
-        `http://localhost:3000/api/messages/current_conversations/${formattedUsername}`,
+      const participants = selectedUsers.map((user) => user._id);
+
+      // Request to check for an existing conversation or create a new one
+      const response = await axios.post(
+        "http://localhost:3000/api/messages/conversation/send",
+        { participants },
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
 
-      const conversations = response.data;
-      // Check if a conversation with the selected user already exists
-      const existingConversation = conversations.find((conversation) =>
-        conversation.participants.some(
-          (participant) => participant._id === selectedUser._id,
-        ),
-      );
+      const conversation = response.data;
 
-      if (existingConversation) {
-        // Navigate to the existing conversation
-        navigate(`/messages/${existingConversation._id}`);
-      } else {
-        // No existing conversation, create a new one
-        const newConversationResponse = await axios.post(
-          "http://localhost:3000/api/messages/conversation/send",
-          {
-            receiver: selectedUser._id,
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        const newConversation = newConversationResponse.data;
-        // Navigate to the new conversation
-        navigate(`/messages/${newConversation._id}`);
-      }
+      // Navigate to the conversation
+      navigate(`/messages/${conversation._id}`);
     } catch (error) {
       console.error("Error checking or creating conversation:", error);
     } finally {
@@ -57,5 +37,5 @@ export function useHandleShowConversation(selectedUser, closeWriteMessage) {
     }
   };
 
-  return { handleShowConversation, selectedUser };
+  return { handleShowConversation };
 }

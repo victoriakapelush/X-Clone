@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSearchUsers from "./UsersSearch";
+import { useHandleShowConversation } from "./useHandleShowConversation";
 
-function CreateGroupPopup({ closeWriteMessage }) {
+function CreateGroupPopup({ closeWriteMessage, selectedUser }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const {
     query,
@@ -15,6 +16,10 @@ function CreateGroupPopup({ closeWriteMessage }) {
     setQuery,
     setResults,
   } = useSearchUsers();
+  const { handleShowConversation } = useHandleShowConversation(
+    selectedUsers,
+    closeWriteMessage,
+  );
 
   const onChange = (e) => {
     handleChange(e);
@@ -51,7 +56,12 @@ function CreateGroupPopup({ closeWriteMessage }) {
               <span>Add people</span>
             </div>
           </div>
-          <button className="next-btn-message-popup radius">Next</button>
+          <button
+            onClick={handleShowConversation}
+            className="next-btn-message-popup radius"
+          >
+            Next
+          </button>
         </div>
         <div className="search-message-popup flex-row">
           <span className="search-icon-wrapper">

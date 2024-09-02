@@ -19,6 +19,8 @@ import ConnectPeople from "./components/ConnectPeople.jsx";
 import PostPage from "./components/PostPage.jsx";
 import CommentPage from "./components/CommentPage.jsx";
 import Messages from "./components/message/Messages.jsx";
+import List from "./components/List.jsx";
+import Community from "./components/Community.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./styles/index.css";
@@ -109,6 +111,22 @@ const router = createBrowserRouter([
   {
     path: "/messages/:convoId",
     element: <Messages />,
+  },
+  {
+    path: "/lists",
+    element: <List />,
+  },
+  {
+    path: "/lists/:listId",
+    element: <List />,
+  },
+  {
+    path: "/communities",
+    element: <Community />,
+  },
+  {
+    path: "/communities/:listId",
+    element: <Community />,
   },
 ]);
 
