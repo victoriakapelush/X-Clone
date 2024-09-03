@@ -55,6 +55,7 @@ function Home() {
     }
     document.getElementById("topost-insert-image").style.display = "block";
   };
+
   const handleUploadClick = (e) => {
     e.preventDefault();
     document.getElementById("image").click();

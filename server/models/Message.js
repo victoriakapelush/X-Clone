@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const MessageSchema = new Schema({
   participants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
-  text: { type: String, required: true },
+  text: { type: String },
   image: { type: String },
   gif: { type: String },
   conversation: { type: Schema.Types.ObjectId, ref: 'Conversation', required: true },

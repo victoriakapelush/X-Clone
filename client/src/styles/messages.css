@@ -258,7 +258,6 @@ h2 {
 
 .styled-textarea {
   display: flex;
-  align-items: center;
   border: 1px solid transparent;
   border-radius: 15px;
   padding: 0.5rem;

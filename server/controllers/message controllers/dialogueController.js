@@ -5,7 +5,7 @@ const { format } = require("date-fns");
 
 const createConversation = async (req, res) => {
   try {
-    const { participants } = req.body; // Expecting `participants` to be an array of user IDs
+    const { participants } = req.body;
     const currentUser = req.user.id;
 
     // Ensure the current user is included in the participants list
@@ -58,9 +58,14 @@ const createConversation = async (req, res) => {
 
 const addMessageToConversation = async (req, res) => {
   try {
-    const { text, image, gif } = req.body;
+    const { text, gif } = req.body;
     const currentUser = req.user.id;
     const {conversationId} = req.params;
+
+    let filename = null;
+    if (req.file) {
+      filename = req.file.filename;
+    }
 
     const postDate = new Date();
     const formattedTime = format(postDate, "PPpp");
@@ -76,7 +81,7 @@ const addMessageToConversation = async (req, res) => {
     const message = new Message({
       participants: conversation.participants,
       text,
-      image,
+      image: filename,
       gif,
       conversation: conversation._id,
       time: formattedTime,
