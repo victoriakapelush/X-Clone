@@ -234,14 +234,9 @@ function Home() {
                   <img
                     className="profile-pic"
                     src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
-                    alt="Profile Picture"
                   />
                 ) : (
-                  <img
-                    className="profile-pic"
-                    src={defaultProfileImage}
-                    alt="Default Profile Picture"
-                  />
+                  <img className="profile-pic" src={defaultProfileImage} />
                 )}
               </Link>
               <div className="form-container-new-post">

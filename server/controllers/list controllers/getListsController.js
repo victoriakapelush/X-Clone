@@ -5,13 +5,15 @@ const getLists = async (req, res) => {
   const currentUserId = req.user.id;
 
   try {
-    const user = await User.findById(currentUserId).populate({
+    const user = await User.findById(currentUserId)
+    .populate({
       path: "lists",
       populate: [
         { path: "owner", model: "User" },
         { path: "members", model: "User" },
         { path: "posts", model: "Post" },
       ],
+      options: { sort: { createdAt: -1 } }, // Sort by creation date in descending order
     });
 
     if (!user) {

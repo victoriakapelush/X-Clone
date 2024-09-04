@@ -6,7 +6,7 @@ import "../styles/highlights.css";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import HomeNav from "./HomeNav";
 import HomeExtra from "./HomeExtra";
 import EditProfilePopup from "./EditProfilePopup";
@@ -19,10 +19,14 @@ import FullSizeImage from "./FullSizeImage";
 import back from "../assets/icons/back.png";
 import UseNewPostHook from "./UseNewPostHook";
 import DeletePostHook from "./DeletePostHook";
+import PickListPopup from "./list/PickListPopup";
+import { ToastContainer } from "react-toastify";
 
 function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showListPopup, setShowListPopup] = useState(false);
   const [userData, setUserData] = useState({});
   const [activeTab, setActiveTab] = useState("posts");
   const [originalUsername, setOriginalUsername] = useState(null);
@@ -144,6 +148,29 @@ function Profile() {
     fetchUserData();
   }, [username]);
 
+  useEffect(() => {
+    // Check if the URL has the hash to open the popup
+    if (location.hash === "#pick") {
+      setShowListPopup(true);
+    } else {
+      setShowListPopup(false);
+    }
+  }, [location]);
+
+  const togglePopup = () => {
+    setShowListPopup((prevState) => {
+      const newState = !prevState;
+
+      if (newState) {
+        navigate("#pick"); // Add the hash to the URL
+      } else {
+        navigate(`/profile/${username}`); // Remove the hash from the URL
+      }
+
+      return newState;
+    });
+  };
+
   return (
     <div className="flex-row profile-page">
       <HomeNav />
@@ -220,7 +247,14 @@ function Profile() {
                     <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
                   </g>
                 </svg>
+                {showListPopup && (
+                  <PickListPopup
+                    closePopup={togglePopup}
+                    currentUser={userData}
+                  />
+                )}
                 <svg
+                  onClick={togglePopup}
                   className="pink-add-list"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
