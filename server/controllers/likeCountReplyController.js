@@ -45,20 +45,16 @@ const saveReplyLikeCount = async (req, res) => {
 
     const updatedReply = await reply.save();
 
-    res
-      .status(200)
-      .send({
-        message: "Like status updated successfully",
-        reply: updatedReply,
-      });
+    res.status(200).send({
+      message: "Like status updated successfully",
+      reply: updatedReply,
+    });
   } catch (error) {
     console.error("Error saving like count for reply:", error);
-    res
-      .status(500)
-      .send({
-        message: "Error saving like count for reply",
-        error: error.message,
-      });
+    res.status(500).send({
+      message: "Error saving like count for reply",
+      error: error.message,
+    });
   }
 };
 

@@ -1,4 +1,4 @@
-const User = require('../../models/User');
+const User = require("../../models/User");
 
 const searchUsers = async (req, res) => {
   try {
@@ -6,7 +6,7 @@ const searchUsers = async (req, res) => {
     const loggedInUserId = req.user.id;
 
     // Escape special characters
-    query = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    query = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const minQueryLength = 2; // Minimum length for query
     if (query.length < minQueryLength) {
@@ -17,16 +17,18 @@ const searchUsers = async (req, res) => {
     const users = await User.find({
       _id: { $ne: loggedInUserId },
       $or: [
-        { originalUsername: { $regex: `^${query}`, $options: 'i' } },
-        { formattedUsername: { $regex: `^${query}`, $options: 'i' } },
-        { 'profile.updatedName': { $regex: `^${query}`, $options: 'i' } }
-      ]
+        { originalUsername: { $regex: `^${query}`, $options: "i" } },
+        { formattedUsername: { $regex: `^${query}`, $options: "i" } },
+        { "profile.updatedName": { $regex: `^${query}`, $options: "i" } },
+      ],
     });
 
     res.json(users);
   } catch (error) {
-    console.error('Detailed error:', error);
-    res.status(500).json({ message: 'Error searching users', error: error.message });
+    console.error("Detailed error:", error);
+    res
+      .status(500)
+      .json({ message: "Error searching users", error: error.message });
   }
 };
 

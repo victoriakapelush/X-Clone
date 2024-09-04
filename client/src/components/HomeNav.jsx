@@ -10,7 +10,6 @@ import notifications from "../assets/icons/notifications.png";
 import bookmark from "../assets/icons/bookmark.png";
 import grok from "../assets/icons/grok.png";
 import lists from "../assets/icons/lists.png";
-import communities from "../assets/icons/communities.png";
 import premium from "../assets/icons/premium.png";
 import { useNavigate } from "react-router-dom";
 import ToPost from "./ToPost";
@@ -109,12 +108,6 @@ function HomeNav() {
             <p className="nav-links">Bookmarks</p>
           </div>
         </Link>
-        <Link to="/communities">
-          <div className="flex-row nav-links-container radius">
-            <img className="nav-img" src={communities} />
-            <p className="nav-links">Communities</p>
-          </div>
-        </Link>
         <Link to="/premium">
           <div className="flex-row nav-links-container radius">
             <img className="nav-img" src={premium} />
@@ -127,12 +120,14 @@ function HomeNav() {
             <p className="nav-links">Profile</p>
           </div>
         </Link>
-        <button onClick={handleOpenPopup} className="new-post-btn radius">
-          Post
-        </button>
-        <button className="logout-btn radius" onClick={handleLogout}>
-          Log out
-        </button>
+        <div className="bottom-stick">
+          <button onClick={handleOpenPopup} className="new-post-btn radius">
+            Post
+          </button>
+          <button className="logout-btn radius" onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
       </div>
     </>
   );

@@ -520,6 +520,11 @@ a:visited {
   top: 0;
   flex: 1;
   box-sizing: border-box;
+  justify-content: space-between;
+}
+
+.bottom-stick {
+  margin-top: 5rem;
 }
 
 .nav-links {
@@ -588,7 +593,7 @@ a:visited {
   color: var(--white);
   background-color: transparent;
   font-size: 1rem;
-  margin-top: 3rem;
+  margin-top: 0.5rem;
 }
 
 .logout-btn:hover {
@@ -1258,6 +1263,12 @@ svg {
   .logout-btn {
     width: fit-content;
     font-size: 0.8rem;
+  }
+
+  .bottom-stick {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
   }
 
   .logout-btn {

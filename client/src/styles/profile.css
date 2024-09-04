@@ -292,3 +292,28 @@ svg {
 .random-users-new-post-top-border {
   border-top: 1px solid var(--borders);
 }
+
+.other-user-btns {
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+  padding-top: 0.6rem;
+  margin-right: 1rem;
+  gap: 0.5rem;
+}
+
+.pink-add-list {
+  border: 1px solid rgb(201, 54, 204);
+  border-radius: 50%;
+  fill: rgb(201, 54, 204);
+}
+
+.white-msg-list {
+  border: 1px solid var(--white);
+  border-radius: 50%;
+}
+
+.pink-add-list:hover,
+.white-msg-list:hover {
+  background-color: var(--opacity);
+}

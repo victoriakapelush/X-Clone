@@ -48,12 +48,10 @@ function verifyJWT(req, res, next) {
 
   const tokenParts = authorizationHeader.split(" ");
   if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
-    return res
-      .status(401)
-      .json({
-        message: "Invalid authorization header format",
-        isLoggedIn: false,
-      });
+    return res.status(401).json({
+      message: "Invalid authorization header format",
+      isLoggedIn: false,
+    });
   }
 
   const token = tokenParts[1];

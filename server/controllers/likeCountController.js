@@ -32,28 +32,27 @@ const saveLikeCount = async (req, res) => {
     // Save the updated post
     const updatedPost = await post.save();
 
-// If the post is a repost, update the original post's like count
-if (post && post.originalPostId) {
-  // Fetch the original post using the originalPostId
-  const originalPost = await Post.findById(post.originalPostId._id);
-  if (originalPost) {
-    const originalUserIndex = originalPost.likes.indexOf(currentUser);
+    // If the post is a repost, update the original post's like count
+    if (post && post.originalPostId) {
+      // Fetch the original post using the originalPostId
+      const originalPost = await Post.findById(post.originalPostId._id);
+      if (originalPost) {
+        const originalUserIndex = originalPost.likes.indexOf(currentUser);
 
-    if (userIndex === -1 && originalUserIndex === -1) {
-      // User has liked the repost but not the original post
-      originalPost.likes.push(currentUser);
-      originalPost.likeCount += 1;
-    } else if (userIndex !== -1 && originalUserIndex !== -1) {
-      // User has liked both the repost and the original post
-      originalPost.likes.splice(originalUserIndex, 1);
-      originalPost.likeCount = Math.max(originalPost.likeCount - 1, 0);
+        if (userIndex === -1 && originalUserIndex === -1) {
+          // User has liked the repost but not the original post
+          originalPost.likes.push(currentUser);
+          originalPost.likeCount += 1;
+        } else if (userIndex !== -1 && originalUserIndex !== -1) {
+          // User has liked both the repost and the original post
+          originalPost.likes.splice(originalUserIndex, 1);
+          originalPost.likeCount = Math.max(originalPost.likeCount - 1, 0);
+        }
+
+        // Save the updated original post
+        await originalPost.save();
+      }
     }
-
-    // Save the updated original post
-    await originalPost.save();
-  }
-}
-
 
     res.status(200).send({
       message: "Like status updated successfully",
@@ -69,5 +68,3 @@ if (post && post.originalPostId) {
 };
 
 module.exports = { saveLikeCount };
-
-

@@ -34,10 +34,13 @@ const followers = require("./routes/followers");
 const postComment = require("./routes/postComment");
 const replyComment = require("./routes/replyComment");
 const replies = require("./routes/replies");
-const repost = require('./routes/repost');
-const userSearch = require('./routes/message routes/searchUsers');
-const conversations = require('./routes/message routes/allConvos');
-const currentConvos = require('./routes/message routes/currentUserConvos');
+const repost = require("./routes/repost");
+const userSearch = require("./routes/message routes/searchUsers");
+const conversations = require("./routes/message routes/allConvos");
+const currentConvos = require("./routes/message routes/currentUserConvos");
+const currentLists = require("./routes/list routes/getLists");
+const createLists = require("./routes/list routes/getLists");
+const listData = require("./routes/list routes/listData");
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -115,6 +118,9 @@ app.use("/api/repost", repost);
 app.use("/api/users/", userSearch);
 app.use("/api/messages/conversation", conversations);
 app.use("/api/messages/current_conversations", currentConvos);
+app.use("/api/lists", currentLists);
+app.use("/api/lists/post", createLists);
+app.use("/api/lists/show", listData);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

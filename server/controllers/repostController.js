@@ -8,15 +8,15 @@ const repost = async (req, res) => {
 
   try {
     const originalPost = await Post.findById(postId)
-      .populate('user')
-      .populate('repostedFrom')
-      .populate('originalPostId')
+      .populate("user")
+      .populate("repostedFrom")
+      .populate("originalPostId")
       .populate({
-        path: 'totalReplies.user',
-        model: 'User',
+        path: "totalReplies.user",
+        model: "User",
       })
-      .populate('bookmarks')
-      .populate('likes');
+      .populate("bookmarks")
+      .populate("likes");
 
     if (!originalPost) {
       return res.status(404).json({ message: "Post not found" });
@@ -24,9 +24,11 @@ const repost = async (req, res) => {
 
     // Check if the user is trying to repost their own post
     if (originalPost.user._id.toString() === currentUserId) {
-      return res.status(403).json({ message: "You cannot repost your own post." });
+      return res
+        .status(403)
+        .json({ message: "You cannot repost your own post." });
     }
-    
+
     const user = await User.findOne({ originalUsername: currentUserName });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -39,7 +41,9 @@ const repost = async (req, res) => {
     });
 
     if (alreadyReposted) {
-      return res.status(400).json({ message: "You have already reposted this post." });
+      return res
+        .status(400)
+        .json({ message: "You have already reposted this post." });
     }
 
     // Create the repost
@@ -76,7 +80,9 @@ const repost = async (req, res) => {
     });
   } catch (error) {
     console.error("Repost Error:", error);
-    res.status(500).json({ message: "An error occurred", error: error.message });
+    res
+      .status(500)
+      .json({ message: "An error occurred", error: error.message });
   }
 };
 

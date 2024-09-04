@@ -68,13 +68,11 @@ const getUserProfile = async (req, res) => {
     const randomUsers = shuffledUsers.slice(0, 3);
 
     // Return the user profile and the three random users
-    res
-      .status(200)
-      .json({
-        success: true,
-        userProfile: userProfile,
-        randomUsers: randomUsers,
-      });
+    res.status(200).json({
+      success: true,
+      userProfile: userProfile,
+      randomUsers: randomUsers,
+    });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).json({ message: "Internal server error" });

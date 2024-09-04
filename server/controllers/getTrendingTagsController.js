@@ -35,19 +35,22 @@ const getTrendingTags = async (req, res) => {
     // Step 3: Populate the user field in the random posts
     const populatedRandomPostsPromises = randomPostsResults.map((posts) => {
       if (posts.length > 0) {
-        return Post.populate(posts, { path: 'user' }); // Populate the user field
+        return Post.populate(posts, { path: "user" }); // Populate the user field
       }
       return [];
     });
 
-    const populatedRandomPosts = await Promise.all(populatedRandomPostsPromises);
+    const populatedRandomPosts = await Promise.all(
+      populatedRandomPostsPromises,
+    );
 
     // Step 4: Prepare the response
     const response = trendingTags.map((tag, index) => ({
       tag: tag.tag,
-      randomPost: populatedRandomPosts[index].length > 0
-        ? populatedRandomPosts[index][0]
-        : null,
+      randomPost:
+        populatedRandomPosts[index].length > 0
+          ? populatedRandomPosts[index][0]
+          : null,
       postCount: tag.postCount,
     }));
 

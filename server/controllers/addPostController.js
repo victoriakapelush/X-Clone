@@ -156,11 +156,11 @@ const getPost = async (req, res) => {
       .sort({ time: -1 })
       .populate("user")
       .populate("repostedFrom")
-      .populate('originalPostId')
+      .populate("originalPostId")
       .populate({
-        path: 'totalReplies.user', 
-        model: 'User' 
-    });
+        path: "totalReplies.user",
+        model: "User",
+      });
     res.status(200).json({ posts });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -285,7 +285,6 @@ const deletePost = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 trainClassifier();
 

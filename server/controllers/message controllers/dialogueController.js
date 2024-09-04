@@ -1,6 +1,6 @@
-const Message = require('../../models/Message');
-const Conversation = require('../../models/Conversation');
-const User = require('../../models/User');
+const Message = require("../../models/Message");
+const Conversation = require("../../models/Conversation");
+const User = require("../../models/User");
 const { format } = require("date-fns");
 
 const createConversation = async (req, res) => {
@@ -15,7 +15,9 @@ const createConversation = async (req, res) => {
 
     // Validate that there are at least two participants
     if (participants.length < 2) {
-      return res.status(400).json({ message: "At least two participants are required." });
+      return res
+        .status(400)
+        .json({ message: "At least two participants are required." });
     }
 
     const postDate = new Date();
@@ -23,7 +25,7 @@ const createConversation = async (req, res) => {
 
     // Check if a conversation already exists with the exact same participants
     let conversation = await Conversation.findOne({
-      participants: { $all: participants, $size: participants.length }
+      participants: { $all: participants, $size: participants.length },
     });
 
     // If a conversation already exists, return an error or the existing conversation
@@ -44,9 +46,9 @@ const createConversation = async (req, res) => {
     await Promise.all(
       participants.map((participantId) =>
         User.findByIdAndUpdate(participantId, {
-          $push: { conversations: conversation._id }
-        })
-      )
+          $push: { conversations: conversation._id },
+        }),
+      ),
     );
 
     res.status(201).json(conversation);
@@ -55,12 +57,11 @@ const createConversation = async (req, res) => {
   }
 };
 
-
 const addMessageToConversation = async (req, res) => {
   try {
     const { text, gif } = req.body;
     const currentUser = req.user.id;
-    const {conversationId} = req.params;
+    const { conversationId } = req.params;
 
     let filename = null;
     if (req.file) {
@@ -85,7 +86,7 @@ const addMessageToConversation = async (req, res) => {
       gif,
       conversation: conversation._id,
       time: formattedTime,
-      sentBy: currentUser
+      sentBy: currentUser,
     });
 
     await message.save();
@@ -93,13 +94,13 @@ const addMessageToConversation = async (req, res) => {
     // Add the new message to the conversation
     await Conversation.findByIdAndUpdate(conversation._id, {
       $push: { messages: message._id },
-      $set: { lastMessage: message._id, updatedAt: formattedTime }
+      $set: { lastMessage: message._id, updatedAt: formattedTime },
     });
 
     // Update the User models for all participants
     for (const participant of conversation.participants) {
       await User.findByIdAndUpdate(participant, {
-        $push: { messages: message._id }
+        $push: { messages: message._id },
       });
     }
 
@@ -109,31 +110,27 @@ const addMessageToConversation = async (req, res) => {
   }
 };
 
-
 // Fetch messages for a conversation
 const getMessages = async (req, res) => {
-    try {
-      const { conversationId } = req.params;
-  
-      const messages = await Message.find({ conversation: conversationId })
-        .populate('participants')  
-        .populate[{ path: 'sentBy' }]
-        .populate({
-            path: 'messages',
-            populate: [
-              { path: 'participants' }
-            ]
-          })
-          .execPopulate();
-  
-      res.status(200).json(messages);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
+  try {
+    const { conversationId } = req.params;
+
+    const messages = await Message.find({ conversation: conversationId })
+      .populate("participants")
+      .populate[{ path: "sentBy" }].populate({
+        path: "messages",
+        populate: [{ path: "participants" }],
+      })
+      .execPopulate();
+
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   addMessageToConversation,
   createConversation,
-  getMessages
+  getMessages,
 };

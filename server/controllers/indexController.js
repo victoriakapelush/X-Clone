@@ -27,11 +27,9 @@ const signupPost = async (req, res) => {
     }
     if (typeof password !== "string") {
       console.log("Password is not a string.");
-      return res
-        .status(400)
-        .json({
-          message: "Invalid password format. Password must be a string.",
-        });
+      return res.status(400).json({
+        message: "Invalid password format. Password must be a string.",
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 

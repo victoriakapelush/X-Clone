@@ -56,13 +56,11 @@ const saveFollowingCount = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
-    res
-      .status(200)
-      .send({
-        message: "Following and followers status updated successfully",
-        user,
-        otherUser,
-      });
+    res.status(200).send({
+      message: "Following and followers status updated successfully",
+      user,
+      otherUser,
+    });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();

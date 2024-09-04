@@ -90,12 +90,10 @@ const addNestedComment = async (req, res) => {
       .populate("user")
       .populate("post");
 
-    res
-      .status(201)
-      .json({
-        message: "Nested comment added successfully",
-        comment: populatedParentReply,
-      });
+    res.status(201).json({
+      message: "Nested comment added successfully",
+      comment: populatedParentReply,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

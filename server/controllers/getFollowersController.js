@@ -20,13 +20,11 @@ const getFollowers = async (req, res) => {
     const totalFollowing = following.profile.totalFollowing;
     const shuffledFollowing = totalFollowing.sort(() => 0.5 - Math.random());
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        followers: shuffledFollowers,
-        following: shuffledFollowing,
-      });
+    res.status(200).json({
+      success: true,
+      followers: shuffledFollowers,
+      following: shuffledFollowing,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
