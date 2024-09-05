@@ -21,6 +21,8 @@ import UseNewPostHook from "./UseNewPostHook";
 import DeletePostHook from "./DeletePostHook";
 import PickListPopup from "./list/PickListPopup";
 import { ToastContainer } from "react-toastify";
+import 'react-tooltip/dist/react-tooltip.css';
+import { Tooltip } from 'react-tooltip';
 
 function Profile() {
   const { username } = useParams();
@@ -237,11 +239,13 @@ function Profile() {
           ) : (
             <>
               <button className="edit-profile-btn radius">Follow</button>
+              <Tooltip id="my-tooltip" />
               <div className="other-user-btns flex-row">
                 <svg
                   className="white-msg-list"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
+                  data-tooltip-id="my-tooltip" data-tooltip-content="Send message"
                 >
                   <g>
                     <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
@@ -258,7 +262,9 @@ function Profile() {
                   className="pink-add-list"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
+                  data-tooltip-id="my-tooltip" data-tooltip-content="Add/Remove user to/from List"
                 >
+                  <title>Add/Remove user to/from List</title>
                   <g>
                     <path d="M16 6c0 2.21-1.79 4-4 4S8 8.21 8 6s1.79-4 4-4 4 1.79 4 4zm-.76 8.57l-3.95.58 2.86 2.78-.68 3.92L17 20l3.53 1.85-.68-3.92 2.86-2.78-3.95-.58L17 11l-1.76 3.57zm-.45-3.09c-.89-.32-1.86-.48-2.89-.48-2.35 0-4.37.85-5.86 2.44-1.48 1.57-2.36 3.8-2.63 6.46l-.11 1.09h8.58l.52-2.49-4.05-4.3 5.59-.99.85-1.73z"></path>
                   </g>

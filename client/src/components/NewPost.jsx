@@ -13,6 +13,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
 import TokenContext from "./TokenContext";
+import 'react-tooltip/dist/react-tooltip.css';
+import { Tooltip } from 'react-tooltip';
 
 function NewPost({
   postData,
@@ -248,17 +250,20 @@ function NewPost({
                       handleDeletePost(post._id);
                     }}
                     className="close-btn radius only-visible"
+                    data-tooltip-id="my-tooltip" data-tooltip-content="Delete post"
                   >
                     X
                   </button>
                 )}
               </div>
+              <Tooltip id="my-tooltip" />
               <div className="flex-row post-icons-container">
                 <div>
                   <div
                     className="icon-container color-hover flex-row"
                     id="blue-svg"
                     onClick={() => handlePostClick(post)}
+                    data-tooltip-id="my-tooltip" data-tooltip-content="Reply"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -276,6 +281,7 @@ function NewPost({
                   <div
                     className="icon-container color-hover flex-row"
                     id="green-svg"
+                    data-tooltip-id="my-tooltip" data-tooltip-content="Repost"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -297,6 +303,7 @@ function NewPost({
                   <div
                     className="icon-container color-hover flex-row"
                     id="yellow-svg"
+                    data-tooltip-id="my-tooltip" data-tooltip-content="Send"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -322,6 +329,7 @@ function NewPost({
                     className={`icon-container color-hover flex-row ${likedStates[index] ? "liked" : "not-liked"}`}
                     id="pink-svg"
                     onClick={() => handleLike(post._id, index)}
+                    data-tooltip-id="my-tooltip" data-tooltip-content="Like"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -345,6 +353,7 @@ function NewPost({
                       className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? "bookmarked" : "not-bookmarked"}`}
                       id="save-svg"
                       onClick={() => handleBookmark(post._id, index)}
+                      data-tooltip-id="my-tooltip" data-tooltip-content="Bookmark"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -372,6 +381,7 @@ function NewPost({
                       <div
                         className="icon-container sendpost-icon color-hover"
                         id="send-svg"
+                        data-tooltip-id="my-tooltip" data-tooltip-content="Copy link"
                       >
                         <svg
                           viewBox="0 0 24 24"
