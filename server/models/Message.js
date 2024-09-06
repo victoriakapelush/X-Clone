@@ -6,6 +6,7 @@ const MessageSchema = new Schema({
   text: { type: String },
   image: { type: String },
   gif: { type: String },
+  post: { type: Schema.Types.ObjectId, ref: "Post" },
   conversation: {
     type: Schema.Types.ObjectId,
     ref: "Conversation",

@@ -15,6 +15,8 @@ import useRepost from "./RepostHook";
 import TokenContext from "./TokenContext";
 import 'react-tooltip/dist/react-tooltip.css';
 import { Tooltip } from 'react-tooltip';
+import SendPostPopup from './SendPostPopup';
+import useSendPostMessage from "./useSendPostMessage";
 
 function NewPost({
   postData,
@@ -37,6 +39,27 @@ function NewPost({
   const [reposted, setReposted] = useState(false);
   const { username } = useParams();
   const { formattedUsername, token } = useContext(TokenContext);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
+  const {
+    conversations,
+    selectedConversation,
+    selectedPost,
+    messageText,
+    responseMessage,
+    setSelectedConversation,
+    setSelectedPost,
+    setMessageText,
+    handleSubmit,
+  } = useSendPostMessage();
+
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
 
   const handleUpdateReplyCount = (postId, originalPostId = null) => {
     setPostData((prevPosts) =>
@@ -299,7 +322,22 @@ function NewPost({
                     </span>
                   </div>
                 </div>
-                <div>
+                {showSendPostPopup && <SendPostPopup 
+                  postData={postData} 
+                  closeShowSendPostPopup={closeShowSendPostPopup}
+                  conversations={conversations}
+                  selectedConversation={selectedConversation}
+                  selectedPost={selectedPost}
+                    messageText={messageText}
+                    responseMessage={responseMessage}
+                    setSelectedConversation={setSelectedConversation}
+                    setSelectedPost={setSelectedPost}
+                    setMessageText={setMessageText}
+                    handleSubmit={handleSubmit}
+                    handlePostClick={handlePostClick}
+                    selectedPostId={selectedPostId}
+                />}
+                <div onClick={() => sendPost(post._id)}>
                   <div
                     className="icon-container color-hover flex-row"
                     id="yellow-svg"
