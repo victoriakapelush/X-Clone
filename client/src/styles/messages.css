@@ -368,3 +368,17 @@ h2 {
 .extra-margin-masg-header {
   padding: 1rem 0 1rem 0;
 }
+
+.sent-post-msg {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  background-color: var(--black);
+  padding: 0 10px 10px 10px;
+  box-sizing: border-box;
+}
+
+.sent-post-msg:hover {
+  background-color: var(--borders);
+  cursor: pointer;
+}

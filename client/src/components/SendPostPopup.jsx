@@ -10,31 +10,21 @@ import { useHandleShowConversation } from "./message/useHandleShowConversation";
 import "../styles/messages.css";
 import "../styles/messages.css";
 
-function SendPostPopup({ closeShowSendPostPopup, selectedPostId, conversations,
-    selectedConversation,
-    selectedPost,
+function SendPostPopup({ 
+    closeShowSendPostPopup,
+    selectedPostId,
     messageText,
-    responseMessage,
-    setSelectedConversation,
-    setSelectedPost,
-    setMessageText,
-    handleSubmit,
-    handlePostClick }) {
+}) {
   const { formattedUsername, token } = useContext(TokenContext);
   const {
     query,
     results,
-    loading,
     handleSearch,
     handleChange,
     setQuery,
     setResults,
   } = useSearchUsers();
   const [selectedUser, setSelectedUser] = useState(null);
-  const [showConversation, setShowConversation] = useState(false);
-
-
-  console.log("selectedUser", selectedUser, "post", selectedPostId)
 
   const onChange = (e) => {
     handleChange(e);
@@ -45,6 +35,29 @@ function SendPostPopup({ closeShowSendPostPopup, selectedPostId, conversations,
     setSelectedUser(user);
     setQuery("");
     setResults([]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      const res = await axios.post(`http://localhost:3000/api/sendPost/${formattedUsername}`, {
+        postId: selectedPostId,
+        selectedUserId: selectedUser,
+        text: messageText,
+      }, config
+    );
+      console.log("Message sent", res.data)
+    } catch (err) {
+      console.error("Error sending message", err);
+    }
   };
 
   return (

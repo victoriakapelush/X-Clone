@@ -1173,6 +1173,11 @@ svg {
   margin-right: 0;
 }
 
+.del-img-home-input {
+  justify-content: flex-start;
+  position: absolute;
+}
+
 /* MOBILE VERSION */
 
 @media (max-width: 768px) {

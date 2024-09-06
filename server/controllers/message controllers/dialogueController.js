@@ -59,7 +59,7 @@ const createConversation = async (req, res) => {
 
 const addMessageToConversation = async (req, res) => {
   try {
-    const { text, gif } = req.body;
+    const { text, gif, post } = req.body;
     const currentUser = req.user.id;
     const { conversationId } = req.params;
 
@@ -82,6 +82,7 @@ const addMessageToConversation = async (req, res) => {
     const message = new Message({
       participants: conversation.participants,
       text,
+      post,
       image: filename,
       gif,
       conversation: conversation._id,
@@ -117,6 +118,7 @@ const getMessages = async (req, res) => {
 
     const messages = await Message.find({ conversation: conversationId })
       .populate("participants")
+      .populate("post")
       .populate[{ path: "sentBy" }].populate({
         path: "messages",
         populate: [{ path: "participants" }],

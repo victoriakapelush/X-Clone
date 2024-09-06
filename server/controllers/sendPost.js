@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Conversation = require("../models/Conversation");
@@ -23,25 +24,21 @@ const sendPost = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    if (!postId || !mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: "Invalid Post ID" });
+    }
+
     // Check if a conversation exists with exactly these two participants (userId and selectedUserId)
     let conversation = await Conversation.findOne({
       participants: { $all: [userId, selectedUserId], $size: 2 },
     });
 
-    // If no conversation exists, create a new one
-    if (!conversation) {
-      conversation = new Conversation({
-        participants: [userId, selectedUserId],
-      });
-      await conversation.save();
-    }
-
     // Create new message
     const message = new Message({
-      participants: conversation.participants,
+      participants: [userId, selectedUserId],
       text: text || '', // Optional text
       post: postId, // Attach post to message
-      conversation: conversation._id,
+      conversation: conversation ? conversation._id : null, // Link to conversation if it exists
       sentBy: userId,
       image: filename,
       gif: gif || '',
@@ -51,7 +48,20 @@ const sendPost = async (req, res) => {
     // Save message
     await message.save();
 
-    // Update the User models for all participants
+    if (!conversation) {
+      // If no conversation exists, create a new one and add the message
+      conversation = new Conversation({
+        participants: [userId, selectedUserId],
+        messages: [message._id], // Add the new message
+      });
+      await conversation.save();
+    } else {
+      // If conversation exists, push the message into the conversation's messages array
+      conversation.messages.push(message._id);
+      await conversation.save(); // Save the updated conversation
+    }
+
+    // Update the User models for all participants to track messages
     for (const participant of conversation.participants) {
       await User.findByIdAndUpdate(participant, {
         $push: { messages: message._id },
@@ -66,3 +76,4 @@ const sendPost = async (req, res) => {
 };
 
 module.exports = { sendPost };
+

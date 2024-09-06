@@ -8,9 +8,9 @@ const getListData = async (req, res) => {
     const list = await List.findById(listId)
       .populate("owner")
       .populate({
-        path: "posts",                       // Populates posts within the list
+        path: "posts",
         populate: [
-          { path: "user" },                  // Populates the user who made the post
+          { path: "user" },
           { path: "totalReplies" }
         ]
       })      .populate("members");
@@ -42,7 +42,7 @@ const deleteList = async (req, res) => {
       await user.save();
     }
 
-    list.deleteOne();
+    await list.deleteOne();
 
     res.status(200).json({ message: "List deleted successfully" });  
   } catch (error) {
