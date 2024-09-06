@@ -7,8 +7,13 @@ const getListData = async (req, res) => {
   try {
     const list = await List.findById(listId)
       .populate("owner")
-      .populate("posts")
-      .populate("members");
+      .populate({
+        path: "posts",                       // Populates posts within the list
+        populate: [
+          { path: "user" },                  // Populates the user who made the post
+          { path: "totalReplies" }
+        ]
+      })      .populate("members");
 
     if (!list) {
       return res.status(404).json({ message: "List not found" });

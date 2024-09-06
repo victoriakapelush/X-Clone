@@ -44,6 +44,7 @@ const listData = require("./routes/list routes/listData");
 const deleteList = require("./routes/list routes/listData");
 const updateList = require("./routes/list routes/listData");
 const addUserToList = require("./routes/list routes/addUser");
+const getListMembers = require("./routes/list routes/getMembers");
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -127,6 +128,7 @@ app.use("/api/lists/show", listData);
 app.use("/api/lists/delete", deleteList);
 app.use("/api/lists/update", updateList);
 app.use("/api/lists/addUser", addUserToList);
+app.use("/api/lists/members", getListMembers);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

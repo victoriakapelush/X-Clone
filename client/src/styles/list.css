@@ -10,7 +10,8 @@
 }
 
 .list-profile-page {
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
 }
 
 .list-edit-profile-btn:hover {
@@ -23,7 +24,7 @@
   justify-content: center;
   align-self: center;
   align-items: center;
-  margin: 1rem 0;
+  margin: 1rem 0 0 0;
   gap: 0.3rem;
   max-width: 100%;
   width: 100%;
@@ -137,5 +138,11 @@
 }
 
 .list-post-sm {
+  justify-content: flex-start;
+}
+
+.members-list-empty {
+  margin: 1rem 1rem;
+  font-size: 1.2rem;
   justify-content: flex-start;
 }

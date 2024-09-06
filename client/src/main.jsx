@@ -21,6 +21,7 @@ import CommentPage from "./components/CommentPage.jsx";
 import Messages from "./components/message/Messages.jsx";
 import List from "./components/list/List.jsx";
 import SingleList from "./components/list/SingleList.jsx";
+import Members from "./components/list/Members.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./styles/index.css";
@@ -120,6 +121,10 @@ const router = createBrowserRouter([
     path: "/lists/:listId",
     element: <SingleList />,
   },
+  {
+    path: "/lists/:listId/members",
+    element: <Members />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

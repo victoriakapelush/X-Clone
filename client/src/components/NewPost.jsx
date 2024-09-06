@@ -24,7 +24,7 @@ function NewPost({
   handleBookmark,
   likedStates,
   handleLike,
-  userData,
+  userData
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showToPost, setShowToPost] = useState(false);
