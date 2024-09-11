@@ -4,9 +4,10 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const {
   addUserProfile,
-  getUserProfile,
+  getUserProfile
 } = require("../controllers/addUserProfileController");
 const { verifyJWT } = require("../controllers/loginController");
+const { deleteProfilePicture } = require("../controllers/profilePageController");
 
 router.get("/:formattedUsername", verifyJWT, getUserProfile);
 router.post(
@@ -18,5 +19,7 @@ router.post(
   ]),
   addUserProfile,
 );
+router.delete('/:formattedUsername/delete-profile-picture', verifyJWT, deleteProfilePicture);
+
 
 module.exports = router;

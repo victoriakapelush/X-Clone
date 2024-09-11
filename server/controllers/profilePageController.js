@@ -31,6 +31,24 @@ const updateProfilePage = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
+// Check for profile picture update or deletion
+if (req.files && req.files.profilePicture) {
+  // If a new profile picture is uploaded
+  user.profile.profilePicture = req.files.profilePicture[0].filename;
+} else if (req.body.deleteProfilePicture === 'true') {
+  // If the profile picture is to be deleted
+  user.profile.profilePicture = null;
+}
+
+// Check for background image update or deletion
+if (req.files && req.files.backgroundHeaderImage) {
+  // If a new background image is uploaded
+  user.profile.backgroundHeaderImage = req.files.backgroundHeaderImage[0].filename;
+} else if (req.body.deleteBackgroundHeaderImage === 'true') {
+  // If the background image is to be deleted
+  user.profile.backgroundHeaderImage = null;
+}
+
     user.profile.updatedName = updatedName;
     user.profile.profileBio = profileBio;
     user.profile.location = location;
@@ -43,4 +61,35 @@ const updateProfilePage = async (req, res) => {
   }
 };
 
-module.exports = { getProfilePage, updateProfilePage };
+const deleteProfilePicture = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findOne({
+      _id: userId
+    });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+// Check and delete profile picture if requested
+if (user.profile.profilePicture) {
+  user.profile.profilePicture = null; // Remove the profile picture
+}
+
+// Check and delete background header image if requested
+if (user.profile.backgroundHeaderImage) {
+  user.profile.backgroundHeaderImage = null; // Remove the background header image
+}
+
+await user.save(); // Save changes to MongoDB
+
+    res.status(200).send("Profile picture deleted from MongoDB successfully");
+  } catch (error) {
+    console.error("Error deleting profile picture", error);
+    res.status(500).send("Server error");
+  }
+};
+
+module.exports = { getProfilePage, updateProfilePage, deleteProfilePicture };

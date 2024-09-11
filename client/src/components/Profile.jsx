@@ -3,6 +3,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import "../styles/profile.css";
 import "../styles/highlights.css";
+import default_user from "../assets/icons/default_user.png"
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
@@ -227,7 +228,7 @@ function Profile() {
               src={`http://localhost:3000/uploads/${profileData.profilePicture}`}
             />
           ) : (
-            <div className="defaul-profile-image-profile"></div>
+            <img className="defaul-profile-image-profile" src={default_user}/>
           )}
           {username === formattedUsername ? (
             <button
