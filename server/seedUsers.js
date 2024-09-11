@@ -13,59 +13,63 @@ mongoose.connect(mongoDB, {
 });
 
 const generateFakeUserProfile = () => ({
-    profileBio: faker.lorem.text(), // A short bio
-    location: faker.location, // Random city name
-    website: faker.internet.url, // Random URL for the website
-    profilePicture: faker.image.avatar(), // Random avatar image
+    profileBio: faker.person.bio(),
+    location: faker.location.city(),
+    website: faker.internet.url(),
+    profilePicture: faker.image.avatar(), 
+    backgroundHeaderImage: faker.image.urlPicsumPhotos()
 });
 
-const generateFakeUser = (profileId) => ({
-    username: faker.internet.userName(),
+const generateFakeUser = () => {
+  const originalUsernameOrig = faker.person.fullName();
+  const originalUsernameFormat = originalUsernameOrig.toLowerCase().replace(/\s+/g, '');
+  return {
+    originalUsername: originalUsernameOrig,
+    formattedUsername: `${originalUsernameFormat}`,
     email: faker.internet.email(),
     password: faker.internet.password(),
-    profile: generateFakeUserProfile(), // Embeds the generated profile
-  });
+    profile: generateFakeUserProfile(),
+  };
+};
+
 
   const generateFakePost = (userId) => ({
-    text: faker.lorem.text(),
-    time: faker.date.past().toISOString(), // Random past date
-    user: userId,                          // Reference to the user's ObjectId
+    text: faker.hacker.phrase(),
+    time: faker.date.past().toISOString(), 
+    user: userId,
   });
 
 // Seed the database
 const seedDatabase = async (numUsers = 10) => {
-  
-    const profiles = await Promise.all(
-      Array.from({ length: numUsers }).map(async () => {
-        const profileData = generateFakeUserProfile();
-        const profile = new Profile(profileData);  // Create new Profile
-        await profile.save();
-        return profile;
-      })
-    );
-  
+  try {
+    // Create and save users with embedded profiles
     const users = await Promise.all(
-      profiles.map(async (profile) => {
-        const userData = generateFakeUser(profile._id);
+      Array.from({ length: numUsers }).map(async () => {
+        const userData = generateFakeUser(); // Generate user with embedded profile
         const user = new User(userData);  // Create new User
         await user.save();
         return user;
       })
     );
-  
+
     await Promise.all(
       users.map(async (user) => {
         const posts = Array.from({ length: 5 }).map(() => generateFakePost(user._id)); // 5 posts per user
         await Post.insertMany(posts);
       })
     );
-  
+
     console.log('Database seeded successfully');
+  } catch (error) {
+    console.error("Seeding error: ", error);
+  } finally {
     mongoose.disconnect();
-  };
-  
-  // Start seeding
-  seedDatabase().catch(err => {
-    console.error("Seeding error: ", err);
-    mongoose.disconnect();
-  });
+  }
+};
+
+
+// Start seeding
+seedDatabase().catch(err => {
+  console.error("Seeding error: ", err);
+  mongoose.disconnect();
+});

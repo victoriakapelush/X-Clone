@@ -28,33 +28,29 @@ passport.use(
 );
 
 passport.use(
-  new GoogleStrategy(
-    {
+  new GoogleStrategy({
       clientID: process.env.clientID,
       clientSecret: process.env.clientSecret,
       callbackURL: "http://localhost:3000/auth/google/callback",
+      scope: ['openid', 'profile', 'email']
     },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const originalUsername = profile.displayName;
-        const formattedUsername = originalUsername
-          .toLowerCase()
-          .replace(/\s+/g, "");
-        let user = await User.findOne({ googleId: profile.id });
-        if (!user) {
-          user = await User.create({
-            googleId: profile.id,
-            originalUsername: originalUsername,
-            formattedUsername: formattedUsername,
-            email: profile.emails[0].value,
-          });
-        }
-        return done(null, user);
-      } catch (err) {
-        return done(err);
+    async (accessToken, refreshToken, profile, done) => {      
+      let user = await User.findOne({ googleId: profile.id });
+      if (!user) {
+        console.log("Creating new user...");
+        user = await User.create({
+          googleId: profile.id,
+          originalUsername: profile.name,
+          formattedUsername: profile.name.toLowerCase().replace(/\s+/g, ""),
+          email: profile.emails[0].value,
+        });
+      } else {
+        console.log("User found in the database:", user);
       }
-    },
-  ),
+
+      return done(null, user, { token });
+    }
+  )
 );
 
 passport.serializeUser((user, done) => {

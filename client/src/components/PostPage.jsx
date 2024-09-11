@@ -138,7 +138,7 @@ function PostPage() {
   useEffect(() => {
     if (post && post.text) {
       const firstWords = getFirstFewWords(post.text, 10);
-      document.title = `${post.user.originalUsername} on X: "${firstWords}" / X`;
+      document.title = `${post?.user?.originalUsername} on X: "${firstWords}" / X`;
     }
   }, [post]);
 
@@ -279,7 +279,7 @@ function PostPage() {
                 : post.user?.profile) && (
                 <img
                   className="profile-pic no-bottom-margin"
-                  src={`http://localhost:3000/uploads/${(post.repostedFrom ? post.repostedFrom.profile : post.user.profile).profilePicture}`}
+                  src={`http://localhost:3000/uploads/${(post?.repostedFrom ? post.repostedFrom.profile : post.user.profile).profilePicture}`}
                 />
               )}
               <div className="vertical-line-reply"></div>

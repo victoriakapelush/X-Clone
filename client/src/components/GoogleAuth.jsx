@@ -9,34 +9,54 @@ const useGoogleOAuth = () => {
   const [username, setUsername] = useState("");
 
   const responseMessage = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      const token = tokenResponse.access_token;
+    onSuccess: async (credentialResponse) => {
+      const token = credentialResponse.access_token; // Use access token for userinfo
+
+      console.log("Google login successful, access token:", credentialResponse);
+
       try {
-        const userInfo = await axios.get(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        // Fetch user info from Google API using the access token
+        const userInfo = await axios.get('https://openidconnect.googleapis.com/v1/userinfo', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         const result = userInfo.data;
-        if (userInfo) {
+        console.log("Fetched user info:", result);
+
+        // Extract and set the username from Google profile
+        if (result) {
           const formattedUsername = result.name
             .toLowerCase()
             .replace(/\s+/g, "");
           setUsername(formattedUsername);
-          navigate("/home");
+
+          // (Optional) Redirect after successful login
+          navigate("/home");  // Redirect to a protected route
         } else {
           console.log("Login failed.");
           navigate("/signup");
         }
+
+        // Send user data to backend to create/update user in database
+      const backendResponse = await axios.post('http://localhost:3000/api/google/signup', {
+        email: result.email,
+        name: result.name,
+        picture: result.picture,
+        googleId: result.sub,  // Use Google user ID as a unique identifier
+      });
+
+      // Handle backend response
+      console.log("User created/updated in database:", backendResponse.data);
+      localStorage.setItem('token', backendResponse.data.token); 
       } catch (error) {
-        console.error("Error during token verification:", error);
+        console.error("Error during token verification or fetching user info:", error);
         navigate("/signup");
       }
     },
-    onError: () => {
-      console.log("Login failed.");
-      navigate("/");
+    scope: "openid email profile",  // Request additional scopes as needed
+    onError: (error) => {
+      console.log("Login failed:", error);
+      navigate("/");  // Redirect to homepage or login page on failure
     },
   });
 

@@ -1,6 +1,9 @@
+require("dotenv").config({ path: "./config.env" });
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const login = async (req, res) => {
   try {
@@ -14,8 +17,6 @@ const login = async (req, res) => {
         { formattedUsername: formattedUsername, email: email },
       ],
     });
-
-    console.log(user);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
@@ -56,7 +57,7 @@ function verifyJWT(req, res, next) {
 
   const token = tokenParts[1];
 
-  jwt.verify(token, "cats", (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
       console.error("Token verification error:", err);
       return res

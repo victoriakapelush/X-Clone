@@ -49,13 +49,13 @@ const sendPost = require("./routes/sendPost");
 
 const app = express();
 const mongoDB = process.env.mongoDB;
+const secret = process.env.secret;
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  }),
-);
+app.use(cors({
+  origin: 'http://localhost:5173', // Front-end origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods
+  credentials: true, // Enable credentials
+}));
 
 mongoose.set("strictQuery", false);
 
@@ -84,7 +84,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Add session middleware
 app.use(
   session({
-    secret: "cats",
+    secret: secret,
     resave: false,
     saveUninitialized: false,
   }),
@@ -95,8 +95,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use("/api/signup", indexRouter, authRoutes);
-app.use("/", authRoutes);
+app.use("/api/signup", indexRouter);
+app.use("/api/google/signup", authRoutes);
+app.use(authRoutes);
 app.use("/api/login", loginRouter);
 app.use("/home", logoutRouter);
 app.use("/home", homePage);

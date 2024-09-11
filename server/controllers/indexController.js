@@ -63,14 +63,17 @@ const signupPost = async (req, res) => {
     user.profile = {
       profileBio: "",
       profilePicture: null,
+      backgroundHeaderImage: null,
       updatedName: originalUsername,
       location: "",
       website: "",
       registrationDate: "Joined " + currentMonthYear,
       following: "",
+      totalFollowing: [],
       followers: "",
+      totalFollowers: [],
       posts: 0,
-    };
+    };  
 
     await user.save();
 
@@ -88,7 +91,6 @@ const signupPost = async (req, res) => {
       res
         .status(201)
         .json({ success: true, message: "Registration successful", token });
-      console.log(token);
     });
   } catch (error) {
     console.error(error);

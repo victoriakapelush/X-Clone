@@ -70,7 +70,7 @@ function Explore({ user, tag }) {
         {trendingTags.map((tag, index) => (
           <Link
             key={index}
-            to={`/${tag.randomPost.user.formattedUsername}/status/${tag.randomPost._id}`}
+            to={`/${tag?.randomPost?.user?.formattedUsername}/status/${tag?.randomPost._id}`}
           >
             <SingleTrendingTag tag={tag} />
           </Link>
