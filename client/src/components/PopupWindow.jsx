@@ -53,21 +53,21 @@ function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
       return;
     }
 
-    const formData = new FormData();
-    console.log(selectedImage);
-    if (selectedImage) {
-      formData.append("profilePicture", selectedImage);
-    }
-
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in local storage.");
       return;
     }
 
+    const formData = new FormData();
+    console.log(selectedImage);
+    if (selectedImage) {
+      formData.append("profilePicture", selectedImage);
+    }
+
     try {
       const response = await axios.post(
-        `http://localhost:3000/home/${formattedUsername}`,
+        `http://localhost:3000/api/add_photo/${formattedUsername}`,
         formData,
         {
           headers: {

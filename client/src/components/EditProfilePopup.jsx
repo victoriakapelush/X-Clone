@@ -149,7 +149,7 @@ function EditProfilePopup({
   
     // Send a request to delete the profile picture from MongoDB
     try {
-      await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture`,
+      await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=true&deleteBackgroundImage=false`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -177,7 +177,7 @@ function EditProfilePopup({
     }
         // Send a request to delete the picture from MongoDB
         try {
-          await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture`,
+          await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=false&deleteBackgroundImage=true`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

@@ -5,6 +5,7 @@ const upload = multer({ dest: "uploads/" });
 const {
   addUserProfile,
   getUserProfile,
+  addUserPhoto
 } = require("../controllers/addUserProfileController");
 const { verifyJWT } = require("../controllers/loginController");
 
@@ -15,5 +16,6 @@ router.post(
   upload.single("profilePicture"),
   addUserProfile,
 );
+router.post("/:formattedUsername", verifyJWT, upload.single("profilePicture"), addUserPhoto);
 
 module.exports = router;

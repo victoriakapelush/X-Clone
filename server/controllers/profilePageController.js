@@ -63,7 +63,9 @@ if (req.files && req.files.backgroundHeaderImage) {
 
 const deleteProfilePicture = async (req, res) => {
   const userId = req.user.id;
-
+  const deleteProfilePicture = req.query.deleteProfilePicture === 'true';
+  const deleteBackgroundImage = req.query.deleteBackgroundImage === 'true';
+  
   try {
     const user = await User.findOne({
       _id: userId
@@ -74,12 +76,12 @@ const deleteProfilePicture = async (req, res) => {
     }
 
 // Check and delete profile picture if requested
-if (user.profile.profilePicture) {
+if (deleteProfilePicture && user.profile.profilePicture) {
   user.profile.profilePicture = null; // Remove the profile picture
 }
 
 // Check and delete background header image if requested
-if (user.profile.backgroundHeaderImage) {
+if (deleteBackgroundImage && user.profile.backgroundHeaderImage) {
   user.profile.backgroundHeaderImage = null; // Remove the background header image
 }
 

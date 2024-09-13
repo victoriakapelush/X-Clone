@@ -79,4 +79,30 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-module.exports = { addUserProfile, getUserProfile };
+const addUserPhoto = async (req, res) => {
+  const currentUser = req.user.formattedUsername;
+  try {
+
+    if (!req.file) {
+      return res.status(400).send('No file uploaded');
+    }
+
+    const user = await User.findOneAndUpdate(
+      { formattedUsername: currentUser },
+      { $set: { 'profile.profilePicture': req.file.filename } },
+      { new: true, upsert: false, runValidators: true });
+
+    if (!user || !user.profile) {
+      return res.status(404).send("User or user profile not found");
+    }
+
+    res.status(200).send({
+      message: "User profile updated successfully"
+    });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = { addUserProfile, getUserProfile, addUserPhoto };

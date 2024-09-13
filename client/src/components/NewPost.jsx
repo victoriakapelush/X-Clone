@@ -17,6 +17,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { Tooltip } from 'react-tooltip';
 import SendPostPopup from './SendPostPopup';
 import useSendPostMessage from "./useSendPostMessage";
+import default_user from "../assets/icons/default_user.png"
 
 function NewPost({
   postData,
