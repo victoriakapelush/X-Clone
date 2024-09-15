@@ -124,7 +124,7 @@ const router = createBrowserRouter([
   {
     path: "/lists/:listId/members",
     element: <Members />,
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

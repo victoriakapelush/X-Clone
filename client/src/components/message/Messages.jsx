@@ -251,8 +251,8 @@ function Messages() {
                                 : lastMessage.gif
                                   ? "Sent a GIF"
                                   : lastMessage.post
-                                  ? "Sent a post"
-                                  : lastMessage.text
+                                    ? "Sent a post"
+                                    : lastMessage.text
                               : "No messages yet"}
                           </div>
                         </div>
@@ -408,44 +408,50 @@ function Messages() {
                           alignSelf: isSender ? "flex-end" : "flex-start",
                         }}
                       >
-{message.post && (
-  <div className="sent-post-msg flex-column">
-    <Link
-      to={`/${message.post.user.formattedUsername}/status/${message.post._id}`}
-      className="flex-row"
-    >
-      <Link to={`/${message.post.repostedFrom?.formattedUsername || message.post.user.formattedUsername}/status/${message.post._id}`}>
-        <div className="flex-column post-box">
-          <Link
-            to={`/profile/${message.post.user.formattedUsername}`}
-            className="link-to-profile"
-          >
-            <span className="user-name">
-              {message.post.user?.profile.updatedName}
-            </span>{" "}
-            <span className="username-name">
-              @{message.post.user?.formattedUsername} ·{" "}
-              {message.post?.time && !isNaN(new Date(message.post.time)) 
-                ? formatDistanceToNow(new Date(message.post.time), { addSuffix: true }) 
-                : "Invalid date"}
-            </span>
-          </Link>
-          {message.post.text && (
-            <p className="post-text">
-              {message.post.text}
-            </p>
-          )}
-          {message.post.image && (
-            <img
-              className="post-image"
-              src={`http://localhost:3000/uploads/${message.post.image}`}
-            />
-          )}
-        </div>
-      </Link>
-    </Link>
-  </div>
-)}
+                        {message.post && (
+                          <div className="sent-post-msg flex-column">
+                            <Link
+                              to={`/${message.post.user.formattedUsername}/status/${message.post._id}`}
+                              className="flex-row"
+                            >
+                              <Link
+                                to={`/${message.post.repostedFrom?.formattedUsername || message.post.user.formattedUsername}/status/${message.post._id}`}
+                              >
+                                <div className="flex-column post-box">
+                                  <Link
+                                    to={`/profile/${message.post.user.formattedUsername}`}
+                                    className="link-to-profile"
+                                  >
+                                    <span className="user-name">
+                                      {message.post.user?.profile.updatedName}
+                                    </span>{" "}
+                                    <span className="username-name">
+                                      @{message.post.user?.formattedUsername} ·{" "}
+                                      {message.post?.time &&
+                                      !isNaN(new Date(message.post.time))
+                                        ? formatDistanceToNow(
+                                            new Date(message.post.time),
+                                            { addSuffix: true },
+                                          )
+                                        : "Invalid date"}
+                                    </span>
+                                  </Link>
+                                  {message.post.text && (
+                                    <p className="post-text">
+                                      {message.post.text}
+                                    </p>
+                                  )}
+                                  {message.post.image && (
+                                    <img
+                                      className="post-image"
+                                      src={`http://localhost:3000/uploads/${message.post.image}`}
+                                    />
+                                  )}
+                                </div>
+                              </Link>
+                            </Link>
+                          </div>
+                        )}
 
                         {message.text && <span>{message.text}</span>}
                         {message.image && (

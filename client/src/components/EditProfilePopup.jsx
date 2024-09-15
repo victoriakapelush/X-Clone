@@ -7,7 +7,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import default_user from "../assets/icons/default_user.png"
+import default_user from "../assets/icons/default_user.png";
 import TokenContext from "./TokenContext";
 
 function EditProfilePopup({
@@ -119,14 +119,14 @@ function EditProfilePopup({
         ...prevData,
         backgroundHeaderImage: file,
       }));
-  
+
       if (backgroundImageUrl) {
         URL.revokeObjectURL(backgroundImageUrl); // Clean up the previous object URL
       }
       setBackgroundImageUrl(URL.createObjectURL(file)); // Set new URL for preview
-    } 
+    }
   };
-  
+
   const handleUploadClick = () => {
     document.getElementById("profilePicture").click();
   };
@@ -141,15 +141,16 @@ function EditProfilePopup({
       profilePicture: null, // Clear from state
     }));
     setImageUrl(""); // Clear the image URL from state
-  
+
     // Reset the file input
     if (profileImageInputRef.current) {
       profileImageInputRef.current.value = ""; // Reset the file input
     }
-  
+
     // Send a request to delete the profile picture from MongoDB
     try {
-      await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=true&deleteBackgroundImage=false`,
+      await axios.delete(
+        `http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=true&deleteBackgroundImage=false`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -162,7 +163,6 @@ function EditProfilePopup({
       console.error("Error deleting profile picture", error);
     }
   };
-  
 
   const handleDeleteBackgroundClick = async () => {
     setProfileData((prevData) => ({
@@ -175,20 +175,21 @@ function EditProfilePopup({
     if (backgroundImageInputRef.current) {
       backgroundImageInputRef.current.value = ""; // Resetting the value of file input
     }
-        // Send a request to delete the picture from MongoDB
-        try {
-          await axios.delete(`http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=false&deleteBackgroundImage=true`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
-              },
-            },
-          );
-          console.log("Background image deleted successfully");
-        } catch (error) {
-          console.error("Error deleting background image", error);
-        }
+    // Send a request to delete the picture from MongoDB
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=false&deleteBackgroundImage=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      console.log("Background image deleted successfully");
+    } catch (error) {
+      console.error("Error deleting background image", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -289,7 +290,9 @@ function EditProfilePopup({
         <div
           className="edit-popup-photo-upload-frame flex-row"
           style={{
-            backgroundImage: imageUrl ? `url(${imageUrl})` : `url(${default_user})`,
+            backgroundImage: imageUrl
+              ? `url(${imageUrl})`
+              : `url(${default_user})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

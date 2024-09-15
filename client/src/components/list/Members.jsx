@@ -36,7 +36,7 @@ function Members() {
         console.error("Error fetching user data:", error);
       }
     };
-      getUserData();
+    getUserData();
   }, [listId, token]);
 
   useEffect(() => {
@@ -59,12 +59,14 @@ function Members() {
           </div>
         </header>
         {singleUserData && singleUserData.length > 0 ? (
-            singleUserData.map((user) => (
-                <SingleUserBriefProfile key={user.id} singleUserData={user} />
-            ))
-            ) : (
-            <div className="members-list-empty flex-row grey-color">Members of this List will show up here</div>
-            )}
+          singleUserData.map((user) => (
+            <SingleUserBriefProfile key={user.id} singleUserData={user} />
+          ))
+        ) : (
+          <div className="members-list-empty flex-row grey-color">
+            Members of this List will show up here
+          </div>
+        )}
       </div>
       <div className="profile-right flex-column profile-right-no-display">
         <div className="flex-column premium-subscribe-container">

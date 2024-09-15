@@ -20,37 +20,36 @@ function PickListPopup({ closePopup, currentUser }) {
   const { token, formattedUsername } = useContext(TokenContext);
   const [showCreateListPopup, setShowCreateListPopup] = useState(false);
   const navigate = useNavigate();
-  const [isAdded, setIsAdded] = useState(false);  
+  const [isAdded, setIsAdded] = useState(false);
 
   const handleAddRemoveUser = async (id) => {
     try {
-
-      const response = await axios.post("http://localhost:3000/api/lists/addUser", 
+      const response = await axios.post(
+        "http://localhost:3000/api/lists/addUser",
         {
-        userId: currentUser._id,
-        listId: id
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+          userId: currentUser._id,
+          listId: id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       const message = response.data.message;
-      
+
       // Update state based on the action performed
       if (message === "User added to the list") {
         setIsAdded(true);
         closePopup();
-        toast.success("User added to the List")
+        toast.success("User added to the List");
       } else if (message === "User removed from the list") {
         setIsAdded(false);
         closePopup();
-        toast.warning("User removed from the List")
+        toast.warning("User removed from the List");
       }
-
     } catch (err) {
-        console.log(err)    
-}
+      console.log(err);
+    }
   };
 
   const handleCreateListClick = (e) => {
@@ -161,7 +160,7 @@ function PickListPopup({ closePopup, currentUser }) {
                     <div
                       key={list._id}
                       className="list-post flex-row"
-                      onClick={() => handleAddRemoveUser(list._id)} 
+                      onClick={() => handleAddRemoveUser(list._id)}
                     >
                       <div className="list-post-box-link">
                         <img

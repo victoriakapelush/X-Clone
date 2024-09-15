@@ -10,20 +10,14 @@ import { useHandleShowConversation } from "./message/useHandleShowConversation";
 import "../styles/messages.css";
 import "../styles/messages.css";
 
-function SendPostPopup({ 
-    closeShowSendPostPopup,
-    selectedPostId,
-    messageText,
+function SendPostPopup({
+  closeShowSendPostPopup,
+  selectedPostId,
+  messageText,
 }) {
   const { formattedUsername, token } = useContext(TokenContext);
-  const {
-    query,
-    results,
-    handleSearch,
-    handleChange,
-    setQuery,
-    setResults,
-  } = useSearchUsers();
+  const { query, results, handleSearch, handleChange, setQuery, setResults } =
+    useSearchUsers();
   const [selectedUser, setSelectedUser] = useState(null);
 
   const onChange = (e) => {
@@ -48,13 +42,16 @@ function SendPostPopup({
     };
 
     try {
-      const res = await axios.post(`http://localhost:3000/api/sendPost/${formattedUsername}`, {
-        postId: selectedPostId,
-        selectedUserId: selectedUser,
-        text: messageText,
-      }, config
-    );
-      console.log("Message sent", res.data)
+      const res = await axios.post(
+        `http://localhost:3000/api/sendPost/${formattedUsername}`,
+        {
+          postId: selectedPostId,
+          selectedUserId: selectedUser,
+          text: messageText,
+        },
+        config,
+      );
+      console.log("Message sent", res.data);
     } catch (err) {
       console.error("Error sending message", err);
     }

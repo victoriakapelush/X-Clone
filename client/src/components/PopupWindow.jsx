@@ -2,25 +2,17 @@
 /* eslint-disable react/prop-types */
 import "../styles/popup.css";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import TokenContext from "./TokenContext";
 
 function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [formattedUsername, setFormattedUsername] = useState("");
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem("token");
-    const decoded = jwtDecode(storedUsername);
-    const decodedUsername = decoded.originalUsername
-      .toLowerCase()
-      .replace(/\s+/g, "");
-    setFormattedUsername(decodedUsername);
-  }, []);
+  const { token, formattedUsername } = useContext(TokenContext);
 
   useEffect(() => {
     if (selectedImage) {
@@ -52,15 +44,12 @@ function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
       console.error("No image selected.");
       return;
     }
-
-    const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in local storage.");
       return;
     }
 
     const formData = new FormData();
-    console.log(selectedImage);
     if (selectedImage) {
       formData.append("profilePicture", selectedImage);
     }

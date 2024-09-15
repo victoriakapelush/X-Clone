@@ -13,11 +13,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
 import TokenContext from "./TokenContext";
-import 'react-tooltip/dist/react-tooltip.css';
-import { Tooltip } from 'react-tooltip';
-import SendPostPopup from './SendPostPopup';
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
+import SendPostPopup from "./SendPostPopup";
 import useSendPostMessage from "./useSendPostMessage";
-import default_user from "../assets/icons/default_user.png"
+import default_user from "../assets/icons/default_user.png";
 
 function NewPost({
   postData,
@@ -27,7 +27,7 @@ function NewPost({
   handleBookmark,
   likedStates,
   handleLike,
-  userData
+  userData,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showToPost, setShowToPost] = useState(false);
@@ -218,7 +218,7 @@ function NewPost({
                       onMouseOut={handleMouseOut}
                     />
                   ) : (
-                    <div className="default-profile-image-post"></div>
+                    <img className="profile-pic" src={default_user}></img>
                   )}
                   <Link to={postTwoLinks}>
                     <div className="flex-column post-box">
@@ -274,7 +274,8 @@ function NewPost({
                       handleDeletePost(post._id);
                     }}
                     className="close-btn radius only-visible"
-                    data-tooltip-id="my-tooltip" data-tooltip-content="Delete post"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Delete post"
                   >
                     X
                   </button>
@@ -287,7 +288,8 @@ function NewPost({
                     className="icon-container color-hover flex-row"
                     id="blue-svg"
                     onClick={() => handlePostClick(post)}
-                    data-tooltip-id="my-tooltip" data-tooltip-content="Reply"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Reply"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -305,7 +307,8 @@ function NewPost({
                   <div
                     className="icon-container color-hover flex-row"
                     id="green-svg"
-                    data-tooltip-id="my-tooltip" data-tooltip-content="Repost"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Repost"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -323,12 +326,13 @@ function NewPost({
                     </span>
                   </div>
                 </div>
-                {showSendPostPopup && <SendPostPopup 
-                  postData={postData} 
-                  closeShowSendPostPopup={closeShowSendPostPopup}
-                  conversations={conversations}
-                  selectedConversation={selectedConversation}
-                  selectedPost={selectedPost}
+                {showSendPostPopup && (
+                  <SendPostPopup
+                    postData={postData}
+                    closeShowSendPostPopup={closeShowSendPostPopup}
+                    conversations={conversations}
+                    selectedConversation={selectedConversation}
+                    selectedPost={selectedPost}
                     messageText={messageText}
                     responseMessage={responseMessage}
                     setSelectedConversation={setSelectedConversation}
@@ -337,12 +341,14 @@ function NewPost({
                     handleSubmit={handleSubmit}
                     handlePostClick={handlePostClick}
                     selectedPostId={selectedPostId}
-                />}
+                  />
+                )}
                 <div onClick={() => sendPost(post._id)}>
                   <div
                     className="icon-container color-hover flex-row"
                     id="yellow-svg"
-                    data-tooltip-id="my-tooltip" data-tooltip-content="Send"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Send"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -368,7 +374,8 @@ function NewPost({
                     className={`icon-container color-hover flex-row ${likedStates[index] ? "liked" : "not-liked"}`}
                     id="pink-svg"
                     onClick={() => handleLike(post._id, index)}
-                    data-tooltip-id="my-tooltip" data-tooltip-content="Like"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Like"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -392,7 +399,8 @@ function NewPost({
                       className={`icon-container bookmark-icon color-hover ${bookmarkedStates[index] ? "bookmarked" : "not-bookmarked"}`}
                       id="save-svg"
                       onClick={() => handleBookmark(post._id, index)}
-                      data-tooltip-id="my-tooltip" data-tooltip-content="Bookmark"
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Bookmark"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -420,7 +428,8 @@ function NewPost({
                       <div
                         className="icon-container sendpost-icon color-hover"
                         id="send-svg"
-                        data-tooltip-id="my-tooltip" data-tooltip-content="Copy link"
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Copy link"
                       >
                         <svg
                           viewBox="0 0 24 24"

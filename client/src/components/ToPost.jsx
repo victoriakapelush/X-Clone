@@ -8,8 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import 'react-tooltip/dist/react-tooltip.css';
-import { Tooltip } from 'react-tooltip';
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
 
 function ToPost({ onClose, onSave }) {
   const [userData, setUserData] = useState({});
@@ -166,7 +166,11 @@ function ToPost({ onClose, onSave }) {
                 ></div>
                 <div className="flex-row button-and-upload-pic">
                   <div className="upload-pic-container">
-                    <button onClick={handleUploadClick} data-tooltip-id="my-tooltip" data-tooltip-content="Media">
+                    <button
+                      onClick={handleUploadClick}
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Media"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"
@@ -184,7 +188,10 @@ function ToPost({ onClose, onSave }) {
                       onChange={handleProfileImageChange}
                       style={{ display: "none" }}
                     />
-                    <button data-tooltip-id="my-tooltip" data-tooltip-content="GIF">
+                    <button
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="GIF"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"
@@ -195,7 +202,10 @@ function ToPost({ onClose, onSave }) {
                         </g>
                       </svg>
                     </button>
-                    <button data-tooltip-id="my-tooltip" data-tooltip-content="Emoji">
+                    <button
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Emoji"
+                    >
                       <svg
                         className="upload-pic radius"
                         viewBox="0 0 24 24"

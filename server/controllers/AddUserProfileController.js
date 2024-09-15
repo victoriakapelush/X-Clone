@@ -80,21 +80,23 @@ const getUserProfile = async (req, res) => {
 };
 
 const addUserPhoto = async (req, res) => {
-  const currentUser = req.user.formattedUsername;
+  const currentUser = req.user.originalUsername;
+
   try {
 
-    if (!req.file) {
-      return res.status(400).send('No file uploaded');
+    let filename = null;
+    if (req.file) {
+      filename = req.file.filename;
     }
 
-    const user = await User.findOneAndUpdate(
-      { formattedUsername: currentUser },
-      { $set: { 'profile.profilePicture': req.file.filename } },
-      { new: true, upsert: false, runValidators: true });
-
-    if (!user || !user.profile) {
-      return res.status(404).send("User or user profile not found");
+    const user = await User.findOne({ originalUsername: currentUser });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+        user.profile.profilePicture = filename;
+
+        user.save()
 
     res.status(200).send({
       message: "User profile updated successfully"
