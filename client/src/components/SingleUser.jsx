@@ -1,19 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import useFollow from "./FollowUnfollowHook";
-import ProfilePopup from "./ProfilePopup";
 
 const SingleUser = ({ user }) => {
   const { isFollowing, handleFollow } = useFollow(user);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [showProfilePopup, setShowProfilePopup] = useState(false);
 
   return (
     <div className="who-tofollow-container flex-column">
       <div className="who-tofollow-profile-box flex-row">
-        <Link key={user.id} to={`/profile/${user.formattedUsername}`}>
+        <Link key={user._id} to={`/profile/${user.formattedUsername}`}>
           <div className="who-to-follow-single-user flex-row">
             <div className="who-tofollow-image-box">
               {user.profile.profilePicture ? (

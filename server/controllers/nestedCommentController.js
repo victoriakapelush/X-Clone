@@ -90,6 +90,10 @@ const addNestedComment = async (req, res) => {
       .populate("user")
       .populate("post");
 
+    parentReply.totalReplies.sort(
+      (a, b) => new Date(b.time) - new Date(a.time),
+    );
+
     res.status(201).json({
       message: "Nested comment added successfully",
       comment: populatedParentReply,

@@ -3,7 +3,9 @@ const router = express.Router();
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const {
-  getListData, deleteList, updateList 
+  getListData,
+  deleteList,
+  updateList,
 } = require("../../controllers/list controllers/getListData");
 const { verifyJWT } = require("../../controllers/loginController");
 

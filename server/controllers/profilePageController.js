@@ -2,7 +2,6 @@ const User = require("../models/User");
 
 const getProfilePage = async (req, res) => {
   const currentUser = req.params.formattedUsername;
-  console.log(currentUser);
 
   try {
     const user = await User.findOne({ formattedUsername: currentUser });
@@ -31,23 +30,24 @@ const updateProfilePage = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-// Check for profile picture update or deletion
-if (req.files && req.files.profilePicture) {
-  // If a new profile picture is uploaded
-  user.profile.profilePicture = req.files.profilePicture[0].filename;
-} else if (req.body.deleteProfilePicture === 'true') {
-  // If the profile picture is to be deleted
-  user.profile.profilePicture = null;
-}
+    // Check for profile picture update or deletion
+    if (req.files && req.files.profilePicture) {
+      // If a new profile picture is uploaded
+      user.profile.profilePicture = req.files.profilePicture[0].filename;
+    } else if (req.body.deleteProfilePicture === "true") {
+      // If the profile picture is to be deleted
+      user.profile.profilePicture = null;
+    }
 
-// Check for background image update or deletion
-if (req.files && req.files.backgroundHeaderImage) {
-  // If a new background image is uploaded
-  user.profile.backgroundHeaderImage = req.files.backgroundHeaderImage[0].filename;
-} else if (req.body.deleteBackgroundHeaderImage === 'true') {
-  // If the background image is to be deleted
-  user.profile.backgroundHeaderImage = null;
-}
+    // Check for background image update or deletion
+    if (req.files && req.files.backgroundHeaderImage) {
+      // If a new background image is uploaded
+      user.profile.backgroundHeaderImage =
+        req.files.backgroundHeaderImage[0].filename;
+    } else if (req.body.deleteBackgroundHeaderImage === "true") {
+      // If the background image is to be deleted
+      user.profile.backgroundHeaderImage = null;
+    }
 
     user.profile.updatedName = updatedName;
     user.profile.profileBio = profileBio;
@@ -63,29 +63,29 @@ if (req.files && req.files.backgroundHeaderImage) {
 
 const deleteProfilePicture = async (req, res) => {
   const userId = req.user.id;
-  const deleteProfilePicture = req.query.deleteProfilePicture === 'true';
-  const deleteBackgroundImage = req.query.deleteBackgroundImage === 'true';
-  
+  const deleteProfilePicture = req.query.deleteProfilePicture === "true";
+  const deleteBackgroundImage = req.query.deleteBackgroundImage === "true";
+
   try {
     const user = await User.findOne({
-      _id: userId
+      _id: userId,
     });
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-// Check and delete profile picture if requested
-if (deleteProfilePicture && user.profile.profilePicture) {
-  user.profile.profilePicture = null; // Remove the profile picture
-}
+    // Check and delete profile picture if requested
+    if (deleteProfilePicture && user.profile.profilePicture) {
+      user.profile.profilePicture = null; // Remove the profile picture
+    }
 
-// Check and delete background header image if requested
-if (deleteBackgroundImage && user.profile.backgroundHeaderImage) {
-  user.profile.backgroundHeaderImage = null; // Remove the background header image
-}
+    // Check and delete background header image if requested
+    if (deleteBackgroundImage && user.profile.backgroundHeaderImage) {
+      user.profile.backgroundHeaderImage = null; // Remove the background header image
+    }
 
-await user.save(); // Save changes to MongoDB
+    await user.save();
 
     res.status(200).send("Profile picture deleted from MongoDB successfully");
   } catch (error) {

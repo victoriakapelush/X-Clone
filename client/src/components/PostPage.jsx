@@ -4,36 +4,40 @@ import HomeNav from "./HomeNav";
 import "../styles/connectPeople.css";
 import back from "../assets/icons/back.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { format, formatDistanceToNow } from "date-fns";
-import defaultProfileImage from "../assets/images/defaultProfileImage.jpg";
+import default_user from "../assets/icons/default_user.png";
 import GifModal from "./GifModal";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import useLikeSinglePost from "./useLikeSinglePost";
+import useBookmarkSinglePost from "./useBookmarkSinglePost";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TokenContext from "./TokenContext";
+import useRepost from "./RepostHook";
+import useSendPostMessage from "./useSendPostMessage";
+import SendPostPopup from "./SendPostPopup";
 
 function PostPage() {
+  const { token, formattedUsername } = useContext(TokenContext);
   const navigate = useNavigate();
   const { username, postId } = useParams();
   const [userData, setUserData] = useState(null);
   const [randomUser, setRandomUser] = useState(null);
   const [activeTab, setActiveTab] = useState("following");
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [error, setError] = useState("");
+  const [gif, setGif] = useState("");
   const [showGifModal, setShowGifModal] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const token = localStorage.getItem("token");
   const [userProfileData, setUserProfileData] = useState(null);
   const [post, setPost] = useState("");
+  const { repostPost, loading } = useRepost();
   const { likedStates, handleLikePost, handleLikeReply } = useLikeSinglePost(
     post,
     setPost,
@@ -41,6 +45,22 @@ function PostPage() {
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
   const postLink = generatePostLink(post?._id, post?.user?.formattedUsername);
+  const { bookmarked, repliesBookmarks, handleBookmark, handleBookmarkReply } =
+    useBookmarkSinglePost(post, setPost);
+  const {
+    conversations,
+    selectedConversation,
+    selectedPost,
+    messageText,
+    responseMessage,
+    setSelectedConversation,
+    setSelectedPost,
+    setMessageText,
+    handleSubmit,
+  } = useSendPostMessage();
+  const [showToPost, setShowToPost] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
 
   const handleCopy = (postId, username) => {
     setCopied(true);
@@ -84,26 +104,8 @@ function PostPage() {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (token) {
-          const decoded = jwtDecode(token);
-          const decodedUsername = decoded.originalUsername
-            .toLowerCase()
-            .replace(/\s+/g, "");
-          setFormattedUsername(decodedUsername);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
     const getUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
         const showPopup = localStorage.getItem("showPopup");
         if (showPopup === true) {
           setShowPopup(false);
@@ -129,7 +131,7 @@ function PostPage() {
     if (formattedUsername !== "") {
       getUserData();
     }
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   const getFirstFewWords = (text, wordCount) => {
     return text.split(" ").slice(0, wordCount).join(" ");
@@ -142,41 +144,23 @@ function PostPage() {
     }
   }, [post]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!text.trim() && !imageUrl && !selectedGif) {
-      setError("Please enter some text, upload an image or a gif.");
-      return;
-    }
-    setError("");
+  const handleRepost = async (postId) => {
     try {
-      const token = localStorage.getItem("token");
-      const formData = new FormData();
-      formData.append("text", text);
-      formData.append("image", profileImage);
-      formData.append("gif", selectedGif);
+      const updatedPost = await repostPost(postId);
 
-      const response = await axios.post(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-      if (response.status >= 200 && response.status < 300) {
-        setText("");
-        setImageUrl("");
-        setProfileImage(null);
-        setSelectedGif("");
-        document.getElementById("topost-insert-image").style.display = "none";
-      } else {
-        console.error("Error creating a post:", response);
-      }
-    } catch (error) {
-      console.error("Error creating a post:", error);
+      setPost((prevPost) => {
+        if (prevPost._id === postId) {
+          // Update only the repost count
+          return {
+            ...prevPost, // Keep the rest of the post data unchanged
+            repost: updatedPost.repost, // Update the repost count
+          };
+        }
+        return prevPost; // If the IDs don't match, return the post unchanged
+      });
+    } catch (err) {
+      console.error("Failed to repost:", err);
+      toast.error("Cannot repost");
     }
   };
 
@@ -190,10 +174,6 @@ function PostPage() {
       return;
     }
     try {
-      if (!token) {
-        console.error("No token found in local storage.");
-        return;
-      }
       const response = await axios.get(
         `http://localhost:3000/home/${username}`,
         {
@@ -256,9 +236,94 @@ function PostPage() {
       : format(date, "MMMM d");
   }
 
+  const handleUpdateReplyCount = (postId, originalPostId = null) => {
+    setPost((prevPost) => {
+      // Check if the postId matches the current post
+      if (
+        prevPost._id === postId ||
+        (originalPostId && prevPost._id === originalPostId)
+      ) {
+        return {
+          ...prevPost,
+          reply: prevPost.reply + 1, // Increment reply count for the single post
+        };
+      }
+      return prevPost; // Return unchanged if no match
+    });
+  };
+
+  const handleReplySubmit = async (e) => {
+    e.preventDefault();
+    console.log("Post ID:", postId);
+
+    try {
+      const formData = new FormData();
+      formData.append("text", text);
+      formData.append("image", profileImage);
+      formData.append("gif", gif);
+
+      const response = await axios.post(
+        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      if (response.status >= 200 && response.status < 300) {
+        const newComment = response.data.comment;
+        setText("");
+        setImageUrl("");
+        setGif("");
+
+        // Update the local state with the new comment and sort it
+        setPost((prevPost) => {
+          const updatedReplies = [...prevPost.totalReplies, newComment];
+
+          return {
+            ...prevPost,
+            totalReplies: updatedReplies.sort(
+              (a, b) => new Date(b.time) - new Date(a.time),
+            ),
+          };
+        });
+
+        if (handleUpdateReplyCount) {
+          handleUpdateReplyCount(postId._id);
+        }
+      } else {
+        console.error("Error creating a comment:", response);
+      }
+    } catch (error) {
+      console.error("Error creating a comment:", error);
+    }
+  };
+
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
+
+  const handlePostClick = (post) => {
+    setShowToPost(true);
+    setSelectedPostId(post);
+  };
+
   return (
     <div className="flex-row home-container">
       <HomeNav />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        closeOnClick
+      />
       <div className="connect-center-container flex-column">
         <header className="flex-row">
           <button
@@ -279,7 +344,18 @@ function PostPage() {
                 : post.user?.profile) && (
                 <img
                   className="profile-pic no-bottom-margin"
-                  src={`http://localhost:3000/uploads/${(post?.repostedFrom ? post.repostedFrom.profile : post.user.profile).profilePicture}`}
+                  src={
+                    (post.repostedFrom
+                      ? post.repostedFrom.profile
+                      : post.user.profile
+                    )?.profilePicture
+                      ? `http://localhost:3000/uploads/${
+                          post.repostedFrom
+                            ? post.repostedFrom.profile.profilePicture
+                            : post.user.profile.profilePicture
+                        }`
+                      : default_user
+                  }
                 />
               )}
               <div className="vertical-line-reply"></div>
@@ -349,7 +425,7 @@ function PostPage() {
                 <span className="count">{post.reply}</span>
               </div>
             </div>
-            <div>
+            <div onClick={() => handleRepost(post._id)} disabled={loading}>
               <div
                 className="icon-container color-hover flex-row"
                 id="green-svg"
@@ -359,13 +435,32 @@ function PostPage() {
                     <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                   </g>
                 </svg>
-                <span className="count">0</span>
+                <span className="count">{post.repost}</span>
               </div>
             </div>
-            <div>
+            {showSendPostPopup && (
+              <SendPostPopup
+                post={post}
+                closeShowSendPostPopup={closeShowSendPostPopup}
+                conversations={conversations}
+                selectedConversation={selectedConversation}
+                selectedPost={selectedPost}
+                messageText={messageText}
+                responseMessage={responseMessage}
+                setSelectedConversation={setSelectedConversation}
+                setSelectedPost={setSelectedPost}
+                setMessageText={setMessageText}
+                handleSubmit={handleSubmit}
+                handlePostClick={handlePostClick}
+                selectedPostId={selectedPostId}
+              />
+            )}
+            <div onClick={() => sendPost(post._id)}>
               <div
                 className="icon-container color-hover flex-row"
                 id="yellow-svg"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Send"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                   <g>
@@ -405,13 +500,15 @@ function PostPage() {
             <div className="save-icons flex-row">
               <div>
                 <div
-                  className="icon-container bookmark-icon color-hover"
+                  className={`icon-container bookmark-icon color-hover ${bookmarked ? "bookmarked" : "not-bookmarked"}`}
                   id="save-svg"
+                  onClick={() => handleBookmark(post._id)}
                 >
                   <svg
                     viewBox="0 0 24 24"
                     aria-hidden="true"
                     className="radius"
+                    fill={bookmarked ? "bookmarked" : "not-bookmarked"}
                   >
                     <g>
                       <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
@@ -419,12 +516,6 @@ function PostPage() {
                   </svg>
                 </div>
               </div>
-              <ToastContainer
-                position="bottom-center"
-                autoClose={1000}
-                hideProgressBar={false}
-                closeOnClick
-              />
               <CopyToClipboard
                 text={postLink}
                 onCopy={() =>
@@ -457,18 +548,13 @@ function PostPage() {
                   <img
                     className="profile-pic"
                     src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
-                    alt="Profile Picture"
                   />
                 ) : (
-                  <img
-                    className="profile-pic"
-                    src={defaultProfileImage}
-                    alt="Default Profile Picture"
-                  />
+                  <img className="profile-pic" src={default_user} />
                 )}
               </Link>
               <div className="form-container-new-post">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleReplySubmit}>
                   <textarea
                     className="post-textarea"
                     placeholder="Post your reply"
@@ -598,7 +684,11 @@ function PostPage() {
                     <div className="pic-vertical-line-box flex-column">
                       <img
                         className="profile-pic no-bottom-margin"
-                        src={`http://localhost:3000/uploads/${reply.user.profile.profilePicture}`}
+                        src={
+                          reply?.user?.profile?.profilePicture
+                            ? `http://localhost:3000/uploads/${reply.user.profile.profilePicture}`
+                            : default_user
+                        }
                       />
                     </div>
                     <div className="reply-summary-post flex-column">
@@ -708,8 +798,9 @@ function PostPage() {
                   <div className="save-icons flex-row">
                     <div>
                       <div
-                        className="icon-container bookmark-icon color-hover"
+                        className={`icon-container bookmark-icon color-hover ${repliesBookmarks[reply._id] ? "bookmarked" : "not-bookmarked"}`}
                         id="save-svg"
+                        onClick={() => handleBookmarkReply(reply._id)} // Call handleBookmarkReply with reply ID when clicked
                       >
                         <svg
                           viewBox="0 0 24 24"
@@ -722,12 +813,6 @@ function PostPage() {
                         </svg>
                       </div>
                     </div>
-                    <ToastContainer
-                      position="bottom-center"
-                      autoClose={1000}
-                      hideProgressBar={false}
-                      closeOnClick
-                    />
                     <CopyToClipboard
                       text={postLink}
                       onCopy={() =>

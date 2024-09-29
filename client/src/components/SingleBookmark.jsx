@@ -12,9 +12,14 @@ import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
+import { format, formatDistanceToNow } from "date-fns";
+import SendPostPopup from "./SendPostPopup";
+import useSendPostMessage from "./useSendPostMessage";
+import ReplyPopup from "./ReplyPopup";
 
 function SingleBookmark({
   bookmarkedPosts,
+  setBookmarkedPosts,
   bookmarkedStates,
   handleBookmark,
   likedStates,
@@ -25,13 +30,38 @@ function SingleBookmark({
   const [copied, setCopied] = useState(false);
   const { repostPost, repostedPosts, loading, error } = useRepost();
   const [reposted, setReposted] = useState(false);
+  const [showToPost, setShowToPost] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
+  const {
+    conversations,
+    selectedConversation,
+    selectedPost,
+    messageText,
+    responseMessage,
+    setSelectedConversation,
+    setSelectedPost,
+    setMessageText,
+    handleSubmit,
+  } = useSendPostMessage();
 
   const handleRepost = async (postId) => {
     try {
       await repostPost(postId);
+
+      // Update the repost count immediately in the state
+      setBookmarkedPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId
+            ? { ...post, repost: (post.repost || 0) + 1 } // Increment the repost count
+            : post,
+        ),
+      );
+
       setReposted(true);
     } catch (err) {
       console.error("Failed to repost:", err);
+      toast.error("Cannot repost");
     }
   };
 
@@ -46,8 +76,53 @@ function SingleBookmark({
     setIsExpanded(!isExpanded);
   };
 
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
+
+  const handlePostClick = (post) => {
+    setShowToPost(true);
+    setSelectedPostId(post);
+  };
+
+  const handleClosePopup = () => {
+    setShowToPost(false);
+  };
+
+  const handleUpdateReplyCount = (postId, originalPostId = null) => {
+    setBookmarkedPosts((prevPosts) =>
+      prevPosts.map((postItem) => {
+        if (
+          postItem._id === postId ||
+          (originalPostId && originalPostId._id === postId)
+        ) {
+          return {
+            ...postItem,
+            reply: postItem.reply + 1,
+          };
+        }
+        return postItem;
+      }),
+    );
+  };
+
   return (
     <div>
+      {showToPost && (
+        <ReplyPopup
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+          selectedPostId={selectedPostId}
+          bookmarkedPosts={bookmarkedPosts}
+          postId={selectedPostId}
+          onUpdateReplyCount={handleUpdateReplyCount}
+        />
+      )}
       <ToastContainer
         position="bottom-center"
         autoClose={1000} // This will close the toast after 1 second
@@ -65,6 +140,21 @@ function SingleBookmark({
             post._id,
             post.user.formattedUsername,
           );
+
+          // Get the post time and format it
+          const postTime = post?.time ? new Date(post.time) : null;
+          let formattedTime = "";
+
+          if (postTime && !isNaN(postTime)) {
+            const now = new Date();
+            const isRecent = now - postTime < 24 * 60 * 60 * 1000; // Within 24 hours
+
+            formattedTime = isRecent
+              ? formatDistanceToNow(postTime, { addSuffix: true }) // e.g., "5 hours ago"
+              : format(postTime, "MMMM d"); // e.g., "September 28"
+          } else {
+            formattedTime = "Invalid date";
+          }
           return (
             <div key={index} className="post random-post flex-column">
               <Link
@@ -88,7 +178,7 @@ function SingleBookmark({
                       {post.user?.profile.updatedName}
                     </span>{" "}
                     <span className="username-name">
-                      @{post.user?.formattedUsername} · {post.time}
+                      @{post.user?.formattedUsername} · {formattedTime}
                     </span>
                   </Link>
                   {post.text && (
@@ -112,6 +202,9 @@ function SingleBookmark({
                   <div
                     className="icon-container color-hover flex-row"
                     id="blue-svg"
+                    onClick={() => handlePostClick(post)}
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Reply"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -142,7 +235,24 @@ function SingleBookmark({
                     <span className="count">{post.repost}</span>
                   </div>
                 </div>
-                <div>
+                {showSendPostPopup && (
+                  <SendPostPopup
+                    bookmarkedPosts={bookmarkedPosts}
+                    closeShowSendPostPopup={closeShowSendPostPopup}
+                    conversations={conversations}
+                    selectedConversation={selectedConversation}
+                    selectedPost={selectedPost}
+                    messageText={messageText}
+                    responseMessage={responseMessage}
+                    setSelectedConversation={setSelectedConversation}
+                    setSelectedPost={setSelectedPost}
+                    setMessageText={setMessageText}
+                    handleSubmit={handleSubmit}
+                    handlePostClick={handlePostClick}
+                    selectedPostId={selectedPostId}
+                  />
+                )}
+                <div onClick={() => sendPost(post._id)}>
                   <div
                     className="icon-container color-hover flex-row"
                     id="yellow-svg"

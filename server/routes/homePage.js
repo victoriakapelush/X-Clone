@@ -4,7 +4,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const {
   addUserProfile,
-  getUserProfile
+  getUserProfile,
 } = require("../controllers/addUserProfileController");
 const { verifyJWT } = require("../controllers/loginController");
 

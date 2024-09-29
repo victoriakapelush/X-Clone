@@ -9,11 +9,9 @@ const getListData = async (req, res) => {
       .populate("owner")
       .populate({
         path: "posts",
-        populate: [
-          { path: "user" },
-          { path: "totalReplies" }
-        ]
-      })      .populate("members");
+        populate: [{ path: "user" }, { path: "totalReplies" }],
+      })
+      .populate("members");
 
     if (!list) {
       return res.status(404).json({ message: "List not found" });
@@ -44,7 +42,7 @@ const deleteList = async (req, res) => {
 
     await list.deleteOne();
 
-    res.status(200).json({ message: "List deleted successfully" });  
+    res.status(200).json({ message: "List deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -75,7 +73,9 @@ const updateList = async (req, res) => {
     const user = await User.findById(userId);
 
     if (user) {
-      const listIndex = user.lists.findIndex((l) => l._id.toString() === listId);
+      const listIndex = user.lists.findIndex(
+        (l) => l._id.toString() === listId,
+      );
       if (listIndex > -1) {
         user.lists[listIndex].name = list.name;
         user.lists[listIndex].description = list.description;
@@ -90,6 +90,5 @@ const updateList = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 module.exports = { getListData, deleteList, updateList };

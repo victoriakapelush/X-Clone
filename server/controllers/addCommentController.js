@@ -22,6 +22,8 @@ const getComments = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    post.totalReplies.sort((a, b) => new Date(b.time) - new Date(a.time));
+
     res.status(200).json({ post });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -73,6 +75,7 @@ const addCommentToPost = async (req, res) => {
       originalPost = await Post.findById(post.originalPostId._id);
     }
 
+    // Save the reply to the current post
     post.totalReplies.push(newReply);
     post.reply = (post.reply || 0) + 1;
     await post.save();
@@ -83,6 +86,26 @@ const addCommentToPost = async (req, res) => {
       originalPost.reply = (originalPost.reply || 0) + 1;
       originalPost.totalReplies.push(newReply._id);
       await originalPost.save();
+    }
+
+    // Update replies on all reposted versions of the post
+    const reposts = await Post.find({ originalPostId: postId });
+    for (let repost of reposts) {
+      repost.totalReplies.push(newReply._id); // Add the new reply
+      repost.reply = (repost.reply || 0) + 1; // Increment the reply count
+      await repost.save(); // Save the repost
+    }
+
+    // Also update reposted versions of the original post, if this is a repost
+    if (originalPost) {
+      const originalReposts = await Post.find({
+        originalPostId: originalPost._id,
+      });
+      for (let repost of originalReposts) {
+        repost.totalReplies.push(newReply._id);
+        repost.reply = (repost.reply || 0) + 1;
+        await repost.save();
+      }
     }
 
     const populatedReply = await Reply.findById(newReply._id)

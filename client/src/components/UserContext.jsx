@@ -3,7 +3,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import TokenContext from "./TokenContext";
-import { Link, useLocation, useParams } from "react-router-dom";
 
 const UserContext = createContext({
   userData: null,
@@ -19,47 +18,45 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [randomUser, setRandomUser] = useState(null);
   const { token, formattedUsername } = useContext(TokenContext);
-  const { username } = useParams();
-
-  const fetchUserData = async () => {
-    if (!token) {
-      console.error("No token found.");
-      return;
-    }
-    try {
-      if (!token) {
-        console.error("No token found in local storage.");
-        return;
-      }
-      const response = await axios.get(
-        `http://localhost:3000/home/${formattedUsername}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (!response.data) {
-        console.error("User data not found in response:", response.data);
-        return;
-      }
-      setUserData(response.data.userProfile);
-      setRandomUser(response.data.randomUsers);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchUserData();
-  }, [formattedUsername]);
+    const fetchUserData = async () => {
+      if (!token) {
+        console.error("No token found.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/home/${formattedUsername}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        if (!response.data) {
+          console.error("User data not found in response:", response.data);
+          return;
+        }
+        console.log(response.data);
+        setUserData(response.data.userProfile);
+        setRandomUser(response.data.randomUsers);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (formattedUsername && token) {
+      fetchUserData();
+    }
+  }, [formattedUsername, token]);
 
   return (
     <UserContext.Provider
       value={{
         userData,
         setUserData,
-        fetchUserData,
         randomUser,
         setRandomUser,
       }}

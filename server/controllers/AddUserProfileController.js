@@ -83,7 +83,6 @@ const addUserPhoto = async (req, res) => {
   const currentUser = req.user.originalUsername;
 
   try {
-
     let filename = null;
     if (req.file) {
       filename = req.file.filename;
@@ -94,12 +93,12 @@ const addUserPhoto = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-        user.profile.profilePicture = filename;
+    user.profile.profilePicture = filename;
 
-        user.save()
+    user.save();
 
     res.status(200).send({
-      message: "User profile updated successfully"
+      message: "User profile updated successfully",
     });
   } catch (error) {
     console.error("Error updating user profile:", error);

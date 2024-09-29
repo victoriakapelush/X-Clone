@@ -5,6 +5,11 @@ const saveFollowingCount = async (req, res) => {
   const currentUser = req.user.id;
   const otherUserId = req.body._id;
 
+  // Prevent a user from following themselves
+  if (currentUser === otherUserId) {
+    return res.status(400).send({ message: "You cannot follow yourself" });
+  }
+
   const session = await mongoose.startSession();
   session.startTransaction();
 

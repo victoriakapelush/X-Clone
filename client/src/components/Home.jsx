@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import defaultProfileImage from "../assets/images/defaultProfileImage.jpg";
 import HomeNav from "./HomeNav";
 import HomeExtra from "./HomeExtra";
@@ -13,12 +13,11 @@ import PostReplacement from "./PostReplacement.jsx";
 import RandomPosts from "./RandomPosts.jsx";
 import GifModal from "./GifModal";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import TokenContext from "./TokenContext";
+import UserContext from "./UserContext.jsx";
 
 function Home() {
-  const [userData, setUserData] = useState(null);
-  const [randomUser, setRandomUser] = useState(null);
   const [activeTab, setActiveTab] = useState("following");
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -26,9 +25,9 @@ function Home() {
   const [showGifModal, setShowGifModal] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const { username } = useParams();
-  const token = localStorage.getItem("token");
   const [userProfileData, setUserProfileData] = useState(null);
+  const { token, formattedUsername } = useContext(TokenContext);
+  const { userData, randomUser, fetchUserData } = useContext(UserContext);
 
   const handleButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -65,54 +64,6 @@ function Home() {
     setShowPopup(false);
     localStorage.setItem("showPopup", false);
   };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (token) {
-          const decoded = jwtDecode(token);
-          const decodedUsername = decoded.originalUsername
-            .toLowerCase()
-            .replace(/\s+/g, "");
-          setFormattedUsername(decodedUsername);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const showPopup = localStorage.getItem("showPopup");
-        if (showPopup === true) {
-          setShowPopup(false);
-        }
-        if (!token) {
-          console.error("No token found in local storage.");
-          return;
-        }
-        const response = await axios.get(
-          `http://localhost:3000/profile/${formattedUsername}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        setUserData(response.data.userProfile);
-        setRandomUser(response.data.randomUsers);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    if (formattedUsername !== "") {
-      getUserData();
-    }
-  }, [formattedUsername]);
 
   useEffect(() => {
     document.title = "Home / X";
@@ -159,38 +110,6 @@ function Home() {
   const handleGifSelect = (gifUrl) => {
     setSelectedGif(gifUrl);
   };
-
-  const fetchUserProfileData = async () => {
-    if (!token) {
-      console.error("No token found.");
-      return;
-    }
-    try {
-      if (!token) {
-        console.error("No token found in local storage.");
-        return;
-      }
-      const response = await axios.get(
-        `http://localhost:3000/home/${username}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (!response.data) {
-        console.error("User data not found in response:", response.data);
-        return;
-      }
-      setUserProfileData(response.data.userProfile);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserProfileData();
-  }, [username]);
 
   return (
     <div className="flex-row home-container">

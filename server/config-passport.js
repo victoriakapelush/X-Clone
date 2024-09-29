@@ -28,13 +28,14 @@ passport.use(
 );
 
 passport.use(
-  new GoogleStrategy({
+  new GoogleStrategy(
+    {
       clientID: process.env.clientID,
       clientSecret: process.env.clientSecret,
       callbackURL: "http://localhost:3000/auth/google/callback",
-      scope: ['openid', 'profile', 'email']
+      scope: ["openid", "profile", "email"],
     },
-    async (accessToken, refreshToken, profile, done) => {      
+    async (accessToken, refreshToken, profile, done) => {
       let user = await User.findOne({ googleId: profile.id });
       if (!user) {
         console.log("Creating new user...");
@@ -49,8 +50,8 @@ passport.use(
       }
 
       return done(null, user, { token });
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {

@@ -4,21 +4,22 @@ import "../styles/popup.css";
 import "../styles/editProfilePopup.css";
 import "../styles/topost.css";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
+import TokenContext from "./TokenContext";
 
-function ToPost({ onClose, onSave }) {
+function ToPost({ onClose }) {
   const [userData, setUserData] = useState({});
   const [profile, setProfile] = useState({});
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [post, setPost] = useState([]);
+  const { token, formattedUsername } = useContext(TokenContext);
 
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
@@ -35,27 +36,8 @@ function ToPost({ onClose, onSave }) {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const decoded = jwtDecode(token);
-          const decodedUsername = decoded.originalUsername
-            .toLowerCase()
-            .replace(/\s+/g, "");
-          setFormattedUsername(decodedUsername);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
     const getUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
         if (!token) {
           console.error("No token found in local storage.");
           return;
@@ -80,19 +62,17 @@ function ToPost({ onClose, onSave }) {
         setUserData({ ...response.data.userProfile });
         setProfile(profiles);
         setPost(posts);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     getUserData();
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem("token");
       const formData = new FormData();
       formData.append("text", text);
       formData.append("image", profileImage);
@@ -108,6 +88,9 @@ function ToPost({ onClose, onSave }) {
         },
       );
       if (response.status >= 200 && response.status < 300) {
+        const newPost = response.data.post;
+        console.log(response.data);
+        setPost((prevPosts) => [...prevPosts, newPost]);
         setText("");
         setImageUrl("");
         setProfileImage(null);

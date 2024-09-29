@@ -5,8 +5,7 @@ const getLists = async (req, res) => {
   const currentUserId = req.user.id;
 
   try {
-    const user = await User.findById(currentUserId)
-    .populate({
+    const user = await User.findById(currentUserId).populate({
       path: "lists",
       populate: [
         { path: "owner", model: "User" },

@@ -11,6 +11,11 @@ import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
+import default_user from "../assets/icons/default_user.png";
+import { format, formatDistanceToNow } from "date-fns";
+import useSendPostMessage from "./useSendPostMessage";
+import SendPostPopup from "./SendPostPopup";
+import ReplyPopup from "./ReplyPopup";
 
 function RandomPosts() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -26,6 +31,20 @@ function RandomPosts() {
   const [copied, setCopied] = useState(false);
   const { repostPost, repostedPosts, loading, error } = useRepost();
   const [reposted, setReposted] = useState(false);
+  const {
+    conversations,
+    selectedConversation,
+    selectedPost,
+    messageText,
+    responseMessage,
+    setSelectedConversation,
+    setSelectedPost,
+    setMessageText,
+    handleSubmit,
+  } = useSendPostMessage();
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
+  const [showToPost, setShowToPost] = useState(false);
 
   const handleCopy = (postId, username) => {
     console.log(`Copied post link: ${postId}, username: ${username}`);
@@ -53,14 +72,68 @@ function RandomPosts() {
   const handleRepost = async (postId) => {
     try {
       await repostPost(postId);
+
+      // Update the repost count immediately in the state
+      setRandomPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === postId ? { ...post, repost: post.repost + 1 } : post,
+        ),
+      );
+
       setReposted(true);
     } catch (err) {
       console.error("Failed to repost:", err);
+      toast.error("Cannot repost");
     }
+  };
+
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
+
+  const handlePostClick = (post) => {
+    setShowToPost(true);
+    setSelectedPostId(post);
+  };
+
+  const handleClosePopup = () => {
+    setShowToPost(false);
+  };
+
+  const handleUpdateReplyCount = (postId, originalPostId = null) => {
+    setRandomPosts((prevPosts) =>
+      prevPosts.map((postItem) => {
+        if (
+          postItem._id === postId ||
+          (originalPostId && originalPostId._id === postId)
+        ) {
+          return {
+            ...postItem,
+            reply: postItem.reply + 1,
+          };
+        }
+        return postItem;
+      }),
+    );
   };
 
   return (
     <div>
+      {showToPost && (
+        <ReplyPopup
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+          selectedPostId={selectedPostId}
+          randomPosts={randomPosts}
+          postId={selectedPostId}
+          onUpdateReplyCount={handleUpdateReplyCount}
+        />
+      )}
       <ToastContainer
         position="bottom-center"
         autoClose={1000} // This will close the toast after 1 second
@@ -75,8 +148,23 @@ function RandomPosts() {
       {randomPosts.map((post, index) => {
         const postLink = generatePostLink(
           post._id,
-          post.user.formattedUsername,
+          post?.user?.formattedUsername,
         );
+
+        // Get the post time and format it
+        const postTime = post?.time ? new Date(post.time) : null;
+        let formattedTime = "";
+
+        if (postTime && !isNaN(postTime)) {
+          const now = new Date();
+          const isRecent = now - postTime < 24 * 60 * 60 * 1000; // Within 24 hours
+
+          formattedTime = isRecent
+            ? formatDistanceToNow(postTime, { addSuffix: true }) // e.g., "5 hours ago"
+            : format(postTime, "MMMM d"); // e.g., "September 28"
+        } else {
+          formattedTime = "Invalid date";
+        }
 
         return (
           <div className="post" key={index}>
@@ -88,18 +176,21 @@ function RandomPosts() {
                 {post?.user?.profile?.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
+                    src={`http://localhost:3000/uploads/${post?.user?.profile.profilePicture}`}
                   />
                 ) : (
-                  <div className="default-profile-image-post"></div>
+                  <img className="profile-pic" src={default_user}></img>
                 )}
                 <div className="flex-column post-box">
-                  <Link to="/profile" className="link-to-profile">
+                  <Link
+                    to={`/profile/${post?.user?.formattedUsername}`}
+                    className="link-to-profile"
+                  >
                     <span className="user-name">
-                      {post.user.profile.updatedName}
+                      {post?.user?.profile.updatedName}
                     </span>{" "}
                     <span className="username-name">
-                      @{post.user.formattedUsername} · {post.time}
+                      @{post?.user?.formattedUsername} · {formattedTime}
                     </span>
                   </Link>
                   {post.text && (
@@ -120,10 +211,30 @@ function RandomPosts() {
               </div>
             </Link>
             <div className="flex-row post-icons-container">
+              {showSendPostPopup && (
+                <SendPostPopup
+                  randomPosts={randomPosts}
+                  closeShowSendPostPopup={closeShowSendPostPopup}
+                  conversations={conversations}
+                  selectedConversation={selectedConversation}
+                  selectedPost={selectedPost}
+                  messageText={messageText}
+                  responseMessage={responseMessage}
+                  setSelectedConversation={setSelectedConversation}
+                  setSelectedPost={setSelectedPost}
+                  setMessageText={setMessageText}
+                  handleSubmit={handleSubmit}
+                  handlePostClick={handlePostClick}
+                  selectedPostId={selectedPostId}
+                />
+              )}
               <div>
                 <div
                   className="icon-container color-hover flex-row"
                   id="blue-svg"
+                  onClick={() => handlePostClick(post)}
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Reply"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -151,10 +262,10 @@ function RandomPosts() {
                       <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                     </g>
                   </svg>
-                  <span className="count">0</span>
+                  <span className="count">{post.repost}</span>
                 </div>
               </div>
-              <div>
+              <div onClick={() => sendPost(post._id)}>
                 <div
                   className="icon-container color-hover flex-row"
                   id="yellow-svg"

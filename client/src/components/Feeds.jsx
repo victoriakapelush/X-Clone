@@ -12,6 +12,11 @@ import useGenerateLink from "./GenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useRepost from "./RepostHook";
+import default_user from "../assets/icons/default_user.png";
+import SendPostPopup from "./SendPostPopup";
+import useSendPostMessage from "./useSendPostMessage";
+import ReplyPopup from "./ReplyPopup";
+import { format, formatDistanceToNow } from "date-fns";
 
 function Feeds() {
   const { randomUser, setRandomUser } = useContext(UserContext);
@@ -19,6 +24,7 @@ function Feeds() {
   const {
     userData,
     postData,
+    setPostData,
     bookmarkedStates,
     handleBookmark,
     likedStates,
@@ -27,8 +33,21 @@ function Feeds() {
   } = UseFeedsHook();
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
-  const { repostPost, repostedPosts, loading, error } = useRepost();
-  const [reposted, setReposted] = useState(false);
+  const { repostPost, loading } = useRepost();
+  const [showToPost, setShowToPost] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
+  const {
+    conversations,
+    selectedConversation,
+    selectedPost,
+    messageText,
+    responseMessage,
+    setSelectedConversation,
+    setSelectedPost,
+    setMessageText,
+    handleSubmit,
+  } = useSendPostMessage();
 
   const handleCopy = () => {
     setCopied(true);
@@ -38,10 +57,23 @@ function Feeds() {
 
   const handleRepost = async (postId) => {
     try {
-      await repostPost(postId);
-      setReposted(true);
+      const updatedPost = await repostPost(postId);
+
+      setPostData((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post._id === postId) {
+            // Update only the repost count
+            return {
+              ...post, // Keep the rest of the post data unchanged
+              repost: updatedPost.repost, // Update the repost count
+            };
+          }
+          return post;
+        }),
+      );
     } catch (err) {
       console.error("Failed to repost:", err);
+      toast.error("Cannot repost");
     }
   };
 
@@ -53,10 +85,53 @@ function Feeds() {
     document.title = "Feeds / X";
   }, []);
 
-  console.log(postData);
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
+
+  const handlePostClick = (post) => {
+    setShowToPost(true);
+    setSelectedPostId(post);
+  };
+
+  const handleClosePopup = () => {
+    setShowToPost(false);
+  };
+
+  const handleUpdateReplyCount = (postId, originalPostId = null) => {
+    setPostData((prevPosts) =>
+      prevPosts.map((postItem) => {
+        if (
+          postItem._id === postId ||
+          (originalPostId && originalPostId._id === postId)
+        ) {
+          return {
+            ...postItem,
+            reply: postItem.reply + 1,
+          };
+        }
+        return postItem;
+      }),
+    );
+  };
 
   return (
     <div className="flex-row profile-page">
+      {showToPost && (
+        <ReplyPopup
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+          selectedPostId={selectedPostId}
+          postData={postData}
+          postId={selectedPostId}
+          onUpdateReplyCount={handleUpdateReplyCount}
+        />
+      )}
       <ToastContainer
         position="bottom-center"
         autoClose={1000} // This will close the toast after 1 second
@@ -76,6 +151,22 @@ function Feeds() {
               post._id,
               post.user.formattedUsername,
             );
+
+            // Get the post time and format it
+            const postTime = post?.time ? new Date(post.time) : null;
+            let formattedTime = "";
+
+            if (postTime && !isNaN(postTime)) {
+              const now = new Date();
+              const isRecent = now - postTime < 24 * 60 * 60 * 1000; // Within 24 hours
+
+              formattedTime = isRecent
+                ? formatDistanceToNow(postTime, { addSuffix: true }) // e.g., "5 hours ago"
+                : format(postTime, "MMMM d"); // e.g., "September 28"
+            } else {
+              formattedTime = "Invalid date";
+            }
+
             return (
               <div key={index} className="post random-post flex-column">
                 <Link
@@ -86,10 +177,9 @@ function Feeds() {
                     <img
                       className="profile-pic"
                       src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
-                      alt="Profile"
                     />
                   ) : (
-                    <div className="default-profile-image-post"></div>
+                    <img className="profile-pic" src={default_user}></img>
                   )}
                   <div className="flex-column post-box">
                     <Link
@@ -100,7 +190,7 @@ function Feeds() {
                         {post.user.profile.updatedName}
                       </span>
                       <span className="username-name">
-                        &nbsp;@{post.user.formattedUsername} · {post.time}
+                        &nbsp;@{post.user.formattedUsername} · {formattedTime}
                       </span>
                     </Link>
                     {post.text && (
@@ -125,6 +215,9 @@ function Feeds() {
                     <div
                       className="icon-container color-hover flex-row"
                       id="blue-svg"
+                      onClick={() => handlePostClick(post)}
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Reply"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -135,7 +228,7 @@ function Feeds() {
                           <path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path>
                         </g>
                       </svg>
-                      <span className="count">0</span>
+                      <span className="count">{post.reply}</span>
                     </div>
                   </div>
                   <div
@@ -158,10 +251,29 @@ function Feeds() {
                       <span className="count">{post.repost}</span>
                     </div>
                   </div>
-                  <div>
+                  {showSendPostPopup && (
+                    <SendPostPopup
+                      postData={postData}
+                      closeShowSendPostPopup={closeShowSendPostPopup}
+                      conversations={conversations}
+                      selectedConversation={selectedConversation}
+                      selectedPost={selectedPost}
+                      messageText={messageText}
+                      responseMessage={responseMessage}
+                      setSelectedConversation={setSelectedConversation}
+                      setSelectedPost={setSelectedPost}
+                      setMessageText={setMessageText}
+                      handleSubmit={handleSubmit}
+                      handlePostClick={handlePostClick}
+                      selectedPostId={selectedPostId}
+                    />
+                  )}
+                  <div onClick={() => sendPost(post._id)}>
                     <div
                       className="icon-container color-hover flex-row"
                       id="yellow-svg"
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Send"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -175,7 +287,11 @@ function Feeds() {
                           ></path>
                         </g>
                       </svg>
-                      <span className="count">0</span>
+                      <span className="count">
+                        {post?.originalPostId
+                          ? post.originalPostId.share
+                          : post.share}
+                      </span>
                     </div>
                   </div>
                   <div>

@@ -49,7 +49,7 @@ export const TokenProvider = ({ children }) => {
       }
     };
     fetchTokenData();
-  }, [formattedUsername]);
+  }, [formattedUsername, loggedinUserId, token]);
 
   return (
     <TokenContext.Provider

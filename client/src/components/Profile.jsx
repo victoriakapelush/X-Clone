@@ -4,8 +4,7 @@
 import "../styles/profile.css";
 import "../styles/highlights.css";
 import default_user from "../assets/icons/default_user.png";
-import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useState, useEffect, useContext, useDebugValue } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import HomeNav from "./HomeNav";
@@ -16,7 +15,6 @@ import Replies from "./Replies";
 import Highlights from "./Highlights";
 import Media from "./Media";
 import Likes from "./Likes";
-import FullSizeImage from "./FullSizeImage";
 import back from "../assets/icons/back.png";
 import UseNewPostHook from "./UseNewPostHook";
 import DeletePostHook from "./DeletePostHook";
@@ -24,21 +22,22 @@ import PickListPopup from "./list/PickListPopup";
 import { ToastContainer } from "react-toastify";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
+import TokenContext from "./TokenContext";
+import UserContext from "./UserContext";
+import useFollow from "./FollowUnfollowHook";
 
 function Profile() {
+  const { token, formattedUsername } = useContext(TokenContext);
   const { username } = useParams();
+  const { userData, setUserData } = useContext(UserContext);
+  const [randomUser, setRandomUser] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isFollowing, handleFollow } = useFollow(userData);
   const [showListPopup, setShowListPopup] = useState(false);
-  const [userData, setUserData] = useState({});
   const [activeTab, setActiveTab] = useState("posts");
   const [originalUsername, setOriginalUsername] = useState(null);
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isImageOpen, setIsImageOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageType, setImageType] = useState("");
-  const [randomUser, setRandomUser] = useState(null);
   const [profileData, setProfileData] = useState({
     profileBio: "",
     location: "",
@@ -70,16 +69,6 @@ function Profile() {
     setPostCount(userData?.profile?.posts);
   }, [postData, setPostCount, setUpdatedPosts, userData]);
 
-  const handleImageClick = (url, type) => {
-    setImageUrl(url);
-    setImageType(type);
-    setIsImageOpen(true);
-  };
-
-  const handleCloseImage = () => {
-    setIsImageOpen(false);
-  };
-
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
   };
@@ -90,7 +79,6 @@ function Profile() {
 
   const handleClosePopup = (updatedProfileData) => {
     setIsPopupOpen(false);
-    setIsImageOpen(false);
     if (updatedProfileData) {
       setProfileData(updatedProfileData);
       setUserData((prevUserData) => ({
@@ -103,13 +91,7 @@ function Profile() {
 
   const fetchUserData = async () => {
     try {
-      const token = localStorage.getItem("token");
       if (token) {
-        const decoded = jwtDecode(token);
-        const decodedUsername = decoded.originalUsername
-          .toLowerCase()
-          .replace(/\s+/g, "");
-        setFormattedUsername(decodedUsername);
         const response = await axios.get(
           `http://localhost:3000/profile/${username}`,
           {
@@ -169,13 +151,20 @@ function Profile() {
       } else {
         navigate(`/profile/${username}`); // Remove the hash from the URL
       }
-
       return newState;
     });
   };
 
   return (
     <div className="flex-row profile-page">
+      {isPopupOpen && (
+        <EditProfilePopup
+          profileData={profileData}
+          setProfileData={setProfileData}
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+        />
+      )}
       <HomeNav />
       <div className="profile-container">
         <header className="flex-row">
@@ -190,22 +179,7 @@ function Profile() {
             {userData && userData.profile && <span>{postCount} posts</span>}
           </div>
         </header>
-        <div
-          className="background-image-holder"
-          onClick={() => {
-            handleImageClick(
-              `http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`,
-              "background-image",
-            );
-          }}
-        >
-          {isImageOpen && (
-            <FullSizeImage
-              onClick={handleCloseImage}
-              imageUrl={imageUrl}
-              imageType={imageType}
-            />
-          )}
+        <div className="background-image-holder">
           {profileData && profileData.backgroundHeaderImage ? (
             <img
               src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`}
@@ -214,15 +188,7 @@ function Profile() {
             <div className="defaul-profile-image-background"></div>
           )}
         </div>
-        <div
-          className="profile-photo-container flex-row"
-          onClick={() => {
-            handleImageClick(
-              `http://localhost:3000/uploads/${profileData.profilePicture}`,
-              "profile-picture",
-            );
-          }}
-        >
+        <div className="profile-photo-container flex-row">
           {profileData && profileData.profilePicture ? (
             <img
               src={`http://localhost:3000/uploads/${profileData.profilePicture}`}
@@ -239,7 +205,12 @@ function Profile() {
             </button>
           ) : (
             <>
-              <button className="edit-profile-btn radius">Follow</button>
+              <button
+                className={`edit-profile-btn radius ${isFollowing ? "unfollow-button" : ""}`}
+                onClick={() => handleFollow(userData._id)}
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </button>
               <Tooltip id="my-tooltip" />
               <div className="other-user-btns flex-row">
                 <svg
@@ -275,21 +246,13 @@ function Profile() {
               </div>
             </>
           )}
-          {isPopupOpen && (
-            <EditProfilePopup
-              profileData={profileData}
-              setProfileData={setProfileData}
-              onClose={handleClosePopup}
-              onSave={handleClosePopup}
-            />
-          )}
         </div>
         <div className="flex-column personal-info-section">
           {profileData && (
             <span className="profile-user-name">{profileData.updatedName}</span>
           )}
-          {userData.formattedUsername && (
-            <span className="user-tag">@{userData.formattedUsername}</span>
+          {userData?.formattedUsername && (
+            <span className="user-tag">@{userData?.formattedUsername}</span>
           )}
           {profileData && profileData.profileBio && (
             <p className="user-profile-description">{profileData.profileBio}</p>
@@ -334,29 +297,33 @@ function Profile() {
                   <path d="M7 4V3h2v1h6V3h2v1h1.5C19.89 4 21 5.12 21 6.5v12c0 1.38-1.11 2.5-2.5 2.5h-13C4.12 21 3 19.88 3 18.5v-12C3 5.12 4.12 4 5.5 4H7zm0 2H5.5c-.27 0-.5.22-.5.5v12c0 .28.23.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5H17v1h-2V6H9v1H7V6zm0 6h2v-2H7v2zm0 4h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2z"></path>
                 </g>
               </svg>
-              {userData.profile ? (
-                <span>{userData.profile.registrationDate}</span>
+              {userData?.profile ? (
+                <span>{userData?.profile.registrationDate}</span>
               ) : (
                 <span>No registration date available</span>
               )}
             </div>
           </div>
           <div className="flex-row following-container">
-            {userData.profile && (
+            {userData?.profile && (
               <Link
                 to={`/${username}/followers?tab=following`}
                 className="following-number"
               >
-                {userData.profile.following ? userData.profile.following : "0"}{" "}
+                {userData?.profile.following
+                  ? userData?.profile.following
+                  : "0"}{" "}
                 <span className="following-grey">Following</span>
               </Link>
             )}
-            {userData && userData.profile && (
+            {userData && userData?.profile && (
               <Link
                 to={`/${username}/followers?tab=followers`}
                 className="following-number"
               >
-                {userData.profile.followers ? userData.profile.followers : "0"}{" "}
+                {userData?.profile.followers
+                  ? userData?.profile.followers
+                  : "0"}{" "}
                 <span className="following-grey">Followers</span>
               </Link>
             )}

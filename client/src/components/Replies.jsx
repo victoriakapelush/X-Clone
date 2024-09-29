@@ -10,11 +10,10 @@ import useFollow from "./FollowUnfollowHook";
 import "../styles/replies.css";
 import "../styles/profile.css";
 import { format, formatDistanceToNow } from "date-fns";
-import useLikeSinglePost from "./useLikeSinglePost";
-import useLike from "./UseLikeHook";
+import default_user from "../assets/icons/default_user.png";
 
 function Replies({ randomUser }) {
-  const { formattedUsername } = useContext(TokenContext);
+  const { formattedUsername, token } = useContext(TokenContext);
   const [reply, setReplies] = useState([]);
   const { username } = useParams();
 
@@ -32,7 +31,6 @@ function Replies({ randomUser }) {
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        const token = localStorage.getItem("token");
         const response = await axios.get(
           `http://localhost:3000/api/profile/replies/${username}`,
           {
@@ -48,7 +46,7 @@ function Replies({ randomUser }) {
     };
 
     fetchReplies();
-  }, [username]);
+  }, [username, token]);
 
   const userFollowStates = randomUser?.slice(0, 3).map((user) => ({
     user,
@@ -91,7 +89,7 @@ function Replies({ randomUser }) {
                             alt={`${user.originalUsername}'s profile`}
                           />
                         ) : (
-                          <div className="no-profile-picture"></div>
+                          <img className="profile-pic" src={default_user}></img>
                         )}
                       </div>
                       <div className="flex-column who-tofollow-name-box">

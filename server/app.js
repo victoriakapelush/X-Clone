@@ -15,7 +15,7 @@ const authRoutes = require("./routes/auth");
 const loginRouter = require("./routes/login");
 const logoutRouter = require("./routes/logout");
 const homePage = require("./routes/homePage");
-const addSingleImage = require('./routes/firstPic');
+const addSingleImage = require("./routes/firstPic");
 const profilePage = require("./routes/profilePage");
 const deletePic = require("./routes/profilePage");
 const post = require("./routes/post");
@@ -53,11 +53,13 @@ const app = express();
 const mongoDB = process.env.mongoDB;
 const secret = process.env.secret;
 
-app.use(cors({
-  origin: 'http://localhost:5173', // Front-end origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods
-  credentials: true, // Enable credentials
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Front-end origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific methods
+    credentials: true, // Enable credentials
+  }),
+);
 
 mongoose.set("strictQuery", false);
 

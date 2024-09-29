@@ -13,6 +13,7 @@ function Bookmarks() {
   const { randomUser } = useContext(UserContext);
   const {
     bookmarkedPosts,
+    setBookmarkedPosts,
     bookmarkedStates,
     handleBookmark,
     likedStates,
@@ -49,6 +50,7 @@ function Bookmarks() {
         </div>
         <SingleBookmark
           bookmarkedPosts={bookmarkedPosts}
+          setBookmarkedPosts={setBookmarkedPosts}
           bookmarkedStates={bookmarkedStates}
           handleBookmark={handleBookmark}
           likedStates={likedStates}

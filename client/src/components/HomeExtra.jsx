@@ -64,7 +64,7 @@ function HomeExtra({ randomUser }) {
           randomUser
             .slice(0, 3)
             .map((user) => (
-              <SingleUser key={user.id} user={user} randomUser={randomUser} />
+              <SingleUser key={user._id} user={user} randomUser={randomUser} />
             ))}
       </div>
     </div>

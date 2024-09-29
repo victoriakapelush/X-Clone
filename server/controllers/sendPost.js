@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Conversation = require("../models/Conversation");
@@ -36,12 +36,12 @@ const sendPost = async (req, res) => {
     // Create new message
     const message = new Message({
       participants: [userId, selectedUserId],
-      text: text || '', // Optional text
+      text: text || "", // Optional text
       post: postId, // Attach post to message
       conversation: conversation ? conversation._id : null, // Link to conversation if it exists
       sentBy: userId,
       image: filename,
-      gif: gif || '',
+      gif: gif || "",
       time: formattedTime,
     });
 
@@ -69,11 +69,12 @@ const sendPost = async (req, res) => {
     }
 
     // Respond with the saved message
-    res.status(201).json({ message: "Post sent via message successfully", data: message });
+    res
+      .status(201)
+      .json({ message: "Post sent via message successfully", data: message });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 module.exports = { sendPost };
-

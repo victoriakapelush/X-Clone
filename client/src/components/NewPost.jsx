@@ -37,7 +37,6 @@ function NewPost({
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
   const { repostPost, repostedPosts, loading, error } = useRepost();
-  const [reposted, setReposted] = useState(false);
   const { username } = useParams();
   const { formattedUsername, token } = useContext(TokenContext);
   const [showSendPostPopup, setShowSendPostPopup] = useState(false);
@@ -65,8 +64,6 @@ function NewPost({
   const handleUpdateReplyCount = (postId, originalPostId = null) => {
     setPostData((prevPosts) =>
       prevPosts.map((postItem) => {
-        console.log(postItem);
-
         if (
           postItem._id === postId ||
           (originalPostId && originalPostId._id === postId)
@@ -208,7 +205,7 @@ function NewPost({
                         onMouseOut={handleMouseOut}
                       />
                     ) : (
-                      <div className="default-profile-image-post"></div>
+                      <img className="profile-pic" src={default_user}></img>
                     )
                   ) : userData?.profile?.profilePicture ? (
                     <img

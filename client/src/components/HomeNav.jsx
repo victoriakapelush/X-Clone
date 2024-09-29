@@ -19,7 +19,8 @@ import UserContext from "./UserContext";
 function HomeNav() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
-  const { formattedUsername } = useContext(TokenContext);
+  const { formattedUsername, setLoggedinUserData, setFormattedUsername } =
+    useContext(TokenContext);
   const { setUserData } = useContext(UserContext);
 
   const handleOpenPopup = () => {
@@ -36,6 +37,8 @@ function HomeNav() {
       localStorage.removeItem("token");
       navigate("/");
       setUserData(null);
+      setLoggedinUserData(null);
+      setFormattedUsername(null);
     } catch (error) {
       console.error("Logout error:", error);
     }

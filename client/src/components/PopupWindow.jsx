@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import TokenContext from "./TokenContext";
 
-function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
+function PopupWindow({ onClose }) {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -44,6 +44,7 @@ function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
       console.error("No image selected.");
       return;
     }
+    console.log(token);
     if (!token) {
       console.error("No token found in local storage.");
       return;
@@ -65,7 +66,6 @@ function PopupWindow({ profileData, setProfileData, onClose, onSave }) {
           },
         },
       );
-      console.log(response.data);
       onClose();
       navigate("/home");
     } catch (error) {

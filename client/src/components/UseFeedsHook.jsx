@@ -143,6 +143,7 @@ const UseFeedsHook = () => {
   return {
     userData,
     postData,
+    setPostData,
     bookmarkedStates,
     handleBookmark,
     likedStates,

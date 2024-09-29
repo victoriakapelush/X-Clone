@@ -10,6 +10,7 @@ import axios from "axios";
 import TokenContext from "./TokenContext";
 import GifModal from "./GifModal";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import default_user from "../assets/icons/default_user.png";
 
 function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
   const [userData, setUserData] = useState({});
@@ -55,27 +56,8 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const decoded = jwtDecode(token);
-          const decodedUsername = decoded.originalUsername
-            .toLowerCase()
-            .replace(/\s+/g, "");
-          setFormattedUsername(decodedUsername);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
     const getUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
         if (!token) {
           console.error("No token found in local storage.");
           return;
@@ -105,7 +87,7 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
       }
     };
     getUserData();
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -161,10 +143,15 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
         </div>
         <div className="flex-row popup-reply-post">
           <div className="pic-vertical-line-box flex-column">
-            <img
-              className="profile-pic no-bottom-margin"
-              src={`http://localhost:3000/uploads/${postId.user.profile.profilePicture}`}
-            />
+            {postId && postId.user.profile.profilePicture ? (
+              <img
+                className="profile-pic"
+                src={`http://localhost:3000/uploads/${postId.user.profile.profilePicture}`}
+                alt="Profile"
+              />
+            ) : (
+              <img className="profile-pic" src={default_user}></img>
+            )}
             <div className="vertical-line-reply"></div>
           </div>
           <div className="reply-summary-post flex-column">

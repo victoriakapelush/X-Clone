@@ -31,7 +31,7 @@ const addUserToList = async (req, res) => {
 
       // Fetch all posts from the user and add them to the list's posts
       const userPosts = await Post.find({ user: userId });
-      list.posts.push(...userPosts.map(post => post._id)); // Add the post IDs
+      list.posts.push(...userPosts.map((post) => post._id)); // Add the post IDs
 
       await list.save();
       await user.save();
@@ -41,16 +41,19 @@ const addUserToList = async (req, res) => {
       list.members.splice(userIndexInList, 1);
       user.lists.splice(listIndexInUser, 1);
       list.membersCount = Math.max(0, list.membersCount - 1); // Decrease the count but ensure it never goes below 0
-      
+
       // Remove the user's posts from the list's posts
       const userPosts = await Post.find({ user: userId });
       list.posts = list.posts.filter(
-        postId => !userPosts.some(post => String(post._id) === String(postId))
+        (postId) =>
+          !userPosts.some((post) => String(post._id) === String(postId)),
       );
-      
+
       await list.save();
       await user.save();
-      return res.status(200).json({ message: "User removed from the list", list });
+      return res
+        .status(200)
+        .json({ message: "User removed from the list", list });
     }
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

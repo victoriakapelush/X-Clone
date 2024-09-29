@@ -4,6 +4,7 @@ import "../styles/postreplacement.css";
 import "../styles/connectPeople.css";
 import { Link } from "react-router-dom";
 import useFollow from "./FollowUnfollowHook";
+import default_user from "../assets/icons/default_user.png";
 
 function FollowingData({ userData, following, removeFollowing }) {
   const { isFollowing, handleFollow } = useFollow(following);
@@ -23,7 +24,11 @@ function FollowingData({ userData, following, removeFollowing }) {
         <div className="brief-profile-single-user flex-row">
           <div className="who-tofollow-image-box">
             <img
-              src={`http://localhost:3000/uploads/${following.profile.profilePicture}`}
+              src={
+                following.profile?.profilePicture
+                  ? `http://localhost:3000/uploads/${following.profile.profilePicture}`
+                  : default_user
+              }
             />
           </div>
           <div className="flex-column brief-profile-name-box">

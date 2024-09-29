@@ -73,7 +73,7 @@ const signupPost = async (req, res) => {
       followers: "",
       totalFollowers: [],
       posts: 0,
-    };  
+    };
 
     await user.save();
 

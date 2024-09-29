@@ -53,15 +53,26 @@ const googleAuth = async (req, res) => {
         },
       });
     }
-// Create a token (JWT or session) and return it
-const token = jwt.sign(
-  { id: user._id, originalUsername: user.originalUsername, formattedUsername: user.formattedUsername },
-  JWT_SECRET, 
-  { expiresIn: '30d' }
-);
+    // Create a token (JWT or session) and return it
+    const token = jwt.sign(
+      {
+        id: user._id,
+        originalUsername: user.originalUsername,
+        formattedUsername: user.formattedUsername,
+      },
+      JWT_SECRET,
+      { expiresIn: "30d" },
+    );
 
     // Send the token to the client
-    res.status(201).json({ success: true, message: "Registration successful", token: token, user: user });
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Registration successful",
+        token: token,
+        user: user,
+      });
   } catch (error) {
     console.error("Error verifying Google ID token", error);
     res.status(400).json({ success: false, message: "Invalid token" });
