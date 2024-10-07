@@ -68,7 +68,7 @@ function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/home/${formattedUsername}`,
+          `https://xsocial.onrender.com/home/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
       formData.append("gif", gif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId._id || post._id}`,
+        `https://xsocial.onrender.com/api/post/${formattedUsername}/comment/${postId._id || post._id}`,
         formData,
         {
           headers: {
@@ -148,7 +148,7 @@ function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
             {userToDisplay?.profile?.profilePicture ? (
               <img
                 className="profile-pic"
-                src={`http://localhost:3000/uploads/${userToDisplay?.profile?.profilePicture}`}
+                src={`https://xsocial.onrender.com/uploads/${userToDisplay?.profile?.profilePicture}`}
               />
             ) : (
               <img className="profile-pic" src={default_user}></img>
@@ -168,7 +168,7 @@ function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
             {imageToDisplay && (
               <img
                 className="reply-post-text reply-post-image"
-                src={`http://localhost:3000/uploads/${imageToDisplay}`}
+                src={`https://xsocial.onrender.com/uploads/${imageToDisplay}`}
               />
             )}
             {gifToDisplay && (
@@ -190,7 +190,7 @@ function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
             <Link to={`/profile/${username}`}>
               <img
                 className="profile-pic"
-                src={`http://localhost:3000/uploads/${profile.profilePicture}`}
+                src={`https://xsocial.onrender.com/uploads/${profile.profilePicture}`}
               />
             </Link>
             <div className="form-container-new-post">

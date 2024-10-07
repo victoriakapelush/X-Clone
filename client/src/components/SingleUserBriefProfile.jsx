@@ -16,7 +16,7 @@ function SingleUserBriefProfile({ singleUserData }) {
             <img
               src={
                 singleUserData.profile?.profilePicture
-                  ? `http://localhost:3000/uploads/${singleUserData.profile.profilePicture}`
+                  ? `https://xsocial.onrender.com/uploads/${singleUserData.profile.profilePicture}`
                   : default_user
               }
             />

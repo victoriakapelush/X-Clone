@@ -59,7 +59,7 @@ function CommentPage() {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/api/reply/${username}/comment/${replyId}`,
+          `https://xsocial.onrender.com/api/reply/${username}/comment/${replyId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ function CommentPage() {
           return;
         }
         const response = await axios.get(
-          `http://localhost:3000/profile/${formattedUsername}`,
+          `https://xsocial.onrender.com/profile/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -200,7 +200,7 @@ function CommentPage() {
       formData.append("gif", selectedGif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/reply/${username}/comment/${replyId}`,
+        `https://xsocial.onrender.com/api/reply/${username}/comment/${replyId}`,
         formData,
         {
           headers: {
@@ -256,7 +256,7 @@ function CommentPage() {
         return;
       }
       const response = await axios.get(
-        `http://localhost:3000/home/${username}`,
+        `https://xsocial.onrender.com/home/${username}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -322,7 +322,7 @@ function CommentPage() {
               {post && post.user && post.user.profile && (
                 <img
                   className="profile-pic no-bottom-margin"
-                  src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
+                  src={`https://xsocial.onrender.com/uploads/${post.user.profile.profilePicture}`}
                 />
               )}
               <div className="vertical-line-reply"></div>
@@ -344,7 +344,7 @@ function CommentPage() {
               {post.image && (
                 <img
                   className="reply-post-text reply-post-image"
-                  src={`http://localhost:3000/uploads/${post.image}`}
+                  src={`https://xsocial.onrender.com/uploads/${post.image}`}
                 />
               )}
               {post.gif && (
@@ -480,7 +480,7 @@ function CommentPage() {
                 {userData && userData.profile.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                    src={`https://xsocial.onrender.com/uploads/${userData.profile.profilePicture}`}
                   />
                 ) : (
                   <img className="profile-pic" src={defaultProfileImage} />
@@ -617,7 +617,7 @@ function CommentPage() {
                     <div className="pic-vertical-line-box flex-column">
                       <img
                         className="profile-pic no-bottom-margin"
-                        src={`http://localhost:3000/uploads/${reply.user.profile.profilePicture}`}
+                        src={`https://xsocial.onrender.com/uploads/${reply.user.profile.profilePicture}`}
                       />
                     </div>
                     <div className="reply-summary-post flex-column">
@@ -637,7 +637,7 @@ function CommentPage() {
                         reply.image !== undefined && (
                           <img
                             className="reply-post-text reply-post-image"
-                            src={`http://localhost:3000/uploads/${reply.image}`}
+                            src={`https://xsocial.onrender.com/uploads/${reply.image}`}
                           />
                         )}
                       {reply.gif &&

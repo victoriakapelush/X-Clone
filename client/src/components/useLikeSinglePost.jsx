@@ -50,7 +50,7 @@ const useLikeSinglePost = (post, setPost) => {
       };
 
       await axios.put(
-        `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
         payload,
         {
           headers: {
@@ -94,7 +94,7 @@ const useLikeSinglePost = (post, setPost) => {
       };
 
       await axios.put(
-        `http://localhost:3000/api/replies/${formattedUsername}/saveReplyLike/${replyId}`,
+        `https://xsocial.onrender.com/api/replies/${formattedUsername}/saveReplyLike/${replyId}`,
         payload,
         {
           headers: {

@@ -67,7 +67,7 @@ function ProfilePopup({ userData, position }) {
       <div className="tooltip-content flex-column">
         <img
           className="profile-pic tooltip-profile-pic"
-          src={`http://localhost:3000/uploads/${userData?.profile.profilePicture}`}
+          src={`https://xsocial.onrender.com/uploads/${userData?.profile.profilePicture}`}
         />
         <div className="tooltip-info">
           <span className="tooltip-name">{userData?.profile.updatedName}</span>

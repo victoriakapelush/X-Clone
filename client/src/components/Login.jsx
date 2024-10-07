@@ -28,7 +28,7 @@ function Login() {
     const updatedCredentials = { ...credentials, formattedUsername };
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/login",
+        "https://xsocial.onrender.com/api/login",
         updatedCredentials,
       );
       const { token } = response.data;

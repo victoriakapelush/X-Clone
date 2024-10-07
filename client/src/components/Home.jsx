@@ -84,7 +84,7 @@ function Home() {
       formData.append("gif", selectedGif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/profile/post/${formattedUsername}`,
         formData,
         {
           headers: {
@@ -152,7 +152,7 @@ function Home() {
                 {userData && userData.profile.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                    src={`https://xsocial.onrender.com/uploads/${userData.profile.profilePicture}`}
                   />
                 ) : (
                   <img className="profile-pic" src={defaultProfileImage} />

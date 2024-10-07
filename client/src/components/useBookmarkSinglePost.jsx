@@ -47,7 +47,7 @@ const useBookmarkSinglePost = (post, setPost) => {
       };
 
       await axios.put(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         payload,
         {
           headers: {
@@ -83,7 +83,7 @@ const useBookmarkSinglePost = (post, setPost) => {
       };
 
       await axios.put(
-        `http://localhost:3000/api/replies/bookmarks/${formattedUsername}/saveReplyBookmark/${replyId}`,
+        `https://xsocial.onrender.com/api/replies/bookmarks/${formattedUsername}/saveReplyBookmark/${replyId}`,
         payload,
         {
           headers: {

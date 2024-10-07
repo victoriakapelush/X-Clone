@@ -31,7 +31,7 @@ function Signup() {
       .replace(/\s+/g, "");
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/signup",
+        "https://xsocial.onrender.com/api/signup",
         inputValue,
         { withCredentials: true },
       );

@@ -40,7 +40,7 @@ const useBookmark = (randomPosts, setRandomPosts) => {
         : [...currentPost.bookmarks, userID];
 
       await axios.put(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         { postId: postId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -69,7 +69,7 @@ const useBookmark = (randomPosts, setRandomPosts) => {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/api/home/posts/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/home/posts/${formattedUsername}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

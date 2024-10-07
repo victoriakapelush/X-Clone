@@ -15,7 +15,7 @@ const useFollow = (initialUser) => {
   const fetchUserData = async () => {
     try {
       const responseFollowers = await axios.get(
-        `http://localhost:3000/api/followers/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/followers/${formattedUsername}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const useFollow = (initialUser) => {
       }
 
       await axios.put(
-        `http://localhost:3000/api/saveFollowing/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/saveFollowing/${formattedUsername}`,
         { _id: otherUserId },
         {
           headers: {

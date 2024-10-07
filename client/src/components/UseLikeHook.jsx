@@ -55,7 +55,7 @@ const useLike = (postsOrPost, setPostsOrPost) => {
 
         // Update the like in the backend
         await axios.put(
-          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
           { _id: postId },
           config,
         );
@@ -86,7 +86,7 @@ const useLike = (postsOrPost, setPostsOrPost) => {
           : postsOrPost.likeCount + 1;
 
         await axios.put(
-          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
           { _id: postId },
           config,
         );

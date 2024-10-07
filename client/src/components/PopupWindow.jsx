@@ -57,7 +57,7 @@ function PopupWindow({ onClose }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/add_photo/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/add_photo/${formattedUsername}`,
         formData,
         {
           headers: {

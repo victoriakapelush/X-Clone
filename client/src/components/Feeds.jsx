@@ -176,7 +176,7 @@ function Feeds() {
                   {post && post.user.profile.profilePicture ? (
                     <img
                       className="profile-pic"
-                      src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
+                      src={`https://xsocial.onrender.com/uploads/${post.user.profile.profilePicture}`}
                     />
                   ) : (
                     <img className="profile-pic" src={default_user}></img>
@@ -204,8 +204,7 @@ function Feeds() {
                     {post.image && (
                       <img
                         className="post-image"
-                        src={`http://localhost:3000/uploads/${post.image}`}
-                        alt="Post"
+                        src={`https://xsocial.onrender.com/uploads/${post.image}`}
                       />
                     )}
                   </div>

@@ -4,7 +4,7 @@ import axios from "axios";
 export const fetchTrendingTags = async (formattedUsername, token) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/trendingTags/${formattedUsername}`,
+      `https://xsocial.onrender.com/api/trendingTags/${formattedUsername}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

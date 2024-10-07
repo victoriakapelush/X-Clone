@@ -32,7 +32,7 @@ function Replies({ randomUser }) {
     const fetchReplies = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/profile/replies/${username}`,
+          `https://xsocial.onrender.com/api/profile/replies/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -86,7 +86,6 @@ function Replies({ randomUser }) {
                         {user.profile.profilePicture ? (
                           <img
                             src={user.profile.profilePicture}
-                            alt={`${user.originalUsername}'s profile`}
                           />
                         ) : (
                           <img className="profile-pic" src={default_user}></img>

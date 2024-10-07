@@ -58,7 +58,7 @@ const secret = process.env.secret;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Front-end origin
+    origin: ["http://localhost:5173", "https://x-social-jvsi.onrender.com"], // Front-end origin
     methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific methods
     credentials: true, // Enable credentials
   }),

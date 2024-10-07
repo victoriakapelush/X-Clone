@@ -5,7 +5,7 @@ import axios from "axios";
 export const randomUsers = async (formattedUsername, token) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/profile/${formattedUsername}`,
+      `https://xsocial.onrender.com/profile/${formattedUsername}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -94,7 +94,7 @@ function Profile() {
     try {
       if (token) {
         const response = await axios.get(
-          `http://localhost:3000/profile/${username}`,
+          `https://xsocial.onrender.com/profile/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -161,7 +161,7 @@ function Profile() {
   useEffect(() => {
     const fetchCommonFollowers = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/common_followers/${username}`,
+        const response = await axios.get(`https://xsocial.onrender.com/api/common_followers/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -205,7 +205,7 @@ function Profile() {
         <div className="background-image-holder">
           {profileData && profileData.backgroundHeaderImage ? (
             <img
-              src={`http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`}
+              src={`https://xsocial.onrender.com/uploads/${profileData.backgroundHeaderImage}`}
             />
           ) : (
             <div className="defaul-profile-image-background"></div>
@@ -214,7 +214,7 @@ function Profile() {
         <div className="profile-photo-container flex-row">
           {profileData && profileData.profilePicture ? (
             <img
-              src={`http://localhost:3000/uploads/${profileData.profilePicture}`}
+              src={`https://xsocial.onrender.com/uploads/${profileData.profilePicture}`}
             />
           ) : (
             <img className="defaul-profile-image-profile" src={default_user} />

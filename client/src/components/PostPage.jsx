@@ -71,7 +71,7 @@ function PostPage() {
   // Function to fetch the post data
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/post/${formattedUsername}/comment/${postId}`, {
+      const response = await axios.get(`https://xsocial.onrender.com/api/post/${formattedUsername}/comment/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,7 +139,7 @@ function PostPage() {
           return;
         }
         const response = await axios.get(
-          `http://localhost:3000/profile/${formattedUsername}`,
+          `https://xsocial.onrender.com/profile/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -278,7 +278,7 @@ function PostPage() {
     }
     try {
       const response = await axios.get(
-        `http://localhost:3000/home/${username}`,
+        `https://xsocial.onrender.com/home/${username}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -303,7 +303,7 @@ function PostPage() {
     const getPostWithComments = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/post/${username}/comment/${postId}`,
+          `https://xsocial.onrender.com/api/post/${username}/comment/${postId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -366,7 +366,7 @@ function PostPage() {
       formData.append("gif", gif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId}`,
+        `https://xsocial.onrender.com/api/post/${formattedUsername}/comment/${postId}`,
         formData,
         {
           headers: {
@@ -466,7 +466,7 @@ function PostPage() {
                       ? post?.repostedFrom?.profile
                       : post?.user.profile
                     )?.profilePicture
-                      ? `http://localhost:3000/uploads/${
+                      ? `https://xsocial.onrender.com/uploads/${
                           post?.repostedFrom
                             ? post?.repostedFrom?.profile?.profilePicture
                             : post?.user?.profile?.profilePicture
@@ -502,7 +502,7 @@ function PostPage() {
               {post && post.image && (
                 <img
                   className="reply-post-text reply-post-image"
-                  src={`http://localhost:3000/uploads/${post.image}`}
+                  src={`https://xsocial.onrender.com/uploads/${post.image}`}
                 />
               )}
               {post && post.gif && (
@@ -675,7 +675,7 @@ function PostPage() {
                 {userData && userData.profile.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                    src={`https://xsocial.onrender.com/uploads/${userData.profile.profilePicture}`}
                   />
                 ) : (
                   <img className="profile-pic" src={default_user} />
@@ -814,7 +814,7 @@ function PostPage() {
                         className="profile-pic no-bottom-margin"
                         src={
                           reply?.user?.profile?.profilePicture
-                            ? `http://localhost:3000/uploads/${reply?.user?.profile?.profilePicture}`
+                            ? `https://xsocial.onrender.com/uploads/${reply?.user?.profile?.profilePicture}`
                             : default_user
                         }
                       />
@@ -834,7 +834,7 @@ function PostPage() {
                       {reply.image && (
                         <img
                           className="reply-post-text reply-post-image"
-                          src={`http://localhost:3000/uploads/${reply.image}`}
+                          src={`https://xsocial.onrender.com/uploads/${reply.image}`}
                         />
                       )}
                       {reply.gif && (

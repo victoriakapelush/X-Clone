@@ -23,7 +23,7 @@ const useSendPostMessage = () => {
     const fetchConversations = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/messages/current_conversations/${formattedUsername}`,
+          `https://xsocial.onrender.com/api/messages/current_conversations/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const useSendPostMessage = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/sendPost/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/sendPost/${formattedUsername}`,
         {
           postId: selectedPost,
           selectedUserId: selectedUser,

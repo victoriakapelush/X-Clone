@@ -36,7 +36,7 @@ const useNewPostHook = () => {
   const getPost = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/profile/post/${username}`,
+        `https://xsocial.onrender.com/api/profile/post/${username}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -73,7 +73,7 @@ const useNewPostHook = () => {
         : [...currentPost.bookmarks, userID];
 
       await axios.put(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         { postId: postId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -136,7 +136,7 @@ const useNewPostHook = () => {
 
         // Update the like in the backend
         await axios.put(
-          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
           { _id: targetPostId },
           config,
         );
@@ -184,7 +184,7 @@ const useNewPostHook = () => {
           : postData.likeCount + 1;
 
         await axios.put(
-          `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+          `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
           { _id: targetPostId },
           config,
         );

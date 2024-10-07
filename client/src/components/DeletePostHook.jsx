@@ -11,7 +11,7 @@ function DeletePostHook() {
     console.log("Post ID to delete:", postId);
     try {
       await axios.delete(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/profile/post/${formattedUsername}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           data: { postId },

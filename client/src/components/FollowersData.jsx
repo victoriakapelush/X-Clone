@@ -21,7 +21,7 @@ function FollowersData({ userData, follower }) {
             <img
               src={
                 follower.profile?.profilePicture
-                  ? `http://localhost:3000/uploads/${follower.profile.profilePicture}`
+                  ? `https://xsocial.onrender.com/uploads/${follower.profile.profilePicture}`
                   : default_user
               }
             />

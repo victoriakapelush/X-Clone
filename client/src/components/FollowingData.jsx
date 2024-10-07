@@ -26,7 +26,7 @@ function FollowingData({ userData, following, removeFollowing }) {
             <img
               src={
                 following.profile?.profilePicture
-                  ? `http://localhost:3000/uploads/${following.profile.profilePicture}`
+                  ? `https://xsocial.onrender.com/uploads/${following.profile.profilePicture}`
                   : default_user
               }
             />

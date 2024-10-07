@@ -17,7 +17,7 @@ function Media() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:3000/api/profile/media/${username}`,
+          `https://xsocial.onrender.com/api/profile/media/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ function Media() {
           <img
             key={index}
             className="mediapost-image"
-            src={`http://localhost:3000/uploads/${post.image}`}
+            src={`https://xsocial.onrender.com/uploads/${post.image}`}
           />
         ),
     )

@@ -36,7 +36,7 @@ const useGoogleOAuth = () => {
 
         // Send user data to backend to create/update user in database
         const backendResponse = await axios.post(
-          "http://localhost:3000/api/google/signup",
+          "https://xsocial.onrender.com/api/google/signup",
           {
             email: result.email,
             name: result.name,

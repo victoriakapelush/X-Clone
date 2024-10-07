@@ -200,7 +200,7 @@ function NewPost({
                     post.repostedFrom.profile.profilePicture ? (
                       <img
                         className="profile-pic"
-                        src={`http://localhost:3000/uploads/${post.repostedFrom.profile.profilePicture}`}
+                        src={`https://xsocial.onrender.com/uploads/${post.repostedFrom.profile.profilePicture}`}
                         onMouseOver={handleMouseOver}
                         onMouseOut={handleMouseOut}
                       />
@@ -210,7 +210,7 @@ function NewPost({
                   ) : userData?.profile?.profilePicture ? (
                     <img
                       className="profile-pic"
-                      src={`http://localhost:3000/uploads/${userData.profile.profilePicture}`}
+                      src={`https://xsocial.onrender.com/uploads/${userData.profile.profilePicture}`}
                       onMouseOver={handleMouseOver}
                       onMouseOut={handleMouseOut}
                     />
@@ -249,7 +249,7 @@ function NewPost({
                       {post.image && (
                         <img
                           className="post-image"
-                          src={`http://localhost:3000/uploads/${post?.originalPostId ? post.originalPostId.image : post.image}`}
+                          src={`https://xsocial.onrender.com/uploads/${post?.originalPostId ? post.originalPostId.image : post.image}`}
                         />
                       )}
                       {post.gif && (

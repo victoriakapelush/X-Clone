@@ -13,7 +13,7 @@ const useCommentRepost = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/comment_repost/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/comment_repost/${formattedUsername}`,
         { commentId },
         {
           headers: {

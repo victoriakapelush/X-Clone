@@ -31,7 +31,7 @@ const DisplayBookmarks = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -66,7 +66,7 @@ const DisplayBookmarks = () => {
         : [...currentPost.bookmarks, userID];
 
       await axios.put(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         { postId: postId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -125,7 +125,7 @@ const DisplayBookmarks = () => {
       }
 
       await axios.put(
-        `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
         {
           _id: postId,
         },

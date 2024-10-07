@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/home/${formattedUsername}`,
+          `https://xsocial.onrender.com/home/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

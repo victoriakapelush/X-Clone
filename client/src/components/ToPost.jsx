@@ -44,7 +44,7 @@ function ToPost({ onClose }) {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/home/${formattedUsername}`,
+          `https://xsocial.onrender.com/home/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ function ToPost({ onClose }) {
       formData.append("image", profileImage);
 
       const response = await axios.post(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/profile/post/${formattedUsername}`,
         formData,
         {
           headers: {
@@ -122,7 +122,7 @@ function ToPost({ onClose }) {
             <Link to={`/profile/${formattedUsername}`}>
               <img
                 className="profile-pic"
-                src={`http://localhost:3000/uploads/${profile.profilePicture}`}
+                src={`https://xsocial.onrender.com/uploads/${profile.profilePicture}`}
               />
             </Link>
             <div className="form-container-new-post">

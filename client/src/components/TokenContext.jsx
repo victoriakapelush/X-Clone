@@ -34,7 +34,7 @@ export const TokenProvider = ({ children }) => {
           if (loggedinUserId) {
             // Fetch the user data from the backend
             const response = await axios.get(
-              `http://localhost:3000/profile/${decodedUsername}`,
+              `https://xsocial.onrender.com/profile/${decodedUsername}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

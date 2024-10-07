@@ -43,7 +43,7 @@ function SendPostPopup({
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/sendPost/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/sendPost/${formattedUsername}`,
         {
           postId: selectedPostId,
           selectedUserId: selectedUser,
@@ -109,7 +109,7 @@ function SendPostPopup({
             onClick={() => setSelectedUser(null)}
           >
             <img
-              src={`http://localhost:3000/uploads/${selectedUser.profile.profilePicture}`}
+              src={`https://xsocial.onrender.com/uploads/${selectedUser.profile.profilePicture}`}
               className="selected-user-image"
             />
             <div>
@@ -135,7 +135,7 @@ function SendPostPopup({
                   onClick={() => addUser(user)}
                 >
                   <img
-                    src={`http://localhost:3000/uploads/${user.profile.profilePicture}`}
+                    src={`https://xsocial.onrender.com/uploads/${user.profile.profilePicture}`}
                     className="user-search-image-dropdown"
                   />
                   <div className="flex-column">

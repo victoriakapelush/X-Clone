@@ -13,7 +13,7 @@ const useRepost = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/repost/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/repost/${formattedUsername}`,
         { postId },
         {
           headers: {

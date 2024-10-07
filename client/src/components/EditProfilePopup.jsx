@@ -71,7 +71,7 @@ function EditProfilePopup({
       typeof profileData.profilePicture === "string"
     ) {
       setImageUrl(
-        `http://localhost:3000/uploads/${profileData.profilePicture}`,
+        `https://xsocial.onrender.com/uploads/${profileData.profilePicture}`,
       );
     }
 
@@ -88,7 +88,7 @@ function EditProfilePopup({
       typeof profileData.backgroundHeaderImage === "string"
     ) {
       setBackgroundImageUrl(
-        `http://localhost:3000/uploads/${profileData.backgroundHeaderImage}`,
+        `https://xsocial.onrender.com/uploads/${profileData.backgroundHeaderImage}`,
       );
     }
     return () => {
@@ -150,7 +150,7 @@ function EditProfilePopup({
     // Send a request to delete the profile picture from MongoDB
     try {
       await axios.delete(
-        `http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=true&deleteBackgroundImage=false`,
+        `https://xsocial.onrender.com/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=true&deleteBackgroundImage=false`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -178,7 +178,7 @@ function EditProfilePopup({
     // Send a request to delete the picture from MongoDB
     try {
       await axios.delete(
-        `http://localhost:3000/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=false&deleteBackgroundImage=true`,
+        `https://xsocial.onrender.com/api/profile/${formattedUsername}/delete-profile-picture?deleteProfilePicture=false&deleteBackgroundImage=true`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -207,7 +207,7 @@ function EditProfilePopup({
         profileData.backgroundHeaderImage,
       );
       const response = await axios.post(
-        `http://localhost:3000/profile/${formattedUsername}`,
+        `https://xsocial.onrender.com/profile/${formattedUsername}`,
         formData,
         {
           headers: {

@@ -34,7 +34,7 @@ const UseFeedsHook = () => {
   const getPost = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/feeds/${formattedUsername}`,
+        `https://xsocial.onrender.com/feeds/${formattedUsername}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -70,7 +70,7 @@ const UseFeedsHook = () => {
         : [...currentPost.bookmarks, userID];
 
       await axios.put(
-        `http://localhost:3000/api/bookmarks/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/bookmarks/${formattedUsername}`,
         { postId: postId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -110,7 +110,7 @@ const UseFeedsHook = () => {
       }
 
       await axios.put(
-        `http://localhost:3000/api/saveLikeCount/${formattedUsername}`,
+        `https://xsocial.onrender.com/api/saveLikeCount/${formattedUsername}`,
         { _id: postId },
         {
           headers: {

@@ -16,7 +16,7 @@ function PostAndComment({ reply, formattedTime }) {
               {reply?.postUser && reply.postUser?.profile && (
                 <img
                   className="profile-pic no-bottom-margin"
-                  src={`http://localhost:3000/uploads/${reply.postUser.profile.profilePicture}`}
+                  src={`https://xsocial.onrender.com/uploads/${reply.postUser.profile.profilePicture}`}
                 />
               )}
               <div className="vertical-line-reply"></div>
@@ -38,7 +38,7 @@ function PostAndComment({ reply, formattedTime }) {
               {reply && reply.image && (
                 <img
                   className="reply-post-text reply-post-image"
-                  src={`http://localhost:3000/uploads/${reply.image}`}
+                  src={`https://xsocial.onrender.com/uploads/${reply.image}`}
                 />
               )}
               {reply && reply.gif && (
@@ -154,7 +154,7 @@ function PostAndComment({ reply, formattedTime }) {
                   <div className="pic-vertical-line-box flex-column">
                     <img
                       className="profile-pic no-bottom-margin"
-                      src={`http://localhost:3000/uploads/${replyItem.user?.profile?.profilePicture}`}
+                      src={`https://xsocial.onrender.com/uploads/${replyItem.user?.profile?.profilePicture}`}
                     />
                   </div>
                   <div className="reply-summary-post flex-column">
@@ -170,15 +170,13 @@ function PostAndComment({ reply, formattedTime }) {
                     {replyItem.image && (
                       <img
                         className="reply-post-text reply-post-image"
-                        src={`http://localhost:3000/uploads/${replyItem.image}`}
-                        alt="Reply image"
+                        src={`https://xsocial.onrender.com/uploads/${replyItem.image}`}
                       />
                     )}
                     {replyItem.gif && (
                       <img
                         className="reply-post-text reply-post-gif"
                         src={replyItem.gif}
-                        alt="Reply GIF"
                       />
                     )}
                   </div>

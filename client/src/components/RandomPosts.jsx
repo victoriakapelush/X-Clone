@@ -176,7 +176,7 @@ function RandomPosts() {
                 {post?.user?.profile?.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${post?.user?.profile.profilePicture}`}
+                    src={`https://xsocial.onrender.com/uploads/${post?.user?.profile.profilePicture}`}
                   />
                 ) : (
                   <img className="profile-pic" src={default_user}></img>
@@ -204,7 +204,7 @@ function RandomPosts() {
                   {post.image && (
                     <img
                       className="post-image"
-                      src={`http://localhost:3000/uploads/${post.image}`}
+                      src={`https://xsocial.onrender.com/uploads/${post.image}`}
                     />
                   )}
                 </div>

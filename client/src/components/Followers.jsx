@@ -37,13 +37,13 @@ function Followers() {
   const fetchUserData = async () => {
     try {
       const [userResponse, followersResponse] = await Promise.all([
-        axios.get(`http://localhost:3000/profile/${username}`, {
+        axios.get(`https://xsocial.onrender.com/profile/${username}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }),
-        axios.get(`http://localhost:3000/api/followers/${username}`, {
+        axios.get(`https://xsocial.onrender.com/api/followers/${username}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",

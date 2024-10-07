@@ -13,7 +13,7 @@ const GifModal = ({ isOpen, onClose, onSelect }) => {
 
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/gifs/search",
+        "https://xsocial.onrender.com/api/gifs/search",
         { params: { query } },
       );
       setGifs(response.data);
@@ -37,7 +37,7 @@ const GifModal = ({ isOpen, onClose, onSelect }) => {
   const fetchRandomGifs = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/gifs/random",
+        "https://xsocial.onrender.com/api/gifs/random",
         { params: { limit: 10 } },
       );
       setGifs(response.data);

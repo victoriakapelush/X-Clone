@@ -51,7 +51,7 @@ function Likes() {
             <img
               className="profile-pic"
               alt="Profile Image"
-              src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
+              src={`https://xsocial.onrender.com/uploads/${post.user.profile.profilePicture}`}
             />
           ) : (
             <div className="defaul-profile-image-post"></div>
@@ -74,7 +74,7 @@ function Likes() {
             {post.image && (
               <img
                 className="post-image"
-                src={`http://localhost:3000/uploads/${post.image}`}
+                src={`https://xsocial.onrender.com/uploads/${post.image}`}
               />
             )}
           </div>

@@ -40,7 +40,7 @@ function ConnectPeople() {
           return;
         }
         const response = await axios.get(
-          `http://localhost:3000/home/connect_people/${formattedUsername}`,
+          `https://xsocial.onrender.com/home/connect_people/${formattedUsername}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

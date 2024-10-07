@@ -14,7 +14,7 @@ const SingleUser = ({ user }) => {
             <div className="who-tofollow-image-box">
               {user.profile.profilePicture ? (
                 <img
-                  src={`http://localhost:3000/uploads/${user.profile.profilePicture}`}
+                  src={`https://xsocial.onrender.com/uploads/${user.profile.profilePicture}`}
                 />
               ) : (
                 <div className="no-profile-picture"></div>
