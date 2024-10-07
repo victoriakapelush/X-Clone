@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "nodemon server.js",
     "format": "prettier --write \"**/*.{js,ts,json,md}\""
   },
   "dependencies": {
