@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import TokenContext from "./TokenContext";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 const useBookmarkSinglePost = (post, setPost) => {
   const { token, formattedUsername } = useContext(TokenContext);
@@ -20,7 +20,7 @@ const useBookmarkSinglePost = (post, setPost) => {
   }, [token]);
 
   useEffect(() => {
-    if (post) {
+    if (post && userID) {
       // Check if the post itself is bookmarked
       setBookmarked(post.bookmarks.includes(userID));
 
@@ -78,12 +78,12 @@ const useBookmarkSinglePost = (post, setPost) => {
           : reply.bookmarks.filter((user) => user !== userID);
 
       const payload = {
-        replyId,
-        bookmarks: updatedReplyBookmarks,
+        _id: replyId,
+        post: post._id,
       };
 
       await axios.put(
-        `http://localhost:3000/api/replies/${formattedUsername}/bookmarks/${replyId}`,
+        `http://localhost:3000/api/replies/bookmarks/${formattedUsername}/saveReplyBookmark/${replyId}`,
         payload,
         {
           headers: {
@@ -94,17 +94,16 @@ const useBookmarkSinglePost = (post, setPost) => {
       );
 
       const updatedReplies = post.totalReplies.map((r) =>
-        r._id === replyId ? { ...r, bookmarks: updatedReplyBookmarks } : r,
+        r._id === replyId
+          ? { ...r, bookmarks: updatedReplyBookmarks }
+          : r,
       );
 
-      setPost((prevPost) => ({
-        ...prevPost,
-        totalReplies: updatedReplies,
-      }));
+      setPost((prevPost) => ({ ...prevPost, totalReplies: updatedReplies }));
 
-      setRepliesBookmarks((prev) => ({
-        ...prev,
-        [replyId]: !prev[replyId],
+      setRepliesBookmarks((prevStates) => ({
+        ...prevStates,
+        [replyId]: !prevStates[replyId],
       }));
     } catch (error) {
       console.error("Error updating reply bookmark status:", error);
@@ -115,3 +114,4 @@ const useBookmarkSinglePost = (post, setPost) => {
 };
 
 export default useBookmarkSinglePost;
+

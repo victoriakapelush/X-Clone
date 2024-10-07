@@ -88,9 +88,6 @@ function ToPost({ onClose }) {
         },
       );
       if (response.status >= 200 && response.status < 300) {
-        const newPost = response.data.post;
-        console.log(response.data);
-        setPost((prevPosts) => [...prevPosts, newPost]);
         setText("");
         setImageUrl("");
         setProfileImage(null);

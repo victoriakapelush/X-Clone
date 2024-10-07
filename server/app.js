@@ -24,6 +24,7 @@ const randomPosts = require("./routes/randomPosts");
 const allUsers = require("./routes/allUsers");
 const saveLike = require("./routes/saveLike");
 const saveReplyLike = require("./routes/saveReplyLike");
+const saveReplyBookmark = require("./routes/saveReplyBookmark");
 const saveFollowing = require("./routes/saveFollowing");
 const bookmarks = require("./routes/bookmarks");
 const likes = require("./routes/likes");
@@ -37,6 +38,7 @@ const postComment = require("./routes/postComment");
 const replyComment = require("./routes/replyComment");
 const replies = require("./routes/replies");
 const repost = require("./routes/repost");
+const commentRepost = require("./routes/commentRepost");
 const userSearch = require("./routes/message routes/searchUsers");
 const conversations = require("./routes/message routes/allConvos");
 const currentConvos = require("./routes/message routes/currentUserConvos");
@@ -48,6 +50,7 @@ const updateList = require("./routes/list routes/listData");
 const addUserToList = require("./routes/list routes/addUser");
 const getListMembers = require("./routes/list routes/getMembers");
 const sendPost = require("./routes/sendPost");
+const commonFollowers = require("./routes/commonFollowers");
 
 const app = express();
 const mongoDB = process.env.mongoDB;
@@ -115,6 +118,7 @@ app.use("/api/home/posts", randomPosts);
 app.use("/home/connect_people", allUsers);
 app.use("/api/saveLikeCount", saveLike);
 app.use("/api/replies", saveReplyLike);
+app.use("/api/replies/bookmarks", saveReplyBookmark);
 app.use("/api/profile/likes", likes);
 app.use("/api/profile/media", media);
 app.use("/api/saveFollowing", saveFollowing);
@@ -127,6 +131,7 @@ app.use("/api/post", postComment);
 app.use("/api/reply", replyComment);
 app.use("/api/profile/replies", replies);
 app.use("/api/repost", repost);
+app.use("/api/comment_repost", commentRepost);
 app.use("/api/users/", userSearch);
 app.use("/api/messages/conversation", conversations);
 app.use("/api/messages/current_conversations", currentConvos);
@@ -138,6 +143,7 @@ app.use("/api/lists/update", updateList);
 app.use("/api/lists/addUser", addUserToList);
 app.use("/api/lists/members", getListMembers);
 app.use("/api/sendPost", sendPost);
+app.use("/api/common_followers", commonFollowers);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

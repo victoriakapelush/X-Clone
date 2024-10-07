@@ -51,7 +51,7 @@ function Explore({ user, tag }) {
   return (
     <div className="flex-row profile-page">
       <HomeNav />
-      <div className="connect-center-container flex-column explore-page-middle">
+      <div className="connect-center-container flex-column explore-page-middle full-height">
         <div className="bookmarks-search flex-row explore-search-bottom-line">
           <div className="bookmarks-input flex-row" contentEditable="true">
             <div className="bookmarks-search-svg-container">

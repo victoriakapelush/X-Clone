@@ -10,6 +10,7 @@ const UserSchema = new Schema({
   password: { type: String },
   profile: ProfileSchema,
   bookmarks: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  bookmarkedComments: [{ type: Schema.Types.ObjectId, ref: "Reply" }],
   lists: [{ type: Schema.Types.ObjectId, ref: "List" }],
   messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
   conversations: [{ type: Schema.Types.ObjectId, ref: "Conversation" }],

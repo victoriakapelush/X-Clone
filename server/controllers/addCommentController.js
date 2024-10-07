@@ -3,8 +3,15 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const Reply = require("../models/Reply");
 
+// Get comments for the page with one post with comments
+
 const getComments = async (req, res) => {
-  const { postId } = req.params;
+  const { postId: postIdFromBody } = req.body;
+  const postIdFromParams = req.params.postId; 
+
+  const postId = postIdFromParams || postIdFromBody;
+
+  console.log(postId);
 
   try {
     const post = await Post.findById(postId)
@@ -30,15 +37,24 @@ const getComments = async (req, res) => {
   }
 };
 
+// Add comments to the post
+
 const addCommentToPost = async (req, res) => {
-  const { text, gif } = req.body;
-  const postId = req.params.postId;
+  const { text, gif, postId: postIdFromBody } = req.body;
+  const postIdFromParams = req.params.postId; 
   const currentUser = req.user.originalUsername;
+
+  const postId = postIdFromParams || postIdFromBody;
 
   try {
     let filename = null;
     if (req.file) {
       filename = req.file.filename;
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
 
     const user = await User.findOne({ originalUsername: currentUser });
@@ -62,24 +78,20 @@ const addCommentToPost = async (req, res) => {
       share: 0,
       user: user._id,
       post: postId,
+      originalPostId: postId
     });
 
-    const post = await Post.findById(postId);
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
+    await newReply.save();
+
+    post.totalReplies.push(newReply._id); 
+    post.reply = (post.reply || 0) + 1; 
+    await post.save();
 
     // Check if the post is a repost
     let originalPost;
     if (post.originalPostId) {
       originalPost = await Post.findById(post.originalPostId._id);
     }
-
-    // Save the reply to the current post
-    post.totalReplies.push(newReply);
-    post.reply = (post.reply || 0) + 1;
-    await post.save();
-    await newReply.save();
 
     // If the post is a repost, update the reply count on the original post
     if (originalPost) {
@@ -108,23 +120,13 @@ const addCommentToPost = async (req, res) => {
       }
     }
 
-    const populatedReply = await Reply.findById(newReply._id)
-      .populate("user")
-      .populate("post")
-      .populate({
-        path: "totalReplies",
-        populate: {
-          path: "reply",
-          model: "Reply",
-        },
-      });
-
     res
       .status(201)
-      .json({ message: "Comment added successfully", comment: populatedReply });
+      .json({ message: "Comment added successfully", comment: newReply });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 module.exports = { getComments, addCommentToPost };

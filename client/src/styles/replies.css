@@ -10,8 +10,6 @@
   width: 100%;
   height: auto;
   margin-top: 0 !important;
-  border-bottom: 1px solid var(--borders);
-  padding-bottom: 1rem;
 }
 
 .replies-who-to-follow-container {
@@ -36,4 +34,8 @@
 
 .top-border-horizontal {
   border-top: 1px solid var(--borders);
+}
+
+.full-height {
+  min-height: 100vh;
 }

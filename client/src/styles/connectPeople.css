@@ -8,6 +8,7 @@
   border-right: 1px solid var(--borders);
   border-left: 1px solid var(--borders);
   margin-right: 3rem;
+  min-height: 100vh;
 }
 
 .connect-center-container header {

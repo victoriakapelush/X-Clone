@@ -99,7 +99,7 @@ const DisplayBookmarks = () => {
   useEffect(() => {
     if (bookmarkedPosts.length > 0) {
       const initialLikedStates = bookmarkedPosts.map((post) =>
-        post.likes.includes(userID),
+        post?.likes?.includes(userID),
       );
       setLikedStates(initialLikedStates);
     }

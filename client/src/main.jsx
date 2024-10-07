@@ -132,9 +132,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
       <TokenProvider>
         <UserProvider>
-          <RouterProvider router={router} />
+            <RouterProvider router={router} />
         </UserProvider>
       </TokenProvider>
     </React.StrictMode>
   </GoogleOAuthProvider>,
 );
+

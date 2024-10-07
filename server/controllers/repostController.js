@@ -1,5 +1,6 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
+const { format } = require("date-fns");
 
 const repost = async (req, res) => {
   const currentUserId = req.user.id;
@@ -46,6 +47,9 @@ const repost = async (req, res) => {
         .json({ message: "You have already reposted this post." });
     }
 
+    const postDate = new Date();
+    const formattedTime = format(postDate, "PPpp");
+
     // Create the repost
     const repost = new Post({
       text: originalPost.text,
@@ -62,6 +66,7 @@ const repost = async (req, res) => {
       tags: originalPost.topTags,
       repostedFrom: originalPost.user,
       originalPostId: originalPost,
+      repostedTime: formattedTime
     });
 
     const savedPost = await repost.save();

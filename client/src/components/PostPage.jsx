@@ -18,11 +18,16 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TokenContext from "./TokenContext";
 import useRepost from "./RepostHook";
+import useCommentRepost from './CommentRepostHook';
 import useSendPostMessage from "./useSendPostMessage";
 import SendPostPopup from "./SendPostPopup";
+import { Tooltip } from "react-tooltip";
+import ReplyPopup from "./ReplyPopup";
+import useNewPostHook from "./UseNewPostHook";
 
 function PostPage() {
   const { token, formattedUsername } = useContext(TokenContext);
+    const [post, setPost] = useState(null);
   const navigate = useNavigate();
   const { username, postId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -36,8 +41,8 @@ function PostPage() {
   const [selectedGif, setSelectedGif] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [userProfileData, setUserProfileData] = useState(null);
-  const [post, setPost] = useState("");
   const { repostPost, loading } = useRepost();
+  const { repostComment } = useCommentRepost();
   const { likedStates, handleLikePost, handleLikeReply } = useLikeSinglePost(
     post,
     setPost,
@@ -61,8 +66,32 @@ function PostPage() {
   const [showToPost, setShowToPost] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [showSendPostPopup, setShowSendPostPopup] = useState(false);
+  const { postData } = useNewPostHook();
 
-  const handleCopy = (postId, username) => {
+  // Function to fetch the post data
+  const fetchPost = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/post/${formattedUsername}/comment/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(postData); // Check the structure here
+      setPost(response.data.post); // Adjust this if necessary
+    } catch (error) {
+      console.log(error);
+    }
+  };  
+
+  useEffect(() => {
+    if (formattedUsername && postId) {
+      fetchPost();
+    }
+  }, [formattedUsername, postId]);
+  
+
+
+  const handleCopy = () => {
     setCopied(true);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
@@ -96,11 +125,6 @@ function PostPage() {
   const handleUploadClick = (e) => {
     e.preventDefault();
     document.getElementById("image").click();
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    localStorage.setItem("showPopup", false);
   };
 
   useEffect(() => {
@@ -164,6 +188,85 @@ function PostPage() {
     }
   };
 
+  const handleRepostComment = async (commentId) => {
+    try {  
+      // Optimistically update the comment repost count in the UI
+      setPost((prevPost) => {
+        // Check if prevPost and prevPost.comments exist
+        if (!prevPost || !Array.isArray(prevPost.comments)) {
+          console.error("prevPost or prevPost.comments is undefined");
+          return prevPost; // Return unchanged if no comments
+        }
+  
+        if (prevPost._id === postId) {
+          // Map through the comments to find the correct one to update
+          const updatedComments = prevPost.comments.map((comment) =>
+            comment._id === commentId
+              ? { ...comment, repost: comment.repost + 1 } // Optimistically increment repost count
+              : comment
+          );
+  
+          return {
+            ...prevPost,
+            comments: updatedComments, // Update the comments array with the modified comment
+          };
+        }
+        return prevPost;
+      });
+  
+      // Call the function to repost the comment on the server
+      const updatedComment = await repostComment(commentId);
+  
+      // After getting a response from the server, update the state again if necessary
+      setPost((prevPost) => {
+        // Check if prevPost and prevPost.comments exist
+        if (!prevPost || !Array.isArray(prevPost.comments)) {
+          return prevPost;
+        }
+  
+        if (prevPost._id === postId) {
+          // Sync the repost count with the server response (if needed)
+          const updatedComments = prevPost.comments.map((comment) =>
+            comment._id === commentId
+              ? { ...comment, repost: updatedComment.repost } // Update with the server's repost count
+              : comment
+          );
+  
+          return {
+            ...prevPost,
+            comments: updatedComments,
+          };
+        }
+        return prevPost;
+      });
+    } catch (err) {
+      console.error("Failed to repost comment:", err);
+      toast.error("Cannot repost comment");
+  
+      // Handle error by rolling back the optimistic UI update (optional)
+      setPost((prevPost) => {
+        if (!prevPost || !Array.isArray(prevPost.comments)) {
+          return prevPost;
+        }
+  
+        if (prevPost._id === postId) {
+          // Roll back the optimistic UI update in case of error
+          const updatedComments = prevPost.comments.map((comment) =>
+            comment._id === commentId
+              ? { ...comment, repost: comment.repost - 1 } // Decrement repost count in case of failure
+              : comment
+          );
+  
+          return {
+            ...prevPost,
+            comments: updatedComments,
+          };
+        }
+        return prevPost;
+      });
+    }
+  };
+  
   const handleGifSelect = (gifUrl) => {
     setSelectedGif(gifUrl);
   };
@@ -272,12 +375,12 @@ function PostPage() {
           },
         },
       );
+
       if (response.status >= 200 && response.status < 300) {
         const newComment = response.data.comment;
         setText("");
         setImageUrl("");
         setGif("");
-
         // Update the local state with the new comment and sort it
         setPost((prevPost) => {
           const updatedReplies = [...prevPost.totalReplies, newComment];
@@ -310,20 +413,34 @@ function PostPage() {
     setShowSendPostPopup(false);
   };
 
-  const handlePostClick = (post) => {
+  const handlePostClick = (item) => {
     setShowToPost(true);
-    setSelectedPostId(post);
+  };
+
+  const handleClosePopup = () => {
+    setShowToPost(false);
   };
 
   return (
     <div className="flex-row home-container">
       <HomeNav />
+      <Tooltip id="my-tooltip" />
       <ToastContainer
         position="bottom-center"
         autoClose={1000}
         hideProgressBar={false}
         closeOnClick
       />
+        {showToPost && (
+        <ReplyPopup
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+          selectedPostId={selectedPostId}
+          post={post}
+          postId={postId}
+          onUpdateReplyCount={handleUpdateReplyCount}
+        />
+      )}
       <div className="connect-center-container flex-column">
         <header className="flex-row">
           <button
@@ -339,20 +456,20 @@ function PostPage() {
         <div className="flex-column popup-reply-post">
           <div className="flex-row comment-hover">
             <div className="pic-vertical-line-box flex-column">
-              {(post.repostedFrom
-                ? post.repostedFrom.profile
-                : post.user?.profile) && (
+              {(post?.repostedFrom
+                ? post?.repostedFrom?.profile
+                : post?.user?.profile) && (
                 <img
                   className="profile-pic no-bottom-margin"
                   src={
-                    (post.repostedFrom
-                      ? post.repostedFrom.profile
-                      : post.user.profile
+                    (post?.repostedFrom
+                      ? post?.repostedFrom?.profile
+                      : post?.user.profile
                     )?.profilePicture
                       ? `http://localhost:3000/uploads/${
-                          post.repostedFrom
-                            ? post.repostedFrom.profile.profilePicture
-                            : post.user.profile.profilePicture
+                          post?.repostedFrom
+                            ? post?.repostedFrom?.profile?.profilePicture
+                            : post?.user?.profile?.profilePicture
                         }`
                       : default_user
                   }
@@ -361,19 +478,19 @@ function PostPage() {
               <div className="vertical-line-reply"></div>
             </div>
             <div className="reply-summary-post flex-column">
-              {(post.repostedFrom
-                ? post.repostedFrom.profile
-                : post.user?.profile) && (
+              {(post?.repostedFrom
+                ? post?.repostedFrom.profile
+                : post?.user?.profile) && (
                 <span>
-                  {post.repostedFrom
-                    ? post.repostedFrom.profile.updatedName
-                    : post.user.profile.updatedName}
+                  {post?.repostedFrom
+                    ? post?.repostedFrom?.profile.updatedName
+                    : post?.user.profile.updatedName}
                   <span className="reply-replying-to">
                     {" "}
                     @
-                    {post.repostedFrom
-                      ? post.repostedFrom.user?.formattedUsername
-                      : post.user?.formattedUsername}{" "}
+                    {post?.repostedFrom
+                      ? post?.repostedFrom?.user?.formattedUsername
+                      : post?.user?.formattedUsername}{" "}
                     · {formatPostTime(post.time)}
                   </span>
                 </span>
@@ -394,18 +511,18 @@ function PostPage() {
                   src={post.gif}
                 />
               )}
-              {(post.repostedFrom ? post.repostedFrom : post.user) && (
+              {(post?.repostedFrom ? post?.repostedFrom : post?.user) && (
                 <span className="reply-replying-to">
                   Replying to{" "}
                   <Link
-                    to={`/profile/${post.repostedFrom ? post.repostedFrom.formattedUsername : post.user?.formattedUsername}`}
+                    to={`/profile/${post?.repostedFrom ? post?.repostedFrom?.formattedUsername : post?.user?.formattedUsername}`}
                     className="replying-to-blue"
                   >
                     {" "}
                     @
-                    {post.repostedFrom
-                      ? post.repostedFrom.formattedUsername
-                      : post.user?.formattedUsername}
+                    {post?.repostedFrom
+                      ? post?.repostedFrom?.formattedUsername
+                      : post?.user?.formattedUsername}
                   </Link>
                 </span>
               )}
@@ -416,26 +533,31 @@ function PostPage() {
               <div
                 className="icon-container color-hover flex-row"
                 id="blue-svg"
+                onClick={() => handlePostClick({ postId: post._id })}
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Reply"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                   <g className="flex-row">
                     <path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path>
                   </g>
                 </svg>
-                <span className="count">{post.reply}</span>
+                <span className="count">{post?.reply}</span>
               </div>
             </div>
             <div onClick={() => handleRepost(post._id)} disabled={loading}>
               <div
                 className="icon-container color-hover flex-row"
                 id="green-svg"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Repost"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                   <g>
                     <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                   </g>
                 </svg>
-                <span className="count">{post.repost}</span>
+                <span className="count">{post?.repost}</span>
               </div>
             </div>
             {showSendPostPopup && (
@@ -470,7 +592,7 @@ function PostPage() {
                     ></path>
                   </g>
                 </svg>
-                <span className="count">0</span>
+                <span className="count">{post?.send}</span>
               </div>
             </div>
             <div>
@@ -479,6 +601,8 @@ function PostPage() {
                   className={`icon-container color-hover flex-row ${likedStates.likes ? "liked" : "not-liked"}`}
                   id="pink-svg"
                   onClick={handleLikePost}
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Like"  
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -492,7 +616,7 @@ function PostPage() {
                   <span
                     className={`count ${likedStates.likes ? "liked" : "not-liked"}`}
                   >
-                    {post.likeCount}
+                    {post?.likeCount}
                   </span>
                 </div>
               </div>
@@ -503,6 +627,8 @@ function PostPage() {
                   className={`icon-container bookmark-icon color-hover ${bookmarked ? "bookmarked" : "not-bookmarked"}`}
                   id="save-svg"
                   onClick={() => handleBookmark(post._id)}
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Bookmark"  
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -526,6 +652,8 @@ function PostPage() {
                   <div
                     className="icon-container sendpost-icon color-hover"
                     id="send-svg"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="Copy link"    
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -678,7 +806,7 @@ function PostPage() {
                 className="flex-column comment-hover horizontal-line-replies-section"
               >
                 <Link
-                  to={`/post/${reply.user.formattedUsername}/status/${reply._id}`}
+                  to={`/post/${reply?.user?.formattedUsername}/status/${reply._id}`}
                 >
                   <div className="flex-row ">
                     <div className="pic-vertical-line-box flex-column">
@@ -686,17 +814,17 @@ function PostPage() {
                         className="profile-pic no-bottom-margin"
                         src={
                           reply?.user?.profile?.profilePicture
-                            ? `http://localhost:3000/uploads/${reply.user.profile.profilePicture}`
+                            ? `http://localhost:3000/uploads/${reply?.user?.profile?.profilePicture}`
                             : default_user
                         }
                       />
                     </div>
                     <div className="reply-summary-post flex-column">
                       <span>
-                        {reply.user.profile.updatedName}
+                        {reply?.user?.profile?.updatedName}
                         <span className="reply-replying-to">
                           {" "}
-                          @{reply.user.formattedUsername} ·{" "}
+                          @{reply?.user?.formattedUsername} ·{" "}
                           {formatPostTime(reply.time)}
                         </span>
                       </span>
@@ -723,6 +851,9 @@ function PostPage() {
                     <div
                       className="icon-container color-hover flex-row"
                       id="blue-svg"
+                      onClick={() => handlePostClick({ replyId: reply._id, isComment: true })}
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content="Reply"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -736,7 +867,7 @@ function PostPage() {
                       <span className="count">{reply.reply}</span>
                     </div>
                   </div>
-                  <div>
+                  <div onClick={() => handleRepostComment(reply._id)}>
                     <div
                       className="icon-container color-hover flex-row"
                       id="green-svg"
@@ -750,10 +881,27 @@ function PostPage() {
                           <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
                         </g>
                       </svg>
-                      <span className="count">0</span>
+                      <span className="count">{reply.repost}</span>
                     </div>
                   </div>
-                  <div>
+                  {showSendPostPopup && (
+              <SendPostPopup
+                post={post}
+                closeShowSendPostPopup={closeShowSendPostPopup}
+                conversations={conversations}
+                selectedConversation={selectedConversation}
+                selectedPost={selectedPost}
+                messageText={messageText}
+                responseMessage={responseMessage}
+                setSelectedConversation={setSelectedConversation}
+                setSelectedPost={setSelectedPost}
+                setMessageText={setMessageText}
+                handleSubmit={handleSubmit}
+                handlePostClick={handlePostClick}
+                selectedPostId={selectedPostId}
+              />
+            )}
+                  <div onClick={() => sendPost(post._id)}>
                     <div
                       className="icon-container color-hover flex-row"
                       id="yellow-svg"
@@ -770,7 +918,7 @@ function PostPage() {
                           ></path>
                         </g>
                       </svg>
-                      <span className="count">0</span>
+                      <span className="count">{reply.send}</span>
                     </div>
                   </div>
                   <div>
@@ -800,7 +948,7 @@ function PostPage() {
                       <div
                         className={`icon-container bookmark-icon color-hover ${repliesBookmarks[reply._id] ? "bookmarked" : "not-bookmarked"}`}
                         id="save-svg"
-                        onClick={() => handleBookmarkReply(reply._id)} // Call handleBookmarkReply with reply ID when clicked
+                        onClick={() => handleBookmarkReply(reply._id)}
                       >
                         <svg
                           viewBox="0 0 24 24"
@@ -841,7 +989,7 @@ function PostPage() {
               </div>
             ))
           ) : (
-            <p className="top-border-horizontal no-comments-yet">
+            <p className="no-comments-yet">
               No comments yet.
             </p>
           )}

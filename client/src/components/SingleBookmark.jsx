@@ -138,7 +138,7 @@ function SingleBookmark({
         bookmarkedPosts.map((post, index) => {
           const postLink = generatePostLink(
             post._id,
-            post.user.formattedUsername,
+            post?.user?.formattedUsername,
           );
 
           // Get the post time and format it
@@ -158,20 +158,20 @@ function SingleBookmark({
           return (
             <div key={index} className="post random-post flex-column">
               <Link
-                to={`/${post.user.formattedUsername}/status/${post._id}`}
+                to={`/${post?.user?.formattedUsername}/status/${post._id}`}
                 className="flex-row"
               >
-                {post && post.user.profile.profilePicture ? (
+                {post && post?.user?.profile.profilePicture ? (
                   <img
                     className="profile-pic"
-                    src={`http://localhost:3000/uploads/${post.user.profile.profilePicture}`}
+                    src={`http://localhost:3000/uploads/${post?.user?.profile.profilePicture}`}
                   />
                 ) : (
                   <div className="defaul-profile-image-post"></div>
                 )}
                 <div className="flex-column post-box">
                   <Link
-                    to={`/profile/${post.user.formattedUsername}`}
+                    to={`/profile/${post?.user?.formattedUsername}`}
                     className="link-to-profile"
                   >
                     <span className="user-name">
@@ -320,7 +320,7 @@ function SingleBookmark({
                   <CopyToClipboard
                     text={postLink}
                     onCopy={() =>
-                      handleCopy(post._id, post.user.formattedUsername)
+                      handleCopy(post._id, post?.user?.formattedUsername)
                     }
                   >
                     <div>

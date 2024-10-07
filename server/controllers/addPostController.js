@@ -2,6 +2,7 @@ const natural = require("natural");
 const path = require("path");
 const User = require("../models/User");
 const Post = require("../models/Post");
+const Reply = require("../models/Reply");
 const { format } = require("date-fns");
 
 // Initialize the classifier
@@ -147,13 +148,15 @@ const getTopThreeHighestValues = (text) => {
 
 const getPost = async (req, res) => {
   const currentUser = req.params.formattedUsername;
+  
   try {
     const user = await User.findOne({ formattedUsername: currentUser });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Find the user's original posts
     const posts = await Post.find({ user: user._id })
-      .sort({ time: -1 })
       .populate("user")
       .populate("repostedFrom")
       .populate("originalPostId")
@@ -161,11 +164,40 @@ const getPost = async (req, res) => {
         path: "totalReplies.user",
         model: "User",
       });
-    res.status(200).json({ posts });
+
+    // Find the user's reposted replies
+    const repostedReplies = await Reply.find({
+      user: user._id,
+      originalReplyId: { $ne: null },
+    })
+      .populate("user")
+      .populate("repostedFrom")
+      .populate("originalReplyId")
+      .populate({
+        path: "totalReplies.user",
+        model: "User",
+      });
+
+// Combine posts and reposted replies
+const combinedPosts = [...posts, ...repostedReplies];
+
+combinedPosts.sort((a, b) => {
+  // For reposts, use repostedTime; for original posts, use time
+  const timeA = a.repostedFrom ? a.repostedTime : a.time;
+  const timeB = b.repostedFrom ? b.repostedTime : b.time;
+
+  // Sort in descending order, meaning the most recent posts/reposts will be on top
+  return new Date(timeB) - new Date(timeA);
+});
+
+    
+
+    res.status(200).json({ posts: combinedPosts });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 const addPost = async (req, res) => {
   const { text, gif } = req.body;
@@ -205,7 +237,7 @@ const addPost = async (req, res) => {
         likes: [],
         share: 0,
         user: user._id,
-        tags: topTags,
+        tags: topTags
       });
 
       newPost
@@ -266,6 +298,20 @@ const deletePost = async (req, res) => {
           originalPost.repost = 0;
         }
         await originalPost.save();
+      }
+    }
+
+    // Handle the repost scenario for comments
+    if (deletedPost.originalCommentId) {
+      const originalComment = await Reply.findById(deletedPost.originalCommentId._id);
+
+      if (originalComment) {
+        if (originalComment.repost > 0) {
+          originalComment.repost -= 1;
+        } else {
+          originalComment.repost = 0;
+        }
+        await originalComment.save();
       }
     }
 

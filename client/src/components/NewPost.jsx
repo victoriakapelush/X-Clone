@@ -36,7 +36,7 @@ function NewPost({
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const { generatePostLink } = useGenerateLink();
   const [copied, setCopied] = useState(false);
-  const { repostPost, repostedPosts, loading, error } = useRepost();
+  const { repostPost, loading } = useRepost();
   const { username } = useParams();
   const { formattedUsername, token } = useContext(TokenContext);
   const [showSendPostPopup, setShowSendPostPopup] = useState(false);
@@ -367,29 +367,25 @@ function NewPost({
                   </div>
                 </div>
                 <div>
-                  <div
-                    className={`icon-container color-hover flex-row ${likedStates[index] ? "liked" : "not-liked"}`}
-                    id="pink-svg"
-                    onClick={() => handleLike(post._id, index)}
-                    data-tooltip-id="my-tooltip"
-                    data-tooltip-content="Like"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                      className="radius"
-                    >
-                      <g>
-                        <path d="M20.884 13.19c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"></path>
-                      </g>
-                    </svg>
-                    <span
-                      className={`count ${likedStates[index] ? "liked" : "not-liked"}`}
-                    >
-                      {post.likeCount}
-                    </span>
-                  </div>
-                </div>
+            <div
+              className={`icon-container color-hover flex-row ${likedStates[index] ? "liked" : "not-liked"}`}
+              id="pink-svg"
+              onClick={() => handleLike(post._id, index)}
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Like"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
+                <g>
+                  <path d="M20.884 13.19c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"></path>
+                </g>
+              </svg>
+              <span
+                className={`count ${likedStates[index] ? "liked" : "not-liked"}`}
+              >
+                {post.likeCount}
+              </span>
+            </div>
+          </div>
                 <div className="save-icons flex-row">
                   <div>
                     <div

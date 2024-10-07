@@ -155,7 +155,6 @@ function PostAndComment({ reply, formattedTime }) {
                     <img
                       className="profile-pic no-bottom-margin"
                       src={`http://localhost:3000/uploads/${replyItem.user?.profile?.profilePicture}`}
-                      alt={`${replyItem.user?.profile?.updatedName}'s profile`}
                     />
                   </div>
                   <div className="reply-summary-post flex-column">

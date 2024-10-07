@@ -15,6 +15,8 @@ const ReplySchema = new Schema({
   share: { type: Number, default: 0 },
   post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
   totalReplies: [{ type: Schema.Types.ObjectId, ref: "Reply" }],
+  repostedFrom: { type: Schema.Types.ObjectId, ref: "User" },
+  originalReplyId: { type: Schema.Types.ObjectId, ref: "Reply" }
 });
 
 const Reply = mongoose.model("Reply", ReplySchema);

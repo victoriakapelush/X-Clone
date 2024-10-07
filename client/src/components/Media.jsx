@@ -41,7 +41,7 @@ function Media() {
 
   return media.length === 0 ? (
     username === formattedUsername ? (
-      <div className="flex-column highlights-container media-top-border">
+      <div className="flex-column highlights-container media-top-border full-height">
         <h1>Lights, camera … attachments!</h1>
         <p>When you post photos or videos, they will show up here.</p>
       </div>

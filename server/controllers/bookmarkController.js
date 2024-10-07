@@ -60,6 +60,13 @@ const getBookmark = async (req, res) => {
           model: "User",
         },
       })
+      .populate({
+        path: "bookmarkedComments",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      })
       .exec();
 
     if (!user) {

@@ -12,22 +12,26 @@ import GifModal from "./GifModal";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import default_user from "../assets/icons/default_user.png";
 
-function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
+function ReplyPopup({ onClose, postId, post, onUpdateReplyCount, replyId }) {
   const [userData, setUserData] = useState({});
   const [profile, setProfile] = useState({});
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
   const [gif, setGif] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [post, setPost] = useState([]);
   const { username } = useParams();
-  const [comments, setComments] = useState([]);
-  const [commentText, setCommentText] = useState("");
-  const { token } = useContext(TokenContext);
+  const { token, formattedUsername } = useContext(TokenContext);
   const [showGifModal, setShowGifModal] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const userToDisplay = postId?.repostedFrom || postId?.user || post?.user || post?.repostedFrom;
+  const textToDisplay = postId?.text || post?.text;
+  const imageToDisplay = postId?.image || post?.image;
+  const gifToDisplay = postId?.gif || post?.gif;
+  const timeToDisplay = postId?.time || post?.time;
+
+  console.log(replyId)
 
   const handleButtonClick = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -78,10 +82,8 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
         }
 
         const profiles = response.data.userProfile.profile || [];
-        const posts = response.data.userProfile.post || [];
         setUserData({ ...response.data.userProfile });
         setProfile(profiles);
-        setPost(posts);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -99,7 +101,7 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
       formData.append("gif", gif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId._id}`,
+        `http://localhost:3000/api/post/${formattedUsername}/comment/${postId._id || post._id}`,
         formData,
         {
           headers: {
@@ -143,11 +145,10 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
         </div>
         <div className="flex-row popup-reply-post">
           <div className="pic-vertical-line-box flex-column">
-            {postId && postId.user.profile.profilePicture ? (
+            {userToDisplay?.profile?.profilePicture ? (
               <img
                 className="profile-pic"
-                src={`http://localhost:3000/uploads/${postId.user.profile.profilePicture}`}
-                alt="Profile"
+                src={`http://localhost:3000/uploads/${userToDisplay?.profile?.profilePicture}`}
               />
             ) : (
               <img className="profile-pic" src={default_user}></img>
@@ -156,30 +157,30 @@ function ReplyPopup({ onClose, postId, onUpdateReplyCount }) {
           </div>
           <div className="reply-summary-post flex-column">
             <span>
-              {postId.user.profile.updatedName}{" "}
+              {userToDisplay?.updatedName}{" "}
               <span className="reply-replying-to">
-                @{postId.user.formattedUsername} · {postId.time}
+                @{userToDisplay?.formattedUsername} · {timeToDisplay}
               </span>
             </span>
-            {postId.text && (
-              <span className="reply-post-text">{postId.text}</span>
+            {textToDisplay && (
+              <span className="reply-post-text">{textToDisplay}</span>
             )}
-            {postId.image && (
+            {imageToDisplay && (
               <img
                 className="reply-post-text reply-post-image"
-                src={`http://localhost:3000/uploads/${postId.image}`}
+                src={`http://localhost:3000/uploads/${imageToDisplay}`}
               />
             )}
-            {postId.gif && (
+            {gifToDisplay && (
               <img
                 className="reply-post-text reply-post-gif"
-                src={postId.gif}
+                src={gifToDisplay}
               />
             )}
             <span className="reply-replying-to">
               Replying to{" "}
               <span className="replying-to-blue">
-                @{postId.user.formattedUsername}
+                @{userToDisplay?.formattedUsername}
               </span>
             </span>
           </div>

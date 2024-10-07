@@ -3,7 +3,7 @@ import HomeNav from "./HomeNav";
 import "../styles/connectPeople.css";
 import back from "../assets/icons/back.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import PostAndComment from "./PostAndComment";
@@ -15,15 +15,17 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import usePostGenerateLink from "./PostPageGenerateLink";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TokenContext from "./TokenContext";
+import ReplyPopup from "./ReplyPopup";
 
 function CommentPage() {
+  const { token, formattedUsername } = useContext(TokenContext);
   const navigate = useNavigate();
   const { username, replyId } = useParams();
   const [post, setPost] = useState("");
   const [userData, setUserData] = useState(null);
   const [randomUser, setRandomUser] = useState(null);
   const [activeTab, setActiveTab] = useState("following");
-  const [formattedUsername, setFormattedUsername] = useState("");
   const [text, setText] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -31,13 +33,17 @@ function CommentPage() {
   const [showGifModal, setShowGifModal] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const token = localStorage.getItem("token");
   const [userProfileData, setUserProfileData] = useState(null);
   const { generatePostLink } = usePostGenerateLink();
   const [copied, setCopied] = useState(false);
   const postLink = generatePostLink(post?._id, post?.user?.formattedUsername);
+  const [showToPost, setShowToPost] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showSendPostPopup, setShowSendPostPopup] = useState(false);
 
-  const handleCopy = (postId, username) => {
+  console.log(post)
+
+  const handleCopy = () => {
     setCopied(true);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
@@ -65,10 +71,7 @@ function CommentPage() {
           console.error("User data not found in response:", response.data);
           return;
         }
-
-        const post = response.data.reply;
-        setPost(post);
-        console.log("POST", response.data);
+        setPost(response.data.reply);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -127,26 +130,8 @@ function CommentPage() {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (token) {
-          const decoded = jwtDecode(token);
-          const decodedUsername = decoded.originalUsername
-            .toLowerCase()
-            .replace(/\s+/g, "");
-          setFormattedUsername(decodedUsername);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
     const getUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
         const showPopup = localStorage.getItem("showPopup");
         if (showPopup === true) {
           setShowPopup(false);
@@ -172,13 +157,11 @@ function CommentPage() {
     if (formattedUsername !== "") {
       getUserData();
     }
-  }, [formattedUsername]);
+  }, [formattedUsername, token]);
 
   const getFirstFewWords = (text, wordCount) => {
     return text.split(" ").slice(0, wordCount).join(" ");
   };
-
-  console.log(post);
 
   useEffect(() => {
     if (post && post.text) {
@@ -186,6 +169,22 @@ function CommentPage() {
       document.title = `${post.user.originalUsername} on X: "${firstWords}" / X`;
     }
   }, [post]);
+
+  const handleUpdateReplyCount = (postId, originalPostId = null) => {
+    setPost((prevPost) => {
+      // Check if the postId matches the current post
+      if (
+        prevPost._id === postId ||
+        (originalPostId && prevPost._id === originalPostId)
+      ) {
+        return {
+          ...prevPost,
+          reply: prevPost.reply + 1, // Increment reply count for the single post
+        };
+      }
+      return prevPost; // Return unchanged if no match
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -195,14 +194,13 @@ function CommentPage() {
     }
     setError("");
     try {
-      const token = localStorage.getItem("token");
       const formData = new FormData();
       formData.append("text", text);
       formData.append("image", profileImage);
       formData.append("gif", selectedGif);
 
       const response = await axios.post(
-        `http://localhost:3000/api/profile/post/${formattedUsername}`,
+        `http://localhost:3000/api/reply/${username}/comment/${replyId}`,
         formData,
         {
           headers: {
@@ -212,11 +210,29 @@ function CommentPage() {
         },
       );
       if (response.status >= 200 && response.status < 300) {
+        const newComment = response.data.comment;
+
         setText("");
         setImageUrl("");
         setProfileImage(null);
         setSelectedGif("");
         document.getElementById("topost-insert-image").style.display = "none";
+
+        setPost((prevPost) => {
+          const updatedReplies = [...prevPost.totalReplies, newComment];
+
+          return {
+            ...prevPost,
+            totalReplies: updatedReplies.sort(
+              (a, b) => new Date(b.time) - new Date(a.time),
+            ),
+          };
+        });
+
+        if (handleUpdateReplyCount) {
+          handleUpdateReplyCount(replyId._id);
+        }
+
       } else {
         console.error("Error creating a post:", response);
       }
@@ -261,9 +277,33 @@ function CommentPage() {
     fetchUserProfileData();
   }, [username]);
 
+  const sendPost = (postId) => {
+    setSelectedPostId(postId);
+    setShowSendPostPopup(true);
+  };
+
+  const closeShowSendPostPopup = () => {
+    setShowSendPostPopup(false);
+  };
+
+  const handlePostClick = (item) => {
+    setShowToPost(true);
+  };
+
+
   return (
     <div className="flex-row home-container">
       <HomeNav />
+      {showToPost && (
+        <ReplyPopup
+          onClose={handleClosePopup}
+          onSave={handleClosePopup}
+          selectedPostId={selectedPostId}
+          replyId={replyId}
+          post={post}
+          onUpdateReplyCount={handleUpdateReplyCount}
+        />
+      )}
       <div className="connect-center-container flex-column">
         <header className="flex-row">
           <button
@@ -332,6 +372,9 @@ function CommentPage() {
               <div
                 className="icon-container color-hover flex-row"
                 id="blue-svg"
+                onClick={() => handlePostClick({ replyId: post._id })}
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Reply"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="radius">
                   <g className="flex-row">
@@ -731,7 +774,7 @@ function CommentPage() {
               </div>
             ))
           ) : (
-            <p className="top-border-horizontal no-comments-yet">
+            <p className="no-comments-yet">
               No comments yet.
             </p>
           )}

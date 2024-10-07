@@ -4,7 +4,7 @@ const Post = require("../models/Post");
 const Reply = require("../models/Reply");
 
 const getComments = async (req, res) => {
-  const { replyId } = req.params;
+  const replyId = req.params.replyId || req.body.replyId;
 
   try {
     const reply = await Reply.findById(replyId)
@@ -38,7 +38,7 @@ const getComments = async (req, res) => {
 const addNestedComment = async (req, res) => {
   const { text, gif } = req.body;
   const currentUser = req.user.originalUsername;
-  const replyId = req.params.replyId;
+  const replyId = req.params.replyId || req.body.replyId;
 
   try {
     let filename = null;
@@ -79,7 +79,7 @@ const addNestedComment = async (req, res) => {
     }
 
     if (!Array.isArray(parentReply.totalReplies)) {
-      parentReply.totalReplies = []; // Ensure totalReplies is initialized as an array
+      parentReply.totalReplies = [];
     }
 
     parentReply.totalReplies.push(newReply);

@@ -8,6 +8,7 @@ import { useState, useEffect, useContext, useDebugValue } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import HomeNav from "./HomeNav";
+import ToPost from "./ToPost";
 import HomeExtra from "./HomeExtra";
 import EditProfilePopup from "./EditProfilePopup";
 import NewPost from "./NewPost";
@@ -154,6 +155,28 @@ function Profile() {
       return newState;
     });
   };
+
+  // Get common followers
+  const [commonFollowers, setCommonFollowers] = useState([]);
+  useEffect(() => {
+    const fetchCommonFollowers = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/common_followers/${username}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data)
+        setCommonFollowers(response.data.commonFollowers);
+      } catch (err) {
+        console.log(err);
+      } 
+    };
+
+    fetchCommonFollowers();
+  }, [username, token]);
 
   return (
     <div className="flex-row profile-page">
@@ -328,9 +351,19 @@ function Profile() {
               </Link>
             )}
           </div>
-          <span className="followed-not">
-            Not followed by anyone you're following
-          </span>
+          {commonFollowers.length > 0 ? (
+        <span className="followed-not">Followed by &nbsp;
+          {commonFollowers.map((follower) => (
+            <Link key={follower._id} to={`/profile/${follower.formattedUsername}`}>
+              <span className="grey-color">@{follower.formattedUsername}&nbsp;</span>
+            </Link>
+          ))}
+        </span>
+      ) : (
+        <span className="followed-not">
+          Not followed by anyone you're following
+        </span>
+      )}
         </div>
         <nav className="profile-nav flex-row">
           <div className="blue-underline">

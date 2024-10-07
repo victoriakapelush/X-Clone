@@ -6,17 +6,18 @@ const PostSchema = new Schema({
   image: { type: String },
   gif: { type: String },
   reply: { type: Number },
-  totalReplies: [{ type: Schema.Types.ObjectId, ref: "Reply" }],
+  totalReplies: [{ type: Schema.Types.ObjectId, ref: "Reply", default: [] }],
   repost: { type: Number },
   likeCount: { type: Number },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   share: { type: Number },
   time: { type: String },
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  bookmarks: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  bookmarks: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   tags: { type: [String] },
-  repostedFrom: { type: Schema.Types.ObjectId, ref: "User" },
-  originalPostId: { type: Schema.Types.ObjectId, ref: "Post" },
+  repostedFrom: { type: Schema.Types.ObjectId, ref: "User", default: null },
+  originalPostId: { type: Schema.Types.ObjectId, ref: "Post", default: null },
+  repostedTime: { type: String, default: null }
 });
 
 const Post = mongoose.model("Post", PostSchema);
