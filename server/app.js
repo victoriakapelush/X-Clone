@@ -106,7 +106,7 @@ app.use("/api/signup", indexRouter);
 app.use("/api/google/signup", authRoutes);
 app.use(authRoutes);
 app.use("/api/login", loginRouter);
-app.use("/api/home", logoutRouter);
+app.use("/home", logoutRouter);
 app.use("/home", homePage);
 app.use("/api/add_photo", addSingleImage);
 app.use("/api/bookmarks", bookmarks);
