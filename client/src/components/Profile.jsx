@@ -4,7 +4,7 @@
 import "../styles/profile.css";
 import "../styles/highlights.css";
 import default_user from "../assets/icons/default_user.png";
-import { useState, useEffect, useContext, useDebugValue } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import HomeNav from "./HomeNav";
