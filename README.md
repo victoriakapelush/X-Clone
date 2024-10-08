@@ -1,6 +1,6 @@
 # **Social Media Website**
 
-Welcome to the **Social Media Website** project, a Twitter/X-like social networking platform where users can post updates, like, share, repost, and comment on content, follow other users, and engage in real-time conversations.
+Welcome to the **Social Media Website** project, a Twitter/X-like social networking platform where users can post updates, like, share, repost, and comment on content, follow other users, and engage in real-time conversations. Preview link is [here](https://x-social-jvsi.onrender.com).
 
 ## **Table of Contents**
 
